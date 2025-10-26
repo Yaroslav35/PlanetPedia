@@ -1,0 +1,1589 @@
+using System.Collections.Immutable;
+
+namespace PlanetPedia;
+
+public partial class ingame : ContentPage
+{
+    private bool vibro;
+    private Random rand = new Random();
+    private int time;
+    private int loop = 1;
+    private bool running = false;
+    private bool time_run = false;
+    private int mylifes = 2;
+    private int botlifes = 2;
+    private int stars;
+    private int energy = 10;
+    private int target = 0;
+    private bool myTurn = true;
+
+    private List<Hero?> enemyheroes = new List<Hero?>() { null, null, null };
+    private List<Sup?> enemysupes = new List<Sup?>() { null, null, null };
+
+    private List<string> heros = new List<string>()
+    {
+        "1:Астронавт:80:20:150:30:3:astronaut.png",
+        "2:Солнце:40:50:60:75:3:sunc.png",
+        "3:Луна:150:5:225:8:3:moonc.png",
+        "4:Венера:60:40:90:60:3:venusc.png",
+        "5:Юпитер:180:3:270:5:4:jupiterc.png",
+        "6:Плутон:40:70:60:105:5:pluto.png",
+        "7:Пульсар:100:0:150:0:6:netron.png",
+        "8:Сверхновая:90:20:135:30:5:supernova.png",
+        "9:Экзопланета:30:15:45:22:4:exoplanet.png",
+        "10:Пиньята:90:30:135:45:6:pinata.png",
+        "11:Кварк:200:80:300:120:3:quark.png",
+        "12:Дискошар:95:0:140:0:6:disco.png",
+        "13:Тыква:110:1:165:80:5:pumpkin.png",
+        "14:Мрачник:80:30:120:45:4:gloomy.png",
+        "15:Призрак:60:40:90:60:5:ghost.png",
+        // НОВЫЕ ГЕРОИ
+        "16:Водяная планета:60:30:90:45:4:waterplanet.png",
+        "17:Комета:130:40:195:60:5:cometc.png",
+        "18:Кокос:150:10:225:15:6:cocos.png",
+        "19:Песчаный:100:30:150:45:4:sandy.png"
+    };
+
+    private List<string> sups = new List<string>()
+    {
+        "1:Исцеление:2:heal.png",
+        "2:Урон:3:damage.png",
+        "3:Смесь:5:healdamage.png",
+        "4:Ослабление:5:weak.png",
+        "5:Доп.Жизнь:8:extralife.png",
+        "6:Большое исцеление:4:bigheal.png",
+        "7:Чёрная дыра:7:blackhole.png",
+        "8:Галактика:6:galaxy.png",
+        "9:Экскалибур:6:excalibur.png",
+        "10:Антиматерия:3:antimatter.png",
+        "11:Странное зелье:3:strange.png",
+        "12:Зелье радиации:5:radiation.png",
+        "13:Мрачное зелье:999:disablepotion.png",
+        "14:Монета обмена:6:change.png",
+        "15:Конфеты:5:candies_pumpkin.png"
+    };
+
+    private List<Hero?> heroes = new List<Hero?>() { null, null, null };
+    private List<Sup?> supes = new List<Sup?>() { null, null, null };
+
+    public ingame(int stars_get)
+    {
+        InitializeComponent();
+        stars = stars_get;
+        vibro = Preferences.Get("vibro", true);
+        InitializeGame();
+    }
+
+    private void InitializeGame()
+    {
+        switch_card();
+        Update();
+        timer_control();
+
+        int idcard = GetRandomCardId();
+        string[] data = heros[idcard].Split(":");
+        hero1.BackgroundColor = Colors.LightPink;
+        heroes[0] = new Hero(data[1], int.Parse(data[2]), int.Parse(data[3]),
+                           int.Parse(data[4]), int.Parse(data[5]), 0,
+                           int.Parse(data[6]), true, data[7]);
+
+        // Обновляем выделение цели
+        UpdateTargetHighlight();
+        draw();
+    }
+
+    private int GetRandomCardId()
+    {
+        int maxCardId;
+        if (stars >= 0 && stars <= 500) maxCardId = 3;
+        else if (stars > 500 && stars <= 1000) maxCardId = 6;
+        else if (stars > 1000 && stars <= 1500) maxCardId = 9;
+        else if (stars > 1500 && stars <= 2000) maxCardId = 12;
+        else if (stars > 2000 && stars <= 3000) maxCardId = 15;
+        else maxCardId = 19; // 3000+ звезд - все карты доступны (включая новых героев)
+
+        return rand.Next(0, maxCardId);
+    }
+
+    public void switch_card()
+    {
+        UpdateCard(buy1, hp1, dmg1, en1, img1, title1);
+        UpdateCard(buy2, hp2, dmg2, en2, img2, title2);
+        UpdateCard(buy3, hp3, dmg3, en3, img3, title3);
+    }
+
+    private void UpdateCard(Border border, Label hp, Label dmg, Label en, Image img, Label title)
+    {
+        int type = rand.Next(0, 2);
+
+        if (type == 0)
+        {
+            // ИСПРАВЛЕНИЕ: Для усилений используем отдельный случайный ID в пределах списка усилений
+            int supId = rand.Next(0, sups.Count);
+            string[] data = sups[supId].Split(':');
+
+            border.BackgroundColor = Colors.LightGreen;
+            hp.Text = "0";
+            dmg.Text = "0";
+            en.Text = data[2];
+            img.Source = data[3];
+            title.Text = data[1];
+        }
+        else
+        {
+            // ИСПРАВЛЕНИЕ: Для героев используем обычный метод получения ID
+            int heroId = GetRandomCardId();
+            string[] data = heros[heroId].Split(':');
+
+            border.BackgroundColor = Colors.LightPink;
+            hp.Text = data[2];
+            dmg.Text = data[3];
+            en.Text = data[6];
+            img.Source = data[7];
+            title.Text = data[1];
+        }
+    }
+
+    public async void Update()
+    {
+        running = true;
+        while (running)
+        {
+            await Task.Delay(100);
+            energyl.Text = $"Энергия: {energy}";
+            lifel.Text = $"Жизни: {mylifes}";
+            timer.Text = $"Время: {time}";
+            enemylifel.Text = $"Жизни врага: {botlifes}";
+            mylifel.Text = $"Твои жизни: {mylifes}";
+        }
+    }
+
+    private void BuyCard(int cardIndex)
+    {
+        Border buyBorder = cardIndex == 0 ? buy1 : cardIndex == 1 ? buy2 : buy3;
+        Label titleLabel = cardIndex == 0 ? title1 : cardIndex == 1 ? title2 : title3;
+        Label enLabel = cardIndex == 0 ? en1 : cardIndex == 1 ? en2 : en3;
+        Label hpLabel = cardIndex == 0 ? hp1 : cardIndex == 1 ? hp2 : hp3;
+        Label dmgLabel = cardIndex == 0 ? dmg1 : cardIndex == 1 ? dmg2 : dmg3;
+        Image img = cardIndex == 0 ? img1 : cardIndex == 1 ? img2 : img3;
+
+        int energyCost = int.Parse(enLabel.Text);
+
+        if (energy < energyCost) return;
+
+        if (buyBorder.BackgroundColor == Colors.LightPink)
+        {
+            BuyHero(titleLabel.Text, int.Parse(hpLabel.Text), int.Parse(dmgLabel.Text),
+                   energyCost, img.Source.ToString().Replace("File: ", ""));
+        }
+        else if (buyBorder.BackgroundColor == Colors.LightGreen)
+        {
+            BuySup(titleLabel.Text, energyCost, img.Source.ToString().Replace("File: ", ""));
+        }
+
+        energy -= energyCost;
+        switch_card();
+        draw();
+    }
+
+    private void BuyHero(string name, int hp, int dmg, int energyCost, string image)
+    {
+        for (int i = 0; i < heroes.Count; i++)
+        {
+            if (heroes[i] == null)
+            {
+                heroes[i] = new Hero(name, hp, dmg, (int)(hp * 1.5), (int)(dmg * 1.5),
+                                   0, energyCost, true, image);
+                return;
+            }
+            else if (heroes[i].name == name)
+            {
+                heroes[i] = new Hero(heroes[i].name, (int)(heroes[i].hp * 1.5),
+                                   (int)(heroes[i].damage * 1.5),
+                                   (int)(heroes[i].max_hp * 1.5),
+                                   (int)(heroes[i].max_damage * 1.5),
+                                   0, heroes[i].energy + energyCost, true, heroes[i].pic);
+                return;
+            }
+        }
+    }
+
+    private void BuySup(string name, int energyCost, string image)
+    {
+        // ИСПРАВЛЕННЫЙ МЕТОД - правильное определение ID
+        var supData = sups.FirstOrDefault(a => a.Contains(name));
+        if (supData != null)
+        {
+            string[] data = supData.Split(':');
+            int id = int.Parse(data[0]);
+
+            for (int i = 0; i < supes.Count; i++)
+            {
+                if (supes[i] == null)
+                {
+                    supes[i] = new Sup(id, name, energyCost, image);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void buy1t_Tapped(object sender, TappedEventArgs e) => BuyCard(0);
+    private void buy2t_Tapped(object sender, TappedEventArgs e) => BuyCard(1);
+    private void buy3t_Tapped(object sender, TappedEventArgs e) => BuyCard(2);
+
+    private void SellHero(int index)
+    {
+        if (heroes[index] != null)
+        {
+            if (heroes[index].hp > 0)
+            {
+                energy += (int)(heroes[index].energy * 0.7);
+            }
+            heroes[index] = null;
+            draw();
+        }
+    }
+
+    private void SellSup(int index)
+    {
+        if (supes[index] != null)
+        {
+            if (supes[index].energy < 999)
+            {
+                energy += (int)(supes[index].energy * 0.7);
+                supes[index] = null;
+                draw();
+            }
+        }
+    }
+
+    private void sellhero1_Clicked(object sender, EventArgs e) => SellHero(0);
+    private void sellhero2_Clicked(object sender, EventArgs e) => SellHero(1);
+    private void sellhero3_Clicked(object sender, EventArgs e) => SellHero(2);
+    private void sellsup1_Clicked(object sender, EventArgs e) => SellSup(0);
+    private void sellsup2_Clicked(object sender, EventArgs e) => SellSup(1);
+    private void sellsup3_Clicked(object sender, EventArgs e) => SellSup(2);
+
+    public async void timer_control()
+    {
+        time = 30;
+        time_run = true;
+        while (time_run)
+        {
+            await Task.Delay(1000);
+            if (time > 0) time--;
+            else
+            {
+                time_run = false;
+                if (vibro) Vibration.Default.Vibrate();
+                StartBattle();
+            }
+        }
+    }
+
+    private void StartBattle()
+    {
+        preparing.IsVisible = false;
+        fight.IsVisible = true;
+        PrepareBattlefield();
+        _ = BattleLoop();
+    }
+
+    private void PrepareBattlefield()
+    {
+        UpdateAllBattleDisplays();
+        CreateEnemyTeam();
+        UpdateAllEnemyDisplays();
+    }
+
+    // НОВЫЙ МЕТОД: Обновляет все отображения героев игрока в бою
+    private void UpdateAllBattleDisplays()
+    {
+        UpdateBattleDisplay(heroes[0], mhp1, mdmg1, men1, mimg1, mtitle1);
+        UpdateBattleDisplay(heroes[1], mhp2, mdmg2, men2, mimg2, mtitle2);
+        UpdateBattleDisplay(heroes[2], mhp3, mdmg3, men3, mimg3, mtitle3);
+        UpdateSupDisplay(supes[0], men4, mimg4, mtitle4);
+        UpdateSupDisplay(supes[1], men5, mimg5, mtitle5);
+        UpdateSupDisplay(supes[2], men6, mimg6, mtitle6);
+    }
+
+    // НОВЫЙ МЕТОД: Обновляет все отображения врагов в бою
+    private void UpdateAllEnemyDisplays()
+    {
+        UpdateBattleDisplay(enemyheroes[0], ehp1, edmg1, een1, eimg1, etitle1);
+        UpdateBattleDisplay(enemyheroes[1], ehp2, edmg2, een2, eimg2, etitle2);
+        UpdateBattleDisplay(enemyheroes[2], ehp3, edmg3, een3, eimg3, etitle3);
+        UpdateSupDisplay(enemysupes[0], een4, eimg4, etitle4);
+        UpdateSupDisplay(enemysupes[1], een5, eimg5, etitle5);
+        UpdateSupDisplay(enemysupes[2], een6, eimg6, etitle6);
+    }
+
+    private void UpdateShopDisplay(Hero? hero, Label hp, Label dmg, Label en, Image img, Label title)
+    {
+        if (hero != null && hero.alive)
+        {
+            hp.Text = hero.hp.ToString();
+
+            // ОСОБАЯ ЛОГИКА ДЛЯ ТЫКВЫ - ДИНАМИЧЕСКИЙ УРОН
+            if (hero.name == "Тыква")
+            {
+                int dynamicDamage = 110 - hero.hp;
+                if (dynamicDamage < 1) dynamicDamage = 1;
+                if (dynamicDamage > 110) dynamicDamage = 110;
+                dmg.Text = dynamicDamage.ToString();
+            }
+            else
+            {
+                dmg.Text = hero.damage.ToString();
+            }
+
+            // НА ЭКРАНЕ ПОКУПКИ - ЭНЕРГИЯ
+            en.Text = hero.energy.ToString();
+
+            img.Source = hero.pic;
+            title.Text = hero.name;
+        }
+        else if (hero != null && !hero.alive)
+        {
+            hp.Text = "0";
+            dmg.Text = "0";
+            en.Text = "0";
+            img.Source = hero.pic;
+            title.Text = $"{hero.name} (мертв)";
+        }
+        else
+        {
+            hp.Text = "0";
+            dmg.Text = "0";
+            en.Text = "0";
+            img.Source = "ico.png";
+            title.Text = "Пусто";
+        }
+    }
+
+    private void UpdateBattleDisplay(Hero? hero, Label hp, Label dmg, Label en, Image img, Label title)
+    {
+        if (hero != null && hero.alive)
+        {
+            hp.Text = hero.hp.ToString();
+
+            // ОСОБАЯ ЛОГИКА ДЛЯ ТЫКВЫ - ДИНАМИЧЕСКИЙ УРОН
+            if (hero.name == "Тыква")
+            {
+                int dynamicDamage = 110 - hero.hp;
+                if (dynamicDamage < 1) dynamicDamage = 1;
+                if (dynamicDamage > 110) dynamicDamage = 110;
+                dmg.Text = dynamicDamage.ToString();
+            }
+            else
+            {
+                dmg.Text = hero.damage.ToString();
+            }
+
+            // НА ЭКРАНЕ БИТВЫ - РАДИАЦИЯ
+            en.Text = hero.radiation.ToString();
+
+            img.Source = hero.pic;
+            title.Text = hero.name;
+        }
+        else if (hero != null && !hero.alive)
+        {
+            hp.Text = "0";
+            dmg.Text = "0";
+            en.Text = "0";
+            img.Source = hero.pic;
+            title.Text = $"{hero.name} (мертв)";
+        }
+        else
+        {
+            hp.Text = "0";
+            dmg.Text = "0";
+            en.Text = "0";
+            img.Source = "ico.png";
+            title.Text = "Пусто";
+        }
+    }
+
+    private void UpdateSupDisplay(Sup? sup, Label en, Image img, Label title)
+    {
+        if (sup != null)
+        {
+            en.Text = sup.energy.ToString();
+            img.Source = sup.pic;
+            title.Text = sup.name;
+        }
+        else
+        {
+            en.Text = "0";
+            img.Source = "ico.png";
+            title.Text = "Пусто";
+        }
+    }
+
+    private void CreateEnemyTeam()
+    {
+        int enemyenergy = 10 * loop;
+        int h = 0, s = 0;
+        int iter = 0;
+
+        while (enemyenergy > 2 && iter < 10000)
+        {
+            int type = rand.Next(0, 2);
+
+            if (type == 0 && s < 3)
+            {
+                // ИСПРАВЛЕНИЕ: Для усилений используем отдельный случайный ID
+                int supId = rand.Next(0, sups.Count);
+                string[] data = sups[supId].Split(':');
+                if (enemyenergy >= int.Parse(data[2]))
+                {
+                    enemysupes[s] = new Sup(supId + 1, data[1], int.Parse(data[2]), data[3]);
+                    enemyenergy -= int.Parse(data[2]);
+                    s++;
+                }
+            }
+            else if (type == 1 && h < 3)
+            {
+                // ИСПРАВЛЕНИЕ: Для героев используем обычный метод получения ID
+                int heroId = GetRandomCardId();
+                string[] data = heros[heroId].Split(':');
+                if (enemyenergy >= int.Parse(data[6]))
+                {
+                    enemyheroes[h] = new Hero(data[1], int.Parse(data[2]), int.Parse(data[3]),
+                                            int.Parse(data[4]), int.Parse(data[5]), 0,
+                                            int.Parse(data[6]), true, data[7]);
+                    enemyenergy -= int.Parse(data[6]);
+                    h++;
+                }
+            }
+            iter++;
+        }
+
+        if (enemyheroes.All(h => h == null))
+        {
+            enemyheroes[0] = new Hero("Астронавт", 100, 20, 150, 30, 0, 3, true, "astronaut.png");
+        }
+    }
+
+    public async Task BattleLoop()
+    {
+        turn.Text = "Бой начался!";
+        await Task.Delay(500);
+
+        int mychoose = 0;
+        myTurn = true;
+
+        while (HasAliveHeroes(heroes) && HasAliveHeroes(enemyheroes))
+        {
+            if (myTurn)
+            {
+                bool turnCompleted = await PlayerTurn(mychoose);
+                if (turnCompleted)
+                {
+                    mychoose = (mychoose + 1) % 3;
+                    myTurn = !myTurn;
+                }
+            }
+            else
+            {
+                bool turnCompleted = await EnemyTurn();
+                if (turnCompleted)
+                {
+                    myTurn = !myTurn;
+                }
+            }
+
+            ApplyRadiationDamage();
+
+            // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после каждого хода
+            UpdateAllBattleDisplays();
+            UpdateAllEnemyDisplays();
+
+            await Task.Delay(300);
+        }
+
+        if (vibro) Vibration.Default.Vibrate();
+        await EndBattle();
+    }
+
+    private bool HasAliveHeroes(List<Hero?> heroesList)
+    {
+        return heroesList.Any(h => h != null && h.alive);
+    }
+
+    private async Task<bool> PlayerTurn(int heroIndex)
+    {
+        if (heroes[heroIndex] == null || !heroes[heroIndex].alive)
+        {
+            turn.Text = "Ход пропущен (нет героя)";
+            await Task.Delay(300);
+            return true;
+        }
+
+        if (!HasAliveHeroes(enemyheroes))
+        {
+            turn.Text = "Ход пропущен (нет врагов)";
+            await Task.Delay(300);
+            return true;
+        }
+
+        turn.Text = "Ваш ход!";
+
+        var hero = heroes[heroIndex];
+        HighlightHero(heroIndex, true);
+
+        var aliveEnemies = enemyheroes
+            .Select((hero, index) => (hero, index))
+            .Where(x => x.hero != null && x.hero.alive)
+            .ToList();
+
+        if (aliveEnemies.Count == 0)
+        {
+            HighlightHero(heroIndex, false);
+            return true;
+        }
+
+        int enemyIndex = aliveEnemies[rand.Next(aliveEnemies.Count)].index;
+        var enemy = enemyheroes[enemyIndex];
+
+        HighlightEnemy(enemyIndex, true);
+        await ExecuteHeroAbility(heroIndex, enemyIndex);
+
+        await Task.Delay(300);
+        HighlightEnemy(enemyIndex, false);
+        HighlightHero(heroIndex, false);
+
+        return true;
+    }
+
+    private async Task<bool> EnemyTurn()
+    {
+        if (!HasAliveHeroes(enemyheroes))
+        {
+            turn.Text = "Противник пропускает ход (нет героев)";
+            await Task.Delay(300);
+            return true;
+        }
+
+        if (!HasAliveHeroes(heroes))
+        {
+            turn.Text = "Противник пропускает ход (нет целей)";
+            await Task.Delay(300);
+            return true;
+        }
+
+        turn.Text = "Ход противника!";
+        await Task.Delay(300);
+
+        int actionType = rand.Next(0, 2);
+        bool turnCompleted = false;
+
+        if (actionType == 0)
+        {
+            turnCompleted = await ExecuteEnemyAttack();
+        }
+        else
+        {
+            turnCompleted = await ExecuteEnemySup();
+        }
+
+        return turnCompleted;
+    }
+
+    private async Task<bool> ExecuteEnemyAttack()
+    {
+        var aliveEnemies = enemyheroes
+            .Select((hero, index) => (hero, index))
+            .Where(x => x.hero != null && x.hero.alive)
+            .ToList();
+
+        var alivePlayers = heroes
+            .Select((hero, index) => (hero, index))
+            .Where(x => x.hero != null && x.hero.alive)
+            .ToList();
+
+        if (aliveEnemies.Count == 0 || alivePlayers.Count == 0)
+            return true;
+
+        int enemyIndex = aliveEnemies[rand.Next(aliveEnemies.Count)].index;
+        int playerIndex = alivePlayers[rand.Next(alivePlayers.Count)].index;
+
+        var enemy = enemyheroes[enemyIndex];
+        var player = heroes[playerIndex];
+
+        HighlightEnemy(enemyIndex, true);
+        HighlightHero(playerIndex, true);
+
+        turn.Text = $"{enemy.name} атакует {player.name}!";
+
+        // ЛОГИКА АТАКИ ВРАГА - ОДИНАКОВАЯ С ИГРОКОМ
+        if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(enemy.name))
+        {
+            // ПРОВЕРКА ДЛЯ ПРИЗРАКА - 50% ШАНС НЕ ПОЛУЧИТЬ УРОН
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (enemy.name == "Экзопланета")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (enemy.name == "Пульсар")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} избежал радиации!";
+            }
+            else
+            {
+                player.radiation += 10;
+            }
+        }
+        else if (enemy.name == "Сверхновая")
+        {
+            for (int i = 0; i < heroes.Count; i++)
+            {
+                if (heroes[i] != null && heroes[i].alive)
+                {
+                    // ПРОВЕРКА ДЛЯ ПРИЗРАКА В МАССОВОЙ АТАКЕ
+                    if (heroes[i].name == "Призрак" && rand.Next(0, 2) == 0)
+                    {
+                        // Призрак избежал урона
+                    }
+                    else
+                    {
+                        heroes[i].hp -= 20;
+                        CheckPlayerDeath(i);
+                    }
+                }
+            }
+        }
+        else if (enemy.name == "Пиньята")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= 30;
+                player.radiation += 10;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (enemy.name == "Кварк")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+                enemy.alive = false;
+                enemyheroes[enemyIndex] = null;
+            }
+        }
+        else if (enemy.name == "Дискошар")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} избежал ослабления!";
+            }
+            else
+            {
+                player.damage -= 10;
+                if (player.damage < 0) player.damage = 0;
+            }
+        }
+        // НОВЫЕ ГЕРОИ ДЛЯ ВРАГА
+        else if (enemy.name == "Тыква")
+        {
+            int dynamicDamage = 110 - enemy.hp;
+            if (dynamicDamage < 1) dynamicDamage = 1;
+            if (dynamicDamage > 110) dynamicDamage = 110;
+
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= dynamicDamage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (enemy.name == "Мрачник")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (enemy.name == "Призрак")
+        {
+            // ПРИЗРАК АТАКУЕТ ПРИЗРАКА - особая проверка
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки призрака!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        // НОВЫЕ ГЕРОИ ДЛЯ ВРАГА
+        else if (enemy.name == "Водяная планета")
+        {
+            // Массовая атака всем героям игрока
+            for (int i = 0; i < heroes.Count; i++)
+            {
+                if (heroes[i] != null && heroes[i].alive)
+                {
+                    // ПРОВЕРКА ДЛЯ ПРИЗРАКА В МАССОВОЙ АТАКЕ
+                    if (heroes[i].name == "Призрак" && rand.Next(0, 2) == 0)
+                    {
+                        // Призрак избежал урона
+                    }
+                    else
+                    {
+                        heroes[i].hp -= enemy.damage;
+                        CheckPlayerDeath(i);
+                    }
+                }
+            }
+            turn.Text = $"{enemy.name} наносит массовый урон всем героям!";
+        }
+        else if (enemy.name == "Комета")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (enemy.name == "Кокос")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (enemy.name == "Песчаный")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+                // Песчаный исцеляет себя после атаки
+                enemy.hp = Math.Min(enemy.max_hp, enemy.hp + 10);
+                turn.Text = $"{enemy.name} атаковал и исцелил себя на 10 HP!";
+            }
+        }
+
+        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после атаки врага
+        UpdateAllBattleDisplays();
+        UpdateAllEnemyDisplays();
+
+        await Task.Delay(300);
+        HighlightEnemy(enemyIndex, false);
+        HighlightHero(playerIndex, false);
+
+        return true;
+    }
+
+    private async Task<bool> ExecuteEnemySup()
+    {
+        var availableSups = enemysupes
+            .Select((sup, index) => (sup, index))
+            .Where(x => x.sup != null && x.sup.id != 13) // Исключаем Мрачное зелье
+            .ToList();
+
+        if (availableSups.Count == 0)
+        {
+            return await ExecuteEnemyAttack();
+        }
+
+        var aliveEnemies = enemyheroes
+            .Select((hero, index) => (hero, index))
+            .Where(x => x.hero != null && x.hero.alive)
+            .ToList();
+
+        if (aliveEnemies.Count == 0)
+            return true;
+
+        var selectedSup = availableSups[rand.Next(availableSups.Count)];
+        int targetIndex = aliveEnemies[rand.Next(aliveEnemies.Count)].index;
+
+        var sup = selectedSup.sup;
+        var target = enemyheroes[targetIndex];
+
+        turn.Text = $"Противник использует {sup.name}!";
+
+        // ЛОГИКА УСИЛЕНИЙ ВРАГА - ОДИНАКОВАЯ С ИГРОКОМ
+        switch (sup.id)
+        {
+            case 1:
+                target.hp = Math.Min(target.max_hp, target.hp + 20);
+                break;
+            case 2:
+                target.damage = Math.Min(target.max_damage, target.damage + 20);
+                break;
+            case 3:
+                target.hp = Math.Min(target.max_hp, target.hp + 20);
+                target.damage = Math.Min(target.max_damage, target.damage + 15);
+                break;
+            case 4:
+                // ИЗМЕНЕНИЕ: Ослабление теперь уменьшает урон врагу на 20
+                var alivePlayers = heroes.Where(h => h != null && h.alive).ToList();
+                if (alivePlayers.Count > 0)
+                {
+                    var randomPlayer = alivePlayers[rand.Next(alivePlayers.Count)];
+                    randomPlayer.damage = Math.Max(0, randomPlayer.damage - 20);
+                }
+                break;
+            case 5:
+                botlifes++;
+                break;
+            case 6:
+                target.hp = Math.Min(target.max_hp, target.hp + 30);
+                break;
+            case 7:
+                var alivePlayersForBlackHole = heroes.Where(h => h != null && h.alive).ToList();
+                if (alivePlayersForBlackHole.Count > 0)
+                {
+                    var randomPlayer = alivePlayersForBlackHole[rand.Next(alivePlayersForBlackHole.Count)];
+                    randomPlayer.alive = false;
+                    randomPlayer.hp = 0;
+                }
+                break;
+            case 8:
+                // Галактика - эффект применяется в конце раунда
+                break;
+            case 9:
+                target.damage = Math.Min(target.max_damage, target.damage + 35);
+                break;
+            case 10:
+                foreach (var enemy in enemyheroes)
+                {
+                    if (enemy != null) enemy.radiation = 0;
+                }
+                break;
+            case 11:
+                int chance = rand.Next(1, 5);
+                switch (chance)
+                {
+                    case 1: target.hp += 20; break;
+                    case 2: target.hp = Math.Max(0, target.hp - 20); break;
+                    case 3: target.damage += 10; break;
+                    case 4: target.damage = Math.Max(0, target.damage - 10); break;
+                }
+                break;
+            case 12:
+                foreach (var player in heroes)
+                {
+                    if (player != null && player.alive)
+                    {
+                        player.radiation += 10;
+                    }
+                }
+                break;
+            // НОВЫЕ УСИЛЕНИЯ ДЛЯ ВРАГА
+            case 14:
+                // Монета обмена
+                int tempHp = target.hp;
+                int tempDamage = target.damage;
+                target.hp = tempDamage;
+                target.damage = tempHp;
+                target.max_hp = Math.Max(target.max_hp, target.hp);
+                target.max_damage = Math.Max(target.max_damage, target.damage);
+                break;
+            case 15:
+                // Конфеты
+                int randomHeroId = rand.Next(0, heros.Count);
+                string[] newHeroData = heros[randomHeroId].Split(':');
+                enemyheroes[targetIndex] = new Hero(
+                    newHeroData[1],
+                    int.Parse(newHeroData[2]),
+                    int.Parse(newHeroData[3]),
+                    int.Parse(newHeroData[4]),
+                    int.Parse(newHeroData[5]),
+                    0,
+                    int.Parse(newHeroData[6]),
+                    true,
+                    newHeroData[7]
+                );
+                break;
+        }
+
+        enemysupes[selectedSup.index] = null;
+
+        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после использования усиления
+        UpdateAllBattleDisplays();
+        UpdateAllEnemyDisplays();
+
+        await Task.Delay(300);
+        return true;
+    }
+
+    private async Task ExecuteHeroAbility(int heroIndex, int enemyIndex)
+    {
+        var hero = heroes[heroIndex];
+        var enemy = enemyheroes[enemyIndex];
+
+        if (hero == null || enemy == null || !enemy.alive) return;
+
+        turn.Text = $"{hero.name} атакует {enemy.name}!";
+
+        // ЛОГИКА АТАКИ ИГРОКА - ОДИНАКОВАЯ С ВРАГОМ
+        if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(hero.name))
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+        }
+        else if (hero.name == "Экзопланета")
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+        }
+        else if (hero.name == "Пульсар")
+        {
+            enemy.radiation += 10;
+        }
+        else if (hero.name == "Сверхновая")
+        {
+            for (int i = 0; i < enemyheroes.Count; i++)
+            {
+                if (enemyheroes[i] != null && enemyheroes[i].alive)
+                {
+                    enemyheroes[i].hp -= 20;
+                    CheckEnemyDeath(i);
+                }
+            }
+        }
+        else if (hero.name == "Пиньята")
+        {
+            enemy.hp -= 30;
+            enemy.radiation += 10;
+            CheckEnemyDeath(enemyIndex);
+        }
+        else if (hero.name == "Кварк")
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+            hero.alive = false;
+            heroes[heroIndex] = null;
+        }
+        else if (hero.name == "Дискошар")
+        {
+            enemy.damage -= 10;
+            if (enemy.damage < 0) enemy.damage = 0;
+        }
+        // НОВЫЕ ГЕРОИ
+        else if (hero.name == "Тыква")
+        {
+            int dynamicDamage = 110 - hero.hp;
+            if (dynamicDamage < 1) dynamicDamage = 1;
+            if (dynamicDamage > 110) dynamicDamage = 110;
+
+            enemy.hp -= dynamicDamage;
+            CheckEnemyDeath(enemyIndex);
+        }
+        else if (hero.name == "Мрачник")
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+        }
+        else if (hero.name == "Призрак")
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+        }
+        // НОВЫЕ ГЕРОИ ДЛЯ ИГРОКА
+        else if (hero.name == "Водяная планета")
+        {
+            // Массовая атака всем врагам
+            for (int i = 0; i < enemyheroes.Count; i++)
+            {
+                if (enemyheroes[i] != null && enemyheroes[i].alive)
+                {
+                    enemyheroes[i].hp -= hero.damage;
+                    CheckEnemyDeath(i);
+                }
+            }
+            turn.Text = $"{hero.name} наносит массовый урон всем врагам!";
+        }
+        else if (hero.name == "Комета")
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+        }
+        else if (hero.name == "Кокос")
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+        }
+        else if (hero.name == "Песчаный")
+        {
+            enemy.hp -= hero.damage;
+            CheckEnemyDeath(enemyIndex);
+            // Песчаный исцеляет себя после атаки
+            hero.hp = Math.Min(hero.max_hp, hero.hp + 10);
+            turn.Text = $"{hero.name} атаковал и исцелил себя на 10 HP!";
+        }
+
+        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после атаки игрока
+        UpdateAllBattleDisplays();
+        UpdateAllEnemyDisplays();
+
+        await Task.Delay(300);
+    }
+
+    private void CheckEnemyDeath(int enemyIndex)
+    {
+        var enemy = enemyheroes[enemyIndex];
+        if (enemy != null && enemy.hp <= 0)
+        {
+            enemy.alive = false;
+            enemy.hp = 0;
+
+            // Особые способности при смерти
+            if (enemy.name == "Экзопланета")
+            {
+                int a = rand.Next(0, 3);
+                enemyheroes[enemyIndex] = a switch
+                {
+                    0 => new Hero("Венера", 60, 40, 90, 60, 0, 3, true, "venusc.png"),
+                    1 => new Hero("Юпитер", 200, 0, 300, 5, 0, 5, true, "jupiterc.png"),
+                    2 => new Hero("Плутон", 25, 70, 45, 105, 0, 5, true, "pluto.png"),
+                    _ => enemyheroes[enemyIndex]
+                };
+            }
+            else if (enemy.name == "Мрачник")
+            {
+                // Мрачник при смерти дает противнику мрачное зелье
+                for (int i = 0; i < supes.Count; i++)
+                {
+                    if (supes[i] == null)
+                    {
+                        supes[i] = new Sup(13, "Мрачное зелье", 999, "disablepotion.png");
+                        break;
+                    }
+                }
+                enemyheroes[enemyIndex] = null;
+            }
+            else if (enemy.name == "Кокос")
+            {
+                // Кокос при смерти исцеляет всех союзников на 40 HP
+                for (int i = 0; i < enemyheroes.Count; i++)
+                {
+                    if (enemyheroes[i] != null && enemyheroes[i].alive)
+                    {
+                        enemyheroes[i].hp = Math.Min(enemyheroes[i].max_hp, enemyheroes[i].hp + 40);
+                    }
+                }
+                enemyheroes[enemyIndex] = null;
+                turn.Text = "Кокос при смерти исцелил всех союзников на 40 HP!";
+            }
+            else
+            {
+                enemyheroes[enemyIndex] = null;
+            }
+
+            // Немедленно обновляем отображение после смерти врага
+            UpdateAllEnemyDisplays();
+        }
+    }
+
+    private void CheckPlayerDeath(int playerIndex)
+    {
+        var player = heroes[playerIndex];
+        if (player != null && player.hp <= 0)
+        {
+            player.alive = false;
+            player.hp = 0;
+
+            // Особые способности при смерти
+            if (player.name == "Экзопланета")
+            {
+                int a = rand.Next(0, 3);
+                heroes[playerIndex] = a switch
+                {
+                    0 => new Hero("Венера", 60, 40, 90, 60, 0, 3, true, "venusc.png"),
+                    1 => new Hero("Юпитер", 200, 0, 300, 5, 0, 5, true, "jupiterc.png"),
+                    2 => new Hero("Плутон", 25, 70, 45, 105, 0, 5, true, "pluto.png"),
+                    _ => heroes[playerIndex]
+                };
+            }
+            else if (player.name == "Мрачник")
+            {
+                // Мрачник при смерти дает врагу мрачное зелье
+                for (int i = 0; i < enemysupes.Count; i++)
+                {
+                    if (enemysupes[i] == null)
+                    {
+                        enemysupes[i] = new Sup(13, "Мрачное зелье", 999, "disablepotion.png");
+                        break;
+                    }
+                }
+                heroes[playerIndex] = null;
+            }
+            else if (player.name == "Кокос")
+            {
+                // Кокос при смерти исцеляет всех союзников на 40 HP
+                for (int i = 0; i < heroes.Count; i++)
+                {
+                    if (heroes[i] != null && heroes[i].alive)
+                    {
+                        heroes[i].hp = Math.Min(heroes[i].max_hp, heroes[i].hp + 40);
+                    }
+                }
+                heroes[playerIndex] = null;
+                turn.Text = "Кокос при смерти исцелил всех союзников на 40 HP!";
+            }
+            else
+            {
+                heroes[playerIndex] = null;
+            }
+
+            // Обновляем отображение игроков после смерти
+            UpdateAllBattleDisplays();
+        }
+    }
+
+    private void ApplyRadiationDamage()
+    {
+        bool needUpdate = false;
+
+        // Сначала собираем индексы героев, которые умрут от радиации
+        var playersToDie = new List<int>();
+        var enemiesToDie = new List<int>();
+
+        // Проверяем игроков
+        for (int i = 0; i < heroes.Count; i++)
+        {
+            var hero = heroes[i];
+            if (hero != null && hero.alive)
+            {
+                int oldHp = hero.hp;
+                hero.hp -= hero.radiation;
+                if (hero.hp <= 0)
+                {
+                    hero.hp = 0;
+                    playersToDie.Add(i); // Запоминаем индекс для обработки смерти
+                    needUpdate = true;
+                }
+                else if (oldHp != hero.hp)
+                {
+                    needUpdate = true;
+                }
+            }
+        }
+
+        // Проверяем врагов
+        for (int i = 0; i < enemyheroes.Count; i++)
+        {
+            var enemy = enemyheroes[i];
+            if (enemy != null && enemy.alive)
+            {
+                int oldHp = enemy.hp;
+                enemy.hp -= enemy.radiation;
+                if (enemy.hp <= 0)
+                {
+                    enemy.hp = 0;
+                    enemiesToDie.Add(i); // Запоминаем индекс для обработки смерти
+                    needUpdate = true;
+                }
+                else if (oldHp != enemy.hp)
+                {
+                    needUpdate = true;
+                }
+            }
+        }
+
+        // Обрабатываем смерти игроков с особыми эффектами
+        foreach (int index in playersToDie)
+        {
+            CheckPlayerDeath(index); // ВЫЗЫВАЕМ МЕТОД ДЛЯ ОСОБЫХ ЭФФЕКТОВ СМЕРТИ
+        }
+
+        // Обрабатываем смерти врагов с особыми эффектами
+        foreach (int index in enemiesToDie)
+        {
+            CheckEnemyDeath(index); // ВЫЗЫВАЕМ МЕТОД ДЛЯ ОСОБЫХ ЭФФЕКТОВ СМЕРТИ
+        }
+
+        // Обновляем отображение если были изменения
+        if (needUpdate || playersToDie.Count > 0 || enemiesToDie.Count > 0)
+        {
+            UpdateAllBattleDisplays();
+            UpdateAllEnemyDisplays();
+        }
+    }
+
+    private void HighlightHero(int index, bool highlight)
+    {
+        var color = highlight ? Colors.DarkRed : Colors.LightPink;
+        if (index == 0) my1.BackgroundColor = color;
+        else if (index == 1) my2.BackgroundColor = color;
+        else if (index == 2) my3.BackgroundColor = color;
+    }
+
+    private void HighlightEnemy(int index, bool highlight)
+    {
+        var color = highlight ? Colors.DarkRed : Colors.LightPink;
+        if (index == 0) enemy1.BackgroundColor = color;
+        else if (index == 1) enemy2.BackgroundColor = color;
+        else if (index == 2) enemy3.BackgroundColor = color;
+    }
+
+    private async Task EndBattle()
+    {
+        // Обработка Галактики
+        if (supes.Any(s => s != null && s.id == 8) || enemysupes.Any(s => s != null && s.id == 8))
+        {
+            energy += 8;
+            for (int i = 0; i < supes.Count; i++)
+            {
+                if (supes[i] != null && supes[i].id == 8)
+                    supes[i] = null;
+            }
+            for (int i = 0; i < enemysupes.Count; i++)
+            {
+                if (enemysupes[i] != null && enemysupes[i].id == 8)
+                    enemysupes[i] = null;
+            }
+        }
+
+        // СБРОС РАДИАЦИИ У ВСЕХ ВЫЖИВШИХ ГЕРОЕВ ПОСЛЕ РАУНДА
+        foreach (var hero in heroes)
+        {
+            if (hero != null && hero.alive)
+            {
+                hero.radiation = 0; // Сбрасываем радиацию
+            }
+        }
+
+        foreach (var enemy in enemyheroes)
+        {
+            if (enemy != null && enemy.alive)
+            {
+                enemy.radiation = 0; // Сбрасываем радиацию
+            }
+        }
+
+        bool playerHasAliveHeroes = HasAliveHeroes(heroes);
+        bool enemyHasAliveHeroes = HasAliveHeroes(enemyheroes);
+
+        if (!playerHasAliveHeroes)
+        {
+            mylifes--;
+            energy += 10;
+        }
+        if (!enemyHasAliveHeroes) botlifes--;
+
+        energy += 10;
+        loop++;
+
+        await Task.Delay(500);
+
+        if (mylifes <= 0)
+        {
+            await Navigation.PopModalAsync();
+        }
+        else if (botlifes <= 0)
+        {
+            int exp = Preferences.Get("exp", 0);
+            Preferences.Set("exp", exp + 1000);
+            Preferences.Set("stars", stars + 60);
+            await Navigation.PopModalAsync();
+        }
+        else
+        {
+            enemyheroes = new List<Hero?>() { null, null, null };
+            enemysupes = new List<Sup?>() { null, null, null };
+
+            fight.IsVisible = false;
+            preparing.IsVisible = true;
+
+            // Обновляем отображение перед возвратом в режим подготовки
+            draw();
+
+            timer_control();
+        }
+    }
+
+    private void SetTarget(int index)
+    {
+        if (heroes[index] != null && heroes[index].alive)
+        {
+            target = index;
+            UpdateTargetHighlight();
+            turn.Text = $"Цель: {heroes[index].name}";
+        }
+        else
+        {
+            turn.Text = "Нельзя выбрать эту цель!";
+        }
+    }
+
+    private void UpdateTargetHighlight()
+    {
+        // Сбрасываем все выделения
+        my1.Stroke = Colors.Black;
+        my2.Stroke = Colors.Black;
+        my3.Stroke = Colors.Black;
+
+        // Выделяем текущую цель
+        if (target == 0) my1.Stroke = Colors.DarkRed;
+        else if (target == 1) my2.Stroke = Colors.DarkRed;
+        else if (target == 2) my3.Stroke = Colors.DarkRed;
+    }
+
+    private async void tar1_Tapped(object sender, TappedEventArgs e) => SetTarget(0);
+    private async void tar2_Tapped(object sender, TappedEventArgs e) => SetTarget(1);
+    private async void tar3_Tapped(object sender, TappedEventArgs e) => SetTarget(2);
+
+    private void sup1_Tapped(object sender, TappedEventArgs e) => use_sup(0);
+    private void sup2_Tapped(object sender, TappedEventArgs e) => use_sup(1);
+    private void sup3_Tapped(object sender, TappedEventArgs e) => use_sup(2);
+
+    public void use_sup(int n)
+    {
+        // Проверяем, существует ли такое зелье
+        if (n < 0 || n >= supes.Count)
+        {
+            turn.Text = "Неверный номер зелья!";
+            return;
+        }
+
+        // Проверяем, есть ли зелье в этой ячейке
+        if (supes[n] == null)
+        {
+            turn.Text = "Нет зелья в этой ячейке!";
+            return;
+        }
+
+        // Проверяем, выбрана ли валидная цель
+        if (target < 0 || target >= heroes.Count || heroes[target] == null || !heroes[target].alive)
+        {
+            turn.Text = "Сначала выберите живого героя!";
+            return;
+        }
+
+        var hero = heroes[target];
+        var sup = supes[n];
+
+        turn.Text = $"Используется {sup.name} на {hero.name}!";
+
+        // ЛОГИКА УСИЛЕНИЙ ИГРОКА
+        switch (sup.id)
+        {
+            case 1: // Исцеление
+                hero.hp = Math.Min(hero.max_hp, hero.hp + 20);
+                turn.Text = $"{hero.name} исцелен на 20 HP!";
+                break;
+            case 2: // Урон
+                hero.damage = Math.Min(hero.max_damage, hero.damage + 20);
+                turn.Text = $"{hero.name} получил +20 к урону!";
+                break;
+            case 3: // Смесь
+                hero.hp = Math.Min(hero.max_hp, hero.hp + 20);
+                hero.damage = Math.Min(hero.max_damage, hero.damage + 15);
+                turn.Text = $"{hero.name} получил +20 HP и +15 к урону!";
+                break;
+            case 4: // Ослабление - ИЗМЕНЕНИЕ: уменьшает урон случайному врагу на 20
+                var aliveEnemies = enemyheroes.Where(h => h != null && h.alive).ToList();
+                if (aliveEnemies.Count > 0)
+                {
+                    var randomEnemy = aliveEnemies[rand.Next(aliveEnemies.Count)];
+                    randomEnemy.damage = Math.Max(0, randomEnemy.damage - 20);
+                    turn.Text = $"{randomEnemy.name} получил -20 к урону!";
+                    // Обновляем врагов, так как изменился их урон
+                    UpdateAllEnemyDisplays();
+                }
+                else
+                {
+                    turn.Text = "Нет целей для ослабления!";
+                }
+                break;
+            case 5: // Доп.Жизнь
+                mylifes++;
+                turn.Text = "Получена дополнительная жизнь!";
+                break;
+            case 6: // Большое исцеление
+                hero.hp = Math.Min(hero.max_hp, hero.hp + 30);
+                turn.Text = $"{hero.name} исцелен на 30 HP!";
+                break;
+            case 7: // Чёрная дыра
+                var aliveEnemiesForBlackHole = enemyheroes.Where(h => h != null && h.alive).ToList();
+                if (aliveEnemiesForBlackHole.Count > 0)
+                {
+                    var randomEnemy = aliveEnemiesForBlackHole[rand.Next(aliveEnemiesForBlackHole.Count)];
+                    randomEnemy.alive = false;
+                    randomEnemy.hp = 0;
+                    turn.Text = $"{randomEnemy.name} уничтожен черной дырой!";
+                    // Обновляем врагов, так как один из них умер
+                    UpdateAllEnemyDisplays();
+                }
+                else
+                {
+                    turn.Text = "Нет целей для черной дыры!";
+                }
+                break;
+            case 8: // Галактика
+                    // Эффект применяется в конце раунда
+                turn.Text = "Эффект Галактики активирован!";
+                break;
+            case 9: // Экскалибур
+                hero.damage = Math.Min(hero.max_damage, hero.damage + 35);
+                turn.Text = $"{hero.name} получил +35 к урону!";
+                break;
+            case 10: // Антиматерия
+                foreach (var playerHero in heroes)
+                {
+                    if (playerHero != null)
+                    {
+                        playerHero.radiation = 0;
+                        // Восстанавливаем немного HP при очистке радиации
+                        playerHero.hp = Math.Min(playerHero.max_hp, playerHero.hp + 10);
+                    }
+                }
+                turn.Text = "Радиация очищена у всех героев!";
+                break;
+            case 11: // Странное зелье
+                int chance = rand.Next(1, 5);
+                switch (chance)
+                {
+                    case 1:
+                        hero.hp = Math.Min(hero.max_hp, hero.hp + 20);
+                        turn.Text = $"{hero.name} получил +20 HP!";
+                        break;
+                    case 2:
+                        hero.hp = Math.Max(1, hero.hp - 20); // Минимум 1 HP чтобы не умереть
+                        turn.Text = $"{hero.name} потерял 20 HP!";
+                        break;
+                    case 3:
+                        hero.damage = Math.Min(hero.max_damage, hero.damage + 10);
+                        turn.Text = $"{hero.name} получил +10 к урону!";
+                        break;
+                    case 4:
+                        hero.damage = Math.Max(1, hero.damage - 10); // Минимум 1 урона
+                        turn.Text = $"{hero.name} потерял 10 урона!";
+                        break;
+                }
+                break;
+            case 12: // Зелье радиации
+                foreach (var enemy in enemyheroes)
+                {
+                    if (enemy != null && enemy.alive)
+                    {
+                        enemy.radiation += 10;
+                    }
+                }
+                turn.Text = "Все враги получили радиацию!";
+                // Обновляем врагов, так как изменилась их радиация
+                UpdateAllEnemyDisplays();
+                break;
+            case 13: // Мрачное зелье
+                     // Мрачное зелье - нельзя использовать, просто занимает клетку
+                turn.Text = "Мрачное зелье нельзя использовать!";
+                return; // Не удаляем карту
+            case 14: // Монета обмена
+                     // Меняет местами здоровье и урон
+                int tempHp = hero.hp;
+                int tempDamage = hero.damage;
+                hero.hp = Math.Min(hero.max_hp, tempDamage); // Ограничиваем максимальным HP
+                hero.damage = Math.Min(hero.max_damage, tempHp); // Ограничиваем максимальным уроном
+
+                // Корректируем максимальные значения если нужно
+                if (hero.hp > hero.max_hp) hero.max_hp = hero.hp;
+                if (hero.damage > hero.max_damage) hero.max_damage = hero.damage;
+
+                turn.Text = $"{hero.name} поменял HP и урон местами!";
+                break;
+            case 15: // Конфеты
+                     // Конфеты - меняет на случайного другого воина
+                int randomHeroId = rand.Next(0, heros.Count);
+                string[] newHeroData = heros[randomHeroId].Split(':');
+                string oldName = hero.name;
+
+                heroes[target] = new Hero(
+                    newHeroData[1],
+                    int.Parse(newHeroData[2]),
+                    int.Parse(newHeroData[3]),
+                    int.Parse(newHeroData[4]),
+                    int.Parse(newHeroData[5]),
+                    hero.radiation, // Сохраняем текущую радиацию
+                    int.Parse(newHeroData[6]),
+                    true,
+                    newHeroData[7]
+                );
+                turn.Text = $"{oldName} превратился в {heroes[target].name}!";
+                break;
+            default:
+                turn.Text = "Неизвестное зелье!";
+                return;
+        }
+
+        // Удаляем карту только если это не Мрачное зелье
+        if (sup.id != 13)
+        {
+            supes[n] = null;
+        }
+
+        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем все отображения после использования зелья
+        UpdateAllBattleDisplays();
+        UpdateAllEnemyDisplays();
+    }
+
+    public void draw()
+    {
+        UpdateShopDisplay(heroes[0], herohp1, herodmg1, heroen1, heroimg1, herotitle1);
+        UpdateShopDisplay(heroes[1], herohp2, herodmg2, heroen2, heroimg2, herotitle2);
+        UpdateShopDisplay(heroes[2], herohp3, herodmg3, heroen3, heroimg3, herotitle3);
+        UpdateSupDisplay(supes[0], supen1, supimg1, suptitle1);
+        UpdateSupDisplay(supes[1], supen2, supimg2, suptitle2);
+        UpdateSupDisplay(supes[2], supen3, supimg3, suptitle3);
+    }
+
+    private void skip_Clicked(object sender, EventArgs e)
+    {
+        time = 5;
+    }
+}

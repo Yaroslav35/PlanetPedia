@@ -1,0 +1,1454 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.game">
+    <ScrollView>
+        <VerticalStackLayout>
+            <VerticalStackLayout x:Name="main">
+                <Border Stroke="Black" Margin="10,5" Background="#aaaaaa">
+                    <VerticalStackLayout>
+                        <Label 
+                            x:Name="stars"
+                            Text="Звёзды: 0"
+                            TextColor="Black"
+                            FontSize="30"
+                            FontAttributes="Bold"
+                            Margin="10,0,0,0"/>
+                        <Label 
+                            x:Name="zone"
+                            Text="Зона орбиты"
+                            TextColor="Black"
+                            FontSize="20"
+                            FontAttributes="Italic"
+                            Margin="10,0,0,5"/>
+                    </VerticalStackLayout>
+                </Border>
+                <ImageButton 
+                    x:Name="img"
+                    Source="island1.jfif"
+                    MaximumWidthRequest="500"
+                    MaximumHeightRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,30,40,0"
+                    CornerRadius="10"
+                    Clicked="ImageButton_Clicked" />
+                <Button 
+                    x:Name="play"
+                    Text="ИГРАТЬ!"
+                    Background="Gold"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    TextColor="Brown"
+                    BorderWidth="5"
+                    BorderColor="DarkOrange"
+                    MaximumWidthRequest="300"
+                    Margin="20,50,20,0"
+                    Clicked="play_Clicked"/>
+                <Button 
+                    x:Name="collection"
+                    Text="Коллекция карт"
+                    Background="Green"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BorderWidth="3"
+                    BorderColor="LightGreen"
+                    MaximumWidthRequest="300"
+                    Margin="20,5"
+                    Clicked="collection_Clicked"/>
+                <Button 
+                    x:Name="hyperarena"
+                    Text="Гипер-арена"
+                    Background="Purple"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BorderWidth="3"
+                    BorderColor="Pink"
+                    MaximumWidthRequest="300"
+                    Margin="20,5"
+                    Clicked="hyperarena_Clicked"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout x:Name="way" IsVisible="False">
+                <Button 
+                    x:Name="back2"
+                    Text="... Вернуться"
+                    HorizontalOptions="Start"
+                    WidthRequest="150"
+                    Background="Transparent"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    FontSize="18"
+                    Margin="0,5,0,0"
+                    Clicked="back_Clicked"/>
+                <Image 
+                    Source="island1.jfif"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,30,40,0"/>
+                <Label 
+                    Text="Зона 1"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="Зона Орбиты"
+                    FontSize="28"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="0 - 500⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="astronaut.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="sunc.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="moonc.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="heal.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="damage.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="healdamage.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Image 
+                    Source="island2.jfif"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,70,40,0"/>
+                <Label 
+                    Text="Зона 2"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="Зона Солнечной системы"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="501 - 1000⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="venusc.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="jupiterc.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="pluto.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="weak.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="extralife.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="bigheal.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Image 
+                    Source="island3.jfif"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,70,40,0"/>
+                <Label 
+                    Text="Зона 3"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="Зона Вне дома"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="1001 - 1500⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="netron.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="supernova.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="exoplanet.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="blackhole.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="galaxy.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="excalibur.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Image 
+                    Source="island4.jfif"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,70,40,0"/>
+                <Label 
+                    Text="Зона 4"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="Зона Веселья"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="1501 - 2000⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="pinata.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="quark.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="disco.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="antimatter.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="strange.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="radiation.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Image 
+                    Source="island5.jfif"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,70,40,0"/>
+                <Label 
+                    Text="Зона 5"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="Зона Страха"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="2001 - 3000⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="pumpkin.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="gloomy.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="ghost.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="disablepotion.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="change.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="candies_pumpkin.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Image 
+                    Source="island6.jfif"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,70,40,0"/>
+                <Label 
+                    Text="Зона 6"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="Песчанная зона"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="3001+ ⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="waterplanet.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="cometc.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="cocos.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="sandy.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Image 
+                    Source="hyperarena.jfif"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,70,40,0"/>
+                <Label 
+                    Text="Гипер-арена"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="5001+ ⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="Новый рейтинг, больше жизней и бан карт"
+                    FontSize="22"
+                    Margin="20,0"
+                    FontAttributes="Italic"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"/>
+                
+                <Label Text=""/>
+            </VerticalStackLayout>
+            <VerticalStackLayout x:Name="cards" IsVisible="False">
+                <Button 
+                    x:Name="back"
+                    Text="... Вернуться"
+                    HorizontalOptions="Start"
+                    WidthRequest="150"
+                    Background="Transparent"
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    FontSize="18"
+                    Margin="0,5,0,0"
+                    Clicked="back_Clicked"/>
+                <Label 
+                    Text="Коллекция"
+                    FontSize="28"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"/>
+                <Label 
+                    Text="Зона 1: Зона орбиты"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты урона"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Астронавт"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="astronaut.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 80; Урон: 20"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Обыкновенный астронавт со стандартным запасов здоровья и урона'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Солнце"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="sunc.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 40; Урон: 50"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Огромный воин, но с маленьким здоровьем и большим уроном'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Луна"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="moonc.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 150; Урон: 5"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Отличный защитник с маленьким уроном'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+                <Label 
+                    Text="Карты усиления"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Исцеление"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="heal.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: +20"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Маленькое зелье исцеления, сваренное на Проксиме Центавра b'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Урон"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="damage.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Урон: +20"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Небольшое зелье урона с Tres-2b'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Смесь"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="healdamage.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: +20; Урон: +15"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Опасная смесь. На колбе написано - компоненты собраны на Титане и Ганимеде'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+
+                <Label 
+                    Text="Зона 2: Зона Солнечной системы"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты урона"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Венера"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="venusc.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 60; Урон: 40"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Средний воин из Солнечной системы'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Юпитер"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="jupiterc.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 180; Урон: 3"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Огромная планета с мощнейшим запасом здоровья, но очень уж дружелюбная'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Плутон"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="pluto.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 40; Урон: 70"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Другие планеты называют его хрупким, но они не знают он скрывает...'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+                <Label 
+                    Text="Карты усиления"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Ослабление"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="weak.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Урон врага: -10"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Зелье, ослабляющее врага. Никто не знает из чего оно сделано...'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Доп. жизнь"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="extralife.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Жизнь: +1"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Неизвестный артефакт, прибывший из другой Вселенной?'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Большое исцеление"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="bigheal.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: +30"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Большая колба целительного зелья для особых обжор'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+
+                <Label 
+                    Text="Зона 3: Зона Вне дома"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты урона"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Пульсар"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="netron.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 100; Радиация: 10"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Опасная звезда, наносящая периодический урон радиацией'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Сверхновая"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="supernova.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 90; Урон: 20"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Гигантский воин, наносящий урон по всем врагам'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Экзопланета"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="exoplanet.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 30; Урон: 15"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Слабый воин, при смерти трансформируется в другую планету'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+                <Label 
+                    Text="Карты усиления"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Чёрная дыра"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="blackhole.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Временно блокирует врага"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Мощнейший объект способный блокировать другие карты'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Галактика"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="galaxy.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Энергия: +2"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Огромная структура, дающая дополнительную энергию'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Экскалибур"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="excalibur.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Урон: +35"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Меч неизвестного война Вселенной. Даёт мощнейший бонус к урону'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+
+                <Label 
+                    Text="Зона 4: Зона Веселья"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты урона"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Пиньята"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="pinata.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 90; Урон: 30;Радиация: 10"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Хоть она и кажется весёлой, внутри её живёт беспощадный воин, способный уничтожить всех'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Кварк"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="quark.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 1000; Урон: 80"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Маленькая частица с большим уроном. После своего хода умирает'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Дискошар"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="disco.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 95; урон врагу: -10"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Обожает устраивать праздники, и ослаблять врагов'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+                <Label 
+                    Text="Карты усиления"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Антиматерия"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="antimatter.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Очищает от радиации"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Неопознанная материя. Единственное, что о ней известно - это то, что на помогает от радиации'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Странное зелье"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="strange.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Случайный эффект"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Данное зелье синтезировалось ядре HD 189733 A b, где его и добыли. Его эффект непредсказуем. Удача сегодня на твоей стороне?'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Зелье радиации"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="radiation.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Заражает всех врагов радиацией"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Вещество, синтезированное Высшей Расой. Изначально использовалось в мирных целях, но потом стало применяться как биологическое оружие'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+
+                <Label 
+                    Text="Зона 5: Зона Страха"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты урона"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Тыква"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="pumpkin.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 80; Урон: 1-80"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Съедобный воин. Чем меньше у неё здоровье, тем больше урон'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Мрачник"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="gloomy.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 80; Урон: 30"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Очень мрачная планета. При сметри даёт противнику мрачное зелье'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Призрак"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="ghost.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 60; урон: 40"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Может так спрятаться, что другие планеты его не могут найти. С шансом 50% по нему не пройдёт урон'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+                <Label 
+                    Text="Карты усиления"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Мрачное зелье"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="disablepotion.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Для чего оно?"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text=""
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Монета обмена"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="change.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Меняет местами здоровье и урон"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Используй её грамотно!'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Конфеты"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="candies_pumpkin.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Заменяет союзника на случайного"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Весёлые конфетки, которые меняют тебе союзников'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+
+                <Label 
+                    Text="Зона 6: Пляжная зона"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты урона"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Водная планета"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="waterplanet.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 60; Урон: 30"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Наносит урон по всем целям. В отличии от сверхновой имеет меньше здоровья и больше урона'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Комета"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="cometc.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 130; Урон: 40"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Мощный воин, прилетевший из облака Оорта'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Кокос"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="cocos.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 150; урон: 10"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Имеет очень прочную оболочку. При сметри исцеляет всех союзников'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Песчаный"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="sandy.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 100; урон: 30"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Очень молодая планета из песка, любит веселиться. При атаке исцеляется'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

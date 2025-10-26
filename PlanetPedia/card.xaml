@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.card"
+             Title="">
+    <ScrollView>
+        <VerticalStackLayout x:Name="stack">
+            <Label
+                x:Name="title"
+                Text="Title"
+                FontSize="30"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                Margin="0,5,0,0" />
+            <Image 
+                x:Name="img"
+                Source="sun.png"
+                WidthRequest="300"
+                HeightRequest="300"
+                HorizontalOptions="Center"
+                Margin="0,20,0,0"/>
+            <Label 
+                Text="Характеристики"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="15,20,0,0"/>
+            <Border x:Name="propertybox" Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <VerticalStackLayout x:Name="propertylist"></VerticalStackLayout>
+            </Border>
+            <Label 
+                Text="Основная информация"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="15,20,0,0"/>
+            <Border Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <Label 
+                    x:Name="about"
+                    Text="Какой-то длинный текст" 
+                    FontSize="16"
+                    HorizontalTextAlignment="Center"
+                    TextColor="Black"
+                    Margin="15,10"/>
+            </Border>
+            <Label 
+                Text="Интересные факты"
+                FontSize="20"
+                FontAttributes="Bold"
+        Margin="15,20,0,0"/>
+            <Border x:Name="uniquebox" Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <VerticalStackLayout x:Name="uniquelist"></VerticalStackLayout>
+            </Border>
+            <Label 
+                Text="Спутники"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="15,20,0,0"/>
+            <Border x:Name="moonsbox" Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <VerticalStackLayout x:Name="moonslist" Margin="0,10,0,5"></VerticalStackLayout>
+            </Border>
+            <Label 
+                Text="Галерея"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="15,20,0,0"/>
+            <Border x:Name="picbox" Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <FlexLayout x:Name="piclist" Margin="0,10,0,5" Direction="Row" Wrap="Wrap" JustifyContent="Center" AlignItems="Center" AlignContent="Center">
+                    
+                </FlexLayout>
+            </Border>
+            <Label 
+                Text="Видео"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="15,20,0,0"/>
+            <Border x:Name="vidbox" Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <VerticalStackLayout>
+                    <Grid x:Name="vid" SizeChanged="vid_SizeChanged">
+                        <WebView 
+                            x:Name="web"
+                            VerticalOptions="Fill"
+                            HorizontalOptions="Fill"
+                            Margin="5"/>
+                        <Label 
+                            x:Name="pad"
+                            Text=""
+                            FontSize="14"/>
+                    </Grid>
+                    <Button 
+                        x:Name="full"
+                        Text="Полноэкранный режим"
+                        Margin="10,5,10,9"
+                        MaximumWidthRequest="300"
+                        TextColor="{AppThemeBinding Dark=White, Light=Black}"
+                        Clicked="full_Clicked"/>
+                </VerticalStackLayout>
+            </Border>
+            <Label 
+                Text="3D Просмотр"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="15,20,0,0"/>
+            <Border x:Name="box3d" Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <VerticalStackLayout>
+                    <Grid x:Name="third" SizeChanged="third_SizeChanged">
+                        <WebView 
+                            x:Name="web3d"
+                            VerticalOptions="Fill"
+                            HorizontalOptions="Fill"
+                            Margin="5"/>
+                        <Label 
+                            x:Name="pad2"
+                            Text=""
+                            FontSize="14"/>
+                    </Grid>
+                    <Button 
+                        x:Name="web3d_full"
+                        Text="Полноэкранный режим"
+                        Margin="10,5,10,9"
+                        MaximumWidthRequest="300"
+                        TextColor="{AppThemeBinding Dark=White, Light=Black}"
+                        Clicked="web3d_full_Clicked"/>
+                </VerticalStackLayout>
+            </Border>
+            <Label 
+                Text="Тесты"
+                FontSize="20"
+                FontAttributes="Bold"
+                Margin="15,20,0,0"/>
+            <Border x:Name="tests" Margin="10,5,10,0" BackgroundColor="#eeeeee" Stroke="Black">
+                <VerticalStackLayout x:Name="tests_stack">
+                    
+                </VerticalStackLayout>
+            </Border>
+            <Button 
+                x:Name="wiki"
+                Text="Больше информации..."
+                MaximumWidthRequest="200"
+                HeightRequest="30"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Dark=#00EEEE, Light=#0000EE}"
+                Margin="0,0,0,10"
+                Clicked="wiki_Clicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
