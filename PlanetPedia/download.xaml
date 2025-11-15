@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.download"
+             Title="download">
+    <VerticalStackLayout VerticalOptions="Center">
+        <Label 
+            x:Name="status"
+            Text="Получаем доступ..."
+            HorizontalTextAlignment="Center"
+            FontSize="28"
+            FontAttributes="Bold"/>
+        <Image 
+            Source="ico.png"
+            HeightRequest="300"
+            HorizontalOptions="Center"/>
+        <Label 
+            x:Name="task"
+            Text="Задача"
+            HorizontalTextAlignment="Center"
+            FontSize="20"/>
+        <Label 
+            x:Name="progres"
+            Text="Прогресс задачи"
+            FontSize="18"
+            HorizontalTextAlignment="Center"
+            Margin="0,10"/>
+        <Label 
+            Text="Внимание! Не закрывайте страницу. Она сама закроется по завершению!"
+            HorizontalTextAlignment="Center"
+            FontSize="16"
+            Margin="20,10"/>
+    </VerticalStackLayout>
+</ContentPage>

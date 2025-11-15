@@ -3,12 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlanetPedia.web"
              Title="">
-    <Grid x:Name="stack">
-        <WebView 
-            x:Name="webview"
-            Source=""
-            HorizontalOptions="Fill"
-            VerticalOptions="Fill"
-            Navigating="webview_Navigating"/>
+    <Grid RowDefinitions="Auto,*">
+        <Label x:Name="backl" 
+               Text="Назад" 
+               FontAttributes="Bold" 
+               Margin="10,10,0,10" 
+               IsVisible="False"
+               Grid.Row="0">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer 
+                    x:Name="back"
+                    Tapped="back_Tapped"/>
+            </Label.GestureRecognizers>
+        </Label>
+
+        <Grid x:Name="stack"
+              Grid.Row="1">
+            <WebView 
+                x:Name="webview"
+                Source=""
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
+                Navigating="webview_Navigating"/>
+        </Grid>
     </Grid>
 </ContentPage>

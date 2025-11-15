@@ -9,6 +9,7 @@ public partial class settings : ContentPage
     bool mus;
     bool vib;
     bool isrun = false;
+    bool initialized = false;
     public settings()
 	{
 		InitializeComponent();
@@ -60,6 +61,7 @@ public partial class settings : ContentPage
             name.VerticalOptions = LayoutOptions.Center;
             hor.Add(name);
         }
+        initialized = true;
     }
     private void back_Clicked(object sender, EventArgs e)
     {
@@ -139,7 +141,29 @@ public partial class settings : ContentPage
         vib = vibro.IsToggled;
         Preferences.Set("vibro", vib);
 
-        if (vibro.IsToggled) Vibration.Default.Vibrate();
+#if ANDROID || IOS
+        if (vibro.IsToggled && initialized) Vibration.Default.Vibrate();
+#endif
 
+    }
+
+    private async void offlineb_Clicked(object sender, EventArgs e)
+    {
+        var readExternalPermission = await CheckAndRequestPermission<Permissions.StorageRead>();
+        var writeExternalPermission = await CheckAndRequestPermission<Permissions.StorageWrite>();
+        var mediaPermission = await CheckAndRequestPermission<Permissions.Media>();
+        if(readExternalPermission == PermissionStatus.Granted && writeExternalPermission == PermissionStatus.Granted && mediaPermission == PermissionStatus.Granted) await Navigation.PushAsync(new offline());
+
+    }
+
+    public async Task<PermissionStatus> CheckAndRequestPermission<T>() where T : Permissions.BasePermission, new()
+    {
+        var status = await Permissions.CheckStatusAsync<T>();
+
+        if (status == PermissionStatus.Granted)
+            return status;
+
+        status = await Permissions.RequestAsync<T>();
+        return status;
     }
 }

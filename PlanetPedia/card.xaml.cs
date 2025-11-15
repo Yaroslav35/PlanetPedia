@@ -1,5 +1,7 @@
 using CommunityToolkit.Maui.Views;
-
+#if ANDROID
+using Android.OS;
+#endif
 namespace PlanetPedia;
 
 public partial class card : ContentPage
@@ -14,10 +16,9 @@ public partial class card : ContentPage
 		InitializeComponent();
 		file = file_get;
 		file_moons = file_moons_get;
-		read();
+        read();
 	}
-
-	async private void read()
+    async private void read()
 	{
 		bool vid_enabled = Preferences.Get("video", true);
         bool obj_enabled = Preferences.Get("obj", true);
@@ -211,7 +212,107 @@ public partial class card : ContentPage
 			horizontal.Children.Add(title);
 		}
 
-		stack.Children.Add(wiki);
+#if ANDROID
+		try
+		{
+		string dir = "";
+		var context = Android.App.Application.Context;
+
+        // Для Android 10+ (API 29+) используем Scoped Storage
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+        {
+            dir = context.GetExternalFilesDir(null)?.AbsolutePath;
+        }
+        else
+        {
+            // Для более старых версий
+            var externalPath = Android.OS.Environment.GetExternalStoragePublicDirectory(
+                Android.OS.Environment.DirectoryDocuments)?.AbsolutePath;
+            var packageName = context.PackageName;
+            dir =  Path.Combine(externalPath, "Android", "data", packageName);
+        }
+
+		try
+    {
+        var directoryPath = dir;
+        
+        if (!string.IsNullOrEmpty(directoryPath))
+        {
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+                Console.WriteLine($"Папка создана: {directoryPath}");
+            }
+            else
+            {
+                Console.WriteLine($"Папка уже существует: {directoryPath}");
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ошибка при создании папки: {ex.Message}");
+    }
+
+		var basePath = dir;
+		var fullPath = Path.Combine(basePath, "offline");
+
+		if(File.Exists(Path.Combine(fullPath, file.Split(".")[0] + ".mp4"))) 
+		{
+			string videoPath = Path.Combine(fullPath, file.Split(".")[0] + ".mp4");
+            var htmlContent = $@"
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ margin: 0; padding: 0; background: transparent; }}
+            video {{ width: 100%; height: 100%; background: black; }}
+        </style>
+    </head>
+    <body>
+        <video controls>
+            <source src='file://{videoPath}' type='video/mp4'>
+            Your browser does not support the video tag.
+        </video>
+    </body>
+    </html>";
+
+            var htmlSource = new HtmlWebViewSource { Html = htmlContent };
+            web.Source = htmlSource;
+		}
+	}
+	catch
+	{
+		//
+	}
+#elif WINDOWS
+        string userFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
+        if (File.Exists(Path.Combine(userFolder, "PlanetPedia", file.Split(".")[0] + ".mp4")))
+        {
+            string videoPath = Path.Combine(userFolder, "PlanetPedia" , file.Split(".")[0] + ".mp4");
+            var htmlContent = $@"
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ margin: 0; padding: 0; background: transparent; }}
+            video {{ width: 100%; height: 100%; background: black; }}
+        </style>
+    </head>
+    <body>
+        <video controls>
+            <source src='file://{videoPath}' type='video/mp4'>
+            Your browser does not support the video tag.
+        </video>
+    </body>
+    </html>";
+
+            var htmlSource = new HtmlWebViewSource { Html = htmlContent };
+            web.Source = htmlSource;
+        }
+#endif
+
+        stack.Children.Add(wiki);
     }
 
     private void test_go(object? sender, TappedEventArgs e, string title, string dir)
@@ -255,7 +356,7 @@ public partial class card : ContentPage
 
     private void full_Clicked(object sender, EventArgs e)
     {
-		Navigation.PushAsync(new web(vid_url));
+		Navigation.PushModalAsync(new web(vid_url, true));
     }
 
     private void vid_SizeChanged(object sender, EventArgs e)

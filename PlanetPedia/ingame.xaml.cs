@@ -36,8 +36,6 @@ public partial class ingame : ContentPage
         "12:Дискошар:95:0:140:0:6:disco.png",
         "13:Тыква:110:1:165:80:5:pumpkin.png",
         "14:Мрачник:80:30:120:45:4:gloomy.png",
-        "15:Призрак:60:40:90:60:5:ghost.png",
-        // НОВЫЕ ГЕРОИ
         "16:Водяная планета:60:30:90:45:4:waterplanet.png",
         "17:Комета:130:40:195:60:5:cometc.png",
         "18:Кокос:150:10:225:15:6:cocos.png",
@@ -87,7 +85,6 @@ public partial class ingame : ContentPage
                            int.Parse(data[4]), int.Parse(data[5]), 0,
                            int.Parse(data[6]), true, data[7]);
 
-        // Обновляем выделение цели
         UpdateTargetHighlight();
         draw();
     }
@@ -100,7 +97,7 @@ public partial class ingame : ContentPage
         else if (stars > 1000 && stars <= 1500) maxCardId = 9;
         else if (stars > 1500 && stars <= 2000) maxCardId = 12;
         else if (stars > 2000 && stars <= 3000) maxCardId = 15;
-        else maxCardId = 19; // 3000+ звезд - все карты доступны (включая новых героев)
+        else maxCardId = 19;
 
         return rand.Next(0, maxCardId);
     }
@@ -118,7 +115,6 @@ public partial class ingame : ContentPage
 
         if (type == 0)
         {
-            // ИСПРАВЛЕНИЕ: Для усилений используем отдельный случайный ID в пределах списка усилений
             int supId = rand.Next(0, sups.Count);
             string[] data = sups[supId].Split(':');
 
@@ -131,7 +127,6 @@ public partial class ingame : ContentPage
         }
         else
         {
-            // ИСПРАВЛЕНИЕ: Для героев используем обычный метод получения ID
             int heroId = GetRandomCardId();
             string[] data = heros[heroId].Split(':');
 
@@ -210,7 +205,6 @@ public partial class ingame : ContentPage
 
     private void BuySup(string name, int energyCost, string image)
     {
-        // ИСПРАВЛЕННЫЙ МЕТОД - правильное определение ID
         var supData = sups.FirstOrDefault(a => a.Contains(name));
         if (supData != null)
         {
@@ -276,7 +270,9 @@ public partial class ingame : ContentPage
             else
             {
                 time_run = false;
+#if ANDROID || IOS
                 if (vibro) Vibration.Default.Vibrate();
+#endif
                 StartBattle();
             }
         }
@@ -297,7 +293,6 @@ public partial class ingame : ContentPage
         UpdateAllEnemyDisplays();
     }
 
-    // НОВЫЙ МЕТОД: Обновляет все отображения героев игрока в бою
     private void UpdateAllBattleDisplays()
     {
         UpdateBattleDisplay(heroes[0], mhp1, mdmg1, men1, mimg1, mtitle1);
@@ -308,7 +303,6 @@ public partial class ingame : ContentPage
         UpdateSupDisplay(supes[2], men6, mimg6, mtitle6);
     }
 
-    // НОВЫЙ МЕТОД: Обновляет все отображения врагов в бою
     private void UpdateAllEnemyDisplays()
     {
         UpdateBattleDisplay(enemyheroes[0], ehp1, edmg1, een1, eimg1, etitle1);
@@ -325,7 +319,6 @@ public partial class ingame : ContentPage
         {
             hp.Text = hero.hp.ToString();
 
-            // ОСОБАЯ ЛОГИКА ДЛЯ ТЫКВЫ - ДИНАМИЧЕСКИЙ УРОН
             if (hero.name == "Тыква")
             {
                 int dynamicDamage = 110 - hero.hp;
@@ -338,7 +331,6 @@ public partial class ingame : ContentPage
                 dmg.Text = hero.damage.ToString();
             }
 
-            // НА ЭКРАНЕ ПОКУПКИ - ЭНЕРГИЯ
             en.Text = hero.energy.ToString();
 
             img.Source = hero.pic;
@@ -368,7 +360,6 @@ public partial class ingame : ContentPage
         {
             hp.Text = hero.hp.ToString();
 
-            // ОСОБАЯ ЛОГИКА ДЛЯ ТЫКВЫ - ДИНАМИЧЕСКИЙ УРОН
             if (hero.name == "Тыква")
             {
                 int dynamicDamage = 110 - hero.hp;
@@ -381,7 +372,6 @@ public partial class ingame : ContentPage
                 dmg.Text = hero.damage.ToString();
             }
 
-            // НА ЭКРАНЕ БИТВЫ - РАДИАЦИЯ
             en.Text = hero.radiation.ToString();
 
             img.Source = hero.pic;
@@ -433,7 +423,6 @@ public partial class ingame : ContentPage
 
             if (type == 0 && s < 3)
             {
-                // ИСПРАВЛЕНИЕ: Для усилений используем отдельный случайный ID
                 int supId = rand.Next(0, sups.Count);
                 string[] data = sups[supId].Split(':');
                 if (enemyenergy >= int.Parse(data[2]))
@@ -445,7 +434,6 @@ public partial class ingame : ContentPage
             }
             else if (type == 1 && h < 3)
             {
-                // ИСПРАВЛЕНИЕ: Для героев используем обычный метод получения ID
                 int heroId = GetRandomCardId();
                 string[] data = heros[heroId].Split(':');
                 if (enemyenergy >= int.Parse(data[6]))
@@ -496,14 +484,15 @@ public partial class ingame : ContentPage
 
             ApplyRadiationDamage();
 
-            // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после каждого хода
             UpdateAllBattleDisplays();
             UpdateAllEnemyDisplays();
 
             await Task.Delay(300);
         }
 
+#if ANDROID || IOS
         if (vibro) Vibration.Default.Vibrate();
+#endif
         await EndBattle();
     }
 
@@ -617,10 +606,8 @@ public partial class ingame : ContentPage
 
         turn.Text = $"{enemy.name} атакует {player.name}!";
 
-        // ЛОГИКА АТАКИ ВРАГА - ОДИНАКОВАЯ С ИГРОКОМ
         if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(enemy.name))
         {
-            // ПРОВЕРКА ДЛЯ ПРИЗРАКА - 50% ШАНС НЕ ПОЛУЧИТЬ УРОН
             if (player.name == "Призрак" && rand.Next(0, 2) == 0)
             {
                 turn.Text = $"{player.name} увернулся от атаки!";
@@ -660,7 +647,6 @@ public partial class ingame : ContentPage
             {
                 if (heroes[i] != null && heroes[i].alive)
                 {
-                    // ПРОВЕРКА ДЛЯ ПРИЗРАКА В МАССОВОЙ АТАКЕ
                     if (heroes[i].name == "Призрак" && rand.Next(0, 2) == 0)
                     {
                         // Призрак избежал урона
@@ -712,7 +698,6 @@ public partial class ingame : ContentPage
                 if (player.damage < 0) player.damage = 0;
             }
         }
-        // НОВЫЕ ГЕРОИ ДЛЯ ВРАГА
         else if (enemy.name == "Тыква")
         {
             int dynamicDamage = 110 - enemy.hp;
@@ -743,7 +728,6 @@ public partial class ingame : ContentPage
         }
         else if (enemy.name == "Призрак")
         {
-            // ПРИЗРАК АТАКУЕТ ПРИЗРАКА - особая проверка
             if (player.name == "Призрак" && rand.Next(0, 2) == 0)
             {
                 turn.Text = $"{player.name} увернулся от атаки призрака!";
@@ -754,15 +738,12 @@ public partial class ingame : ContentPage
                 CheckPlayerDeath(playerIndex);
             }
         }
-        // НОВЫЕ ГЕРОИ ДЛЯ ВРАГА
         else if (enemy.name == "Водяная планета")
         {
-            // Массовая атака всем героям игрока
             for (int i = 0; i < heroes.Count; i++)
             {
                 if (heroes[i] != null && heroes[i].alive)
                 {
-                    // ПРОВЕРКА ДЛЯ ПРИЗРАКА В МАССОВОЙ АТАКЕ
                     if (heroes[i].name == "Призрак" && rand.Next(0, 2) == 0)
                     {
                         // Призрак избежал урона
@@ -810,13 +791,11 @@ public partial class ingame : ContentPage
             {
                 player.hp -= enemy.damage;
                 CheckPlayerDeath(playerIndex);
-                // Песчаный исцеляет себя после атаки
                 enemy.hp = Math.Min(enemy.max_hp, enemy.hp + 10);
                 turn.Text = $"{enemy.name} атаковал и исцелил себя на 10 HP!";
             }
         }
 
-        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после атаки врага
         UpdateAllBattleDisplays();
         UpdateAllEnemyDisplays();
 
@@ -831,7 +810,7 @@ public partial class ingame : ContentPage
     {
         var availableSups = enemysupes
             .Select((sup, index) => (sup, index))
-            .Where(x => x.sup != null && x.sup.id != 13) // Исключаем Мрачное зелье
+            .Where(x => x.sup != null && x.sup.id != 13)
             .ToList();
 
         if (availableSups.Count == 0)
@@ -855,7 +834,6 @@ public partial class ingame : ContentPage
 
         turn.Text = $"Противник использует {sup.name}!";
 
-        // ЛОГИКА УСИЛЕНИЙ ВРАГА - ОДИНАКОВАЯ С ИГРОКОМ
         switch (sup.id)
         {
             case 1:
@@ -869,7 +847,6 @@ public partial class ingame : ContentPage
                 target.damage = Math.Min(target.max_damage, target.damage + 15);
                 break;
             case 4:
-                // ИЗМЕНЕНИЕ: Ослабление теперь уменьшает урон врагу на 20
                 var alivePlayers = heroes.Where(h => h != null && h.alive).ToList();
                 if (alivePlayers.Count > 0)
                 {
@@ -923,9 +900,7 @@ public partial class ingame : ContentPage
                     }
                 }
                 break;
-            // НОВЫЕ УСИЛЕНИЯ ДЛЯ ВРАГА
             case 14:
-                // Монета обмена
                 int tempHp = target.hp;
                 int tempDamage = target.damage;
                 target.hp = tempDamage;
@@ -934,7 +909,6 @@ public partial class ingame : ContentPage
                 target.max_damage = Math.Max(target.max_damage, target.damage);
                 break;
             case 15:
-                // Конфеты
                 int randomHeroId = rand.Next(0, heros.Count);
                 string[] newHeroData = heros[randomHeroId].Split(':');
                 enemyheroes[targetIndex] = new Hero(
@@ -953,7 +927,6 @@ public partial class ingame : ContentPage
 
         enemysupes[selectedSup.index] = null;
 
-        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после использования усиления
         UpdateAllBattleDisplays();
         UpdateAllEnemyDisplays();
 
@@ -970,7 +943,6 @@ public partial class ingame : ContentPage
 
         turn.Text = $"{hero.name} атакует {enemy.name}!";
 
-        // ЛОГИКА АТАКИ ИГРОКА - ОДИНАКОВАЯ С ВРАГОМ
         if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(hero.name))
         {
             enemy.hp -= hero.damage;
@@ -1014,7 +986,6 @@ public partial class ingame : ContentPage
             enemy.damage -= 10;
             if (enemy.damage < 0) enemy.damage = 0;
         }
-        // НОВЫЕ ГЕРОИ
         else if (hero.name == "Тыква")
         {
             int dynamicDamage = 110 - hero.hp;
@@ -1034,10 +1005,8 @@ public partial class ingame : ContentPage
             enemy.hp -= hero.damage;
             CheckEnemyDeath(enemyIndex);
         }
-        // НОВЫЕ ГЕРОИ ДЛЯ ИГРОКА
         else if (hero.name == "Водяная планета")
         {
-            // Массовая атака всем врагам
             for (int i = 0; i < enemyheroes.Count; i++)
             {
                 if (enemyheroes[i] != null && enemyheroes[i].alive)
@@ -1062,12 +1031,10 @@ public partial class ingame : ContentPage
         {
             enemy.hp -= hero.damage;
             CheckEnemyDeath(enemyIndex);
-            // Песчаный исцеляет себя после атаки
             hero.hp = Math.Min(hero.max_hp, hero.hp + 10);
             turn.Text = $"{hero.name} атаковал и исцелил себя на 10 HP!";
         }
 
-        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем отображение после атаки игрока
         UpdateAllBattleDisplays();
         UpdateAllEnemyDisplays();
 
@@ -1082,7 +1049,6 @@ public partial class ingame : ContentPage
             enemy.alive = false;
             enemy.hp = 0;
 
-            // Особые способности при смерти
             if (enemy.name == "Экзопланета")
             {
                 int a = rand.Next(0, 3);
@@ -1096,7 +1062,6 @@ public partial class ingame : ContentPage
             }
             else if (enemy.name == "Мрачник")
             {
-                // Мрачник при смерти дает противнику мрачное зелье
                 for (int i = 0; i < supes.Count; i++)
                 {
                     if (supes[i] == null)
@@ -1109,7 +1074,6 @@ public partial class ingame : ContentPage
             }
             else if (enemy.name == "Кокос")
             {
-                // Кокос при смерти исцеляет всех союзников на 40 HP
                 for (int i = 0; i < enemyheroes.Count; i++)
                 {
                     if (enemyheroes[i] != null && enemyheroes[i].alive)
@@ -1125,7 +1089,6 @@ public partial class ingame : ContentPage
                 enemyheroes[enemyIndex] = null;
             }
 
-            // Немедленно обновляем отображение после смерти врага
             UpdateAllEnemyDisplays();
         }
     }
@@ -1138,7 +1101,6 @@ public partial class ingame : ContentPage
             player.alive = false;
             player.hp = 0;
 
-            // Особые способности при смерти
             if (player.name == "Экзопланета")
             {
                 int a = rand.Next(0, 3);
@@ -1152,7 +1114,6 @@ public partial class ingame : ContentPage
             }
             else if (player.name == "Мрачник")
             {
-                // Мрачник при смерти дает врагу мрачное зелье
                 for (int i = 0; i < enemysupes.Count; i++)
                 {
                     if (enemysupes[i] == null)
@@ -1165,7 +1126,6 @@ public partial class ingame : ContentPage
             }
             else if (player.name == "Кокос")
             {
-                // Кокос при смерти исцеляет всех союзников на 40 HP
                 for (int i = 0; i < heroes.Count; i++)
                 {
                     if (heroes[i] != null && heroes[i].alive)
@@ -1181,7 +1141,6 @@ public partial class ingame : ContentPage
                 heroes[playerIndex] = null;
             }
 
-            // Обновляем отображение игроков после смерти
             UpdateAllBattleDisplays();
         }
     }
@@ -1190,7 +1149,6 @@ public partial class ingame : ContentPage
     {
         bool needUpdate = false;
 
-        // Сначала собираем индексы героев, которые умрут от радиации
         var playersToDie = new List<int>();
         var enemiesToDie = new List<int>();
 
@@ -1205,7 +1163,7 @@ public partial class ingame : ContentPage
                 if (hero.hp <= 0)
                 {
                     hero.hp = 0;
-                    playersToDie.Add(i); // Запоминаем индекс для обработки смерти
+                    playersToDie.Add(i);
                     needUpdate = true;
                 }
                 else if (oldHp != hero.hp)
@@ -1215,7 +1173,6 @@ public partial class ingame : ContentPage
             }
         }
 
-        // Проверяем врагов
         for (int i = 0; i < enemyheroes.Count; i++)
         {
             var enemy = enemyheroes[i];
@@ -1226,7 +1183,7 @@ public partial class ingame : ContentPage
                 if (enemy.hp <= 0)
                 {
                     enemy.hp = 0;
-                    enemiesToDie.Add(i); // Запоминаем индекс для обработки смерти
+                    enemiesToDie.Add(i);
                     needUpdate = true;
                 }
                 else if (oldHp != enemy.hp)
@@ -1236,19 +1193,16 @@ public partial class ingame : ContentPage
             }
         }
 
-        // Обрабатываем смерти игроков с особыми эффектами
         foreach (int index in playersToDie)
         {
-            CheckPlayerDeath(index); // ВЫЗЫВАЕМ МЕТОД ДЛЯ ОСОБЫХ ЭФФЕКТОВ СМЕРТИ
+            CheckPlayerDeath(index);
         }
 
-        // Обрабатываем смерти врагов с особыми эффектами
         foreach (int index in enemiesToDie)
         {
-            CheckEnemyDeath(index); // ВЫЗЫВАЕМ МЕТОД ДЛЯ ОСОБЫХ ЭФФЕКТОВ СМЕРТИ
+            CheckEnemyDeath(index);
         }
 
-        // Обновляем отображение если были изменения
         if (needUpdate || playersToDie.Count > 0 || enemiesToDie.Count > 0)
         {
             UpdateAllBattleDisplays();
@@ -1274,7 +1228,6 @@ public partial class ingame : ContentPage
 
     private async Task EndBattle()
     {
-        // Обработка Галактики
         if (supes.Any(s => s != null && s.id == 8) || enemysupes.Any(s => s != null && s.id == 8))
         {
             energy += 8;
@@ -1290,12 +1243,11 @@ public partial class ingame : ContentPage
             }
         }
 
-        // СБРОС РАДИАЦИИ У ВСЕХ ВЫЖИВШИХ ГЕРОЕВ ПОСЛЕ РАУНДА
         foreach (var hero in heroes)
         {
             if (hero != null && hero.alive)
             {
-                hero.radiation = 0; // Сбрасываем радиацию
+                hero.radiation = 0;
             }
         }
 
@@ -1303,7 +1255,7 @@ public partial class ingame : ContentPage
         {
             if (enemy != null && enemy.alive)
             {
-                enemy.radiation = 0; // Сбрасываем радиацию
+                enemy.radiation = 0;
             }
         }
 
@@ -1341,7 +1293,6 @@ public partial class ingame : ContentPage
             fight.IsVisible = false;
             preparing.IsVisible = true;
 
-            // Обновляем отображение перед возвратом в режим подготовки
             draw();
 
             timer_control();
@@ -1364,12 +1315,10 @@ public partial class ingame : ContentPage
 
     private void UpdateTargetHighlight()
     {
-        // Сбрасываем все выделения
         my1.Stroke = Colors.Black;
         my2.Stroke = Colors.Black;
         my3.Stroke = Colors.Black;
 
-        // Выделяем текущую цель
         if (target == 0) my1.Stroke = Colors.DarkRed;
         else if (target == 1) my2.Stroke = Colors.DarkRed;
         else if (target == 2) my3.Stroke = Colors.DarkRed;
@@ -1385,21 +1334,18 @@ public partial class ingame : ContentPage
 
     public void use_sup(int n)
     {
-        // Проверяем, существует ли такое зелье
         if (n < 0 || n >= supes.Count)
         {
             turn.Text = "Неверный номер зелья!";
             return;
         }
 
-        // Проверяем, есть ли зелье в этой ячейке
         if (supes[n] == null)
         {
             turn.Text = "Нет зелья в этой ячейке!";
             return;
         }
 
-        // Проверяем, выбрана ли валидная цель
         if (target < 0 || target >= heroes.Count || heroes[target] == null || !heroes[target].alive)
         {
             turn.Text = "Сначала выберите живого героя!";
@@ -1411,30 +1357,28 @@ public partial class ingame : ContentPage
 
         turn.Text = $"Используется {sup.name} на {hero.name}!";
 
-        // ЛОГИКА УСИЛЕНИЙ ИГРОКА
         switch (sup.id)
         {
-            case 1: // Исцеление
+            case 1:
                 hero.hp = Math.Min(hero.max_hp, hero.hp + 20);
                 turn.Text = $"{hero.name} исцелен на 20 HP!";
                 break;
-            case 2: // Урон
+            case 2:
                 hero.damage = Math.Min(hero.max_damage, hero.damage + 20);
                 turn.Text = $"{hero.name} получил +20 к урону!";
                 break;
-            case 3: // Смесь
+            case 3:
                 hero.hp = Math.Min(hero.max_hp, hero.hp + 20);
                 hero.damage = Math.Min(hero.max_damage, hero.damage + 15);
                 turn.Text = $"{hero.name} получил +20 HP и +15 к урону!";
                 break;
-            case 4: // Ослабление - ИЗМЕНЕНИЕ: уменьшает урон случайному врагу на 20
+            case 4:
                 var aliveEnemies = enemyheroes.Where(h => h != null && h.alive).ToList();
                 if (aliveEnemies.Count > 0)
                 {
                     var randomEnemy = aliveEnemies[rand.Next(aliveEnemies.Count)];
                     randomEnemy.damage = Math.Max(0, randomEnemy.damage - 20);
                     turn.Text = $"{randomEnemy.name} получил -20 к урону!";
-                    // Обновляем врагов, так как изменился их урон
                     UpdateAllEnemyDisplays();
                 }
                 else
@@ -1442,15 +1386,15 @@ public partial class ingame : ContentPage
                     turn.Text = "Нет целей для ослабления!";
                 }
                 break;
-            case 5: // Доп.Жизнь
+            case 5:
                 mylifes++;
                 turn.Text = "Получена дополнительная жизнь!";
                 break;
-            case 6: // Большое исцеление
+            case 6:
                 hero.hp = Math.Min(hero.max_hp, hero.hp + 30);
                 turn.Text = $"{hero.name} исцелен на 30 HP!";
                 break;
-            case 7: // Чёрная дыра
+            case 7:
                 var aliveEnemiesForBlackHole = enemyheroes.Where(h => h != null && h.alive).ToList();
                 if (aliveEnemiesForBlackHole.Count > 0)
                 {
@@ -1458,7 +1402,6 @@ public partial class ingame : ContentPage
                     randomEnemy.alive = false;
                     randomEnemy.hp = 0;
                     turn.Text = $"{randomEnemy.name} уничтожен черной дырой!";
-                    // Обновляем врагов, так как один из них умер
                     UpdateAllEnemyDisplays();
                 }
                 else
@@ -1466,27 +1409,25 @@ public partial class ingame : ContentPage
                     turn.Text = "Нет целей для черной дыры!";
                 }
                 break;
-            case 8: // Галактика
-                    // Эффект применяется в конце раунда
+            case 8:
                 turn.Text = "Эффект Галактики активирован!";
                 break;
-            case 9: // Экскалибур
+            case 9:
                 hero.damage = Math.Min(hero.max_damage, hero.damage + 35);
                 turn.Text = $"{hero.name} получил +35 к урону!";
                 break;
-            case 10: // Антиматерия
+            case 10:
                 foreach (var playerHero in heroes)
                 {
                     if (playerHero != null)
                     {
                         playerHero.radiation = 0;
-                        // Восстанавливаем немного HP при очистке радиации
                         playerHero.hp = Math.Min(playerHero.max_hp, playerHero.hp + 10);
                     }
                 }
                 turn.Text = "Радиация очищена у всех героев!";
                 break;
-            case 11: // Странное зелье
+            case 11:
                 int chance = rand.Next(1, 5);
                 switch (chance)
                 {
@@ -1495,7 +1436,7 @@ public partial class ingame : ContentPage
                         turn.Text = $"{hero.name} получил +20 HP!";
                         break;
                     case 2:
-                        hero.hp = Math.Max(1, hero.hp - 20); // Минимум 1 HP чтобы не умереть
+                        hero.hp = Math.Max(1, hero.hp - 20);
                         turn.Text = $"{hero.name} потерял 20 HP!";
                         break;
                     case 3:
@@ -1503,12 +1444,12 @@ public partial class ingame : ContentPage
                         turn.Text = $"{hero.name} получил +10 к урону!";
                         break;
                     case 4:
-                        hero.damage = Math.Max(1, hero.damage - 10); // Минимум 1 урона
+                        hero.damage = Math.Max(1, hero.damage - 10);
                         turn.Text = $"{hero.name} потерял 10 урона!";
                         break;
                 }
                 break;
-            case 12: // Зелье радиации
+            case 12:
                 foreach (var enemy in enemyheroes)
                 {
                     if (enemy != null && enemy.alive)
@@ -1517,28 +1458,23 @@ public partial class ingame : ContentPage
                     }
                 }
                 turn.Text = "Все враги получили радиацию!";
-                // Обновляем врагов, так как изменилась их радиация
                 UpdateAllEnemyDisplays();
                 break;
-            case 13: // Мрачное зелье
-                     // Мрачное зелье - нельзя использовать, просто занимает клетку
+            case 13:
                 turn.Text = "Мрачное зелье нельзя использовать!";
-                return; // Не удаляем карту
-            case 14: // Монета обмена
-                     // Меняет местами здоровье и урон
+                return;
+            case 14:
                 int tempHp = hero.hp;
                 int tempDamage = hero.damage;
-                hero.hp = Math.Min(hero.max_hp, tempDamage); // Ограничиваем максимальным HP
-                hero.damage = Math.Min(hero.max_damage, tempHp); // Ограничиваем максимальным уроном
+                hero.hp = Math.Min(hero.max_hp, tempDamage);
+                hero.damage = Math.Min(hero.max_damage, tempHp);
 
-                // Корректируем максимальные значения если нужно
                 if (hero.hp > hero.max_hp) hero.max_hp = hero.hp;
                 if (hero.damage > hero.max_damage) hero.max_damage = hero.damage;
 
                 turn.Text = $"{hero.name} поменял HP и урон местами!";
                 break;
-            case 15: // Конфеты
-                     // Конфеты - меняет на случайного другого воина
+            case 15: 
                 int randomHeroId = rand.Next(0, heros.Count);
                 string[] newHeroData = heros[randomHeroId].Split(':');
                 string oldName = hero.name;
@@ -1549,7 +1485,7 @@ public partial class ingame : ContentPage
                     int.Parse(newHeroData[3]),
                     int.Parse(newHeroData[4]),
                     int.Parse(newHeroData[5]),
-                    hero.radiation, // Сохраняем текущую радиацию
+                    hero.radiation,
                     int.Parse(newHeroData[6]),
                     true,
                     newHeroData[7]
@@ -1561,13 +1497,11 @@ public partial class ingame : ContentPage
                 return;
         }
 
-        // Удаляем карту только если это не Мрачное зелье
         if (sup.id != 13)
         {
             supes[n] = null;
         }
 
-        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Обновляем все отображения после использования зелья
         UpdateAllBattleDisplays();
         UpdateAllEnemyDisplays();
     }

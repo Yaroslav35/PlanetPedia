@@ -377,7 +377,7 @@
                 FontSize="18"
                 MaximumWidthRequest="400"
                 BorderColor="{AppThemeBinding Light=Black, Dark=White}"
-                TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                TextColor="White"
                 BorderWidth="2"
                 Margin="30,30,30,0"
                 Clicked="neirob_Clicked"/>

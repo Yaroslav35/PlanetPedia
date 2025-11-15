@@ -117,22 +117,34 @@
                             Source="cards.png"
                             HeightRequest="150"
                             WidthRequest="150"
-                            Margin="0,20,0,0" />
+                            Margin="0,10,0,0" />
                         <Label 
                             Text="Стратегическая карточная игра"
                             TextColor="Black"
                             HorizontalTextAlignment="Center"
                             FontAttributes="Italic"
                             Margin="0,20,0,0"/>
+                        <Label 
+                            x:Name="howl"
+                            Text="Как играть?"
+                            HorizontalTextAlignment="Center"
+                            TextColor="#0000EE">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    x:Name="how"
+                                    Tapped="how_Tapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
                         <Button 
                             x:Name="cards"
                             Text="Исследовать"
                             TextColor="White"
                             BorderColor="Black"
                             BorderWidth="2"
-                            Margin="10,20,10,0"
+                            Margin="10,10,10,0"
                             WidthRequest="150"
                             Clicked="cards_Clicked"/>
+                        
                     </VerticalStackLayout>
                 </Border>
                 <Border Stroke="Black" Background="#aaaaaa" HeightRequest="330" WidthRequest="330" Margin="10">

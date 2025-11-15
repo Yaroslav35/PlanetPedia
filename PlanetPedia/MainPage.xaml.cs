@@ -5,6 +5,14 @@
         public MainPage()
         {
             InitializeComponent();
+            permission();
+        }
+
+        private async void permission()
+        {
+            var readExternalPermission = await CheckAndRequestPermission<Permissions.StorageRead>();
+            var writeExternalPermission = await CheckAndRequestPermission<Permissions.StorageWrite>();
+            var mediaPermission = await CheckAndRequestPermission<Permissions.Media>();
         }
 
         private void planetb_Clicked(object sender, EventArgs e)

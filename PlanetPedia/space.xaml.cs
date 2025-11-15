@@ -274,4 +274,10 @@ public partial class space : ContentPage
     {
         Navigation.PushAsync(new game());
     }
+
+    private void how_Tapped(object sender, TappedEventArgs e)
+    {
+        howl.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("551A8B"), Color.FromArgb("db96f2"));
+        Navigation.PushAsync(new web("game.html"));
+    }
 }

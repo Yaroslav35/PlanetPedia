@@ -61,7 +61,7 @@
                 <Button
                     x:Name="moonb"
                     Text="Подробнее..."
-                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                    TextColor="White"
                     FontSize="9"
                     WidthRequest="100"
                     HeightRequest="30"
@@ -128,7 +128,7 @@
                     <Button
         x:Name="fobosb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -164,7 +164,7 @@
                     <Button
         x:Name="deimosb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -231,7 +231,7 @@
                     <Button
         x:Name="iob"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -267,7 +267,7 @@
                     <Button
         x:Name="callistob"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -303,7 +303,7 @@
                     <Button
         x:Name="ganymedeb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -339,7 +339,7 @@
                     <Button
         x:Name="europab"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -406,7 +406,7 @@
                     <Button
         x:Name="titanb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -442,7 +442,7 @@
                     <Button
         x:Name="mimasb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -478,7 +478,7 @@
                     <Button
         x:Name="enceladusb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -514,7 +514,7 @@
                     <Button
         x:Name="reyab"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -550,7 +550,7 @@
                     <Button
         x:Name="yapetb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -617,7 +617,7 @@
                     <Button
         x:Name="mirandab"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -653,7 +653,7 @@
                     <Button
         x:Name="titaniab"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -689,7 +689,7 @@
                     <Button
         x:Name="oberonb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -756,7 +756,7 @@
                     <Button
         x:Name="tritoneb"
         Text="Подробнее..."
-        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+        TextColor="White"
         FontSize="9"
         WidthRequest="100"
         HeightRequest="30"
@@ -773,7 +773,7 @@
             FontSize="18"
             MaximumWidthRequest="400"
             BorderColor="{AppThemeBinding Light=Black, Dark=White}"
-            TextColor="{AppThemeBinding Light=Black, Dark=White}"
+            TextColor="White"
             BorderWidth="2"
             Margin="30,30,30,0"
             Clicked="neirob_Clicked"/>

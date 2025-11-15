@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.offline"
+             Title="Оффлайн загрузка">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label 
+                Text="Тут хранятся загруженные видео"
+                FontSize="18"
+                FontAttributes="Bold"
+                Margin="20,20,0,0"/>
+            <Label 
+                Text="Планеты"
+                FontSize="24"
+                FontAttributes="Bold"
+                Margin="20,20,0,0"/>
+            <HorizontalStackLayout Margin="20,10,0,0">
+                <CheckBox 
+                    x:Name="sun"/>
+                <Label 
+                    Text="Солнце (81 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="mercury"/>
+                <Label 
+                    Text="Меркурий (243 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="venus"/>
+                <Label 
+                    Text="Венера (219 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="earth"/>
+                <Label 
+                    Text="Земля (1 Gb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="mars"/>
+                <Label 
+                    Text="Марс (676 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="jupiter"/>
+                <Label 
+                    Text="Юпитер (85 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="saturn"/>
+                <Label 
+                    Text="Сатурн (267 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="uranus"/>
+                <Label 
+                    Text="Уран (236 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="neptune"/>
+                <Label 
+                    Text="Нептун (149 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+
+            <Label 
+                Text="Спутники"
+                FontSize="24"
+                FontAttributes="Bold"
+                Margin="20,20,0,0"/>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="moon"/>
+                <Label 
+                    Text="Луна (103 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="io"/>
+                <Label 
+                    Text="Ио (976 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="callisto"/>
+                <Label 
+                    Text="Каллисто (51 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="ganymede"/>
+                <Label 
+                    Text="Ганимед (52 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="europa"/>
+                <Label 
+                    Text="Европа (97 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="titan"/>
+                <Label 
+                    Text="Титан (318 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="enceladus"/>
+                <Label 
+                    Text="Энцелад (88 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="yapet"/>
+                <Label 
+                    Text="Япет (176 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="titania"/>
+                <Label 
+                    Text="Титания (56 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="oberon"/>
+                <Label 
+                    Text="Оберон (204 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="tritone"/>
+                <Label 
+                    Text="Тритон (114 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+
+            <Label 
+                Text="Сторонние объекты"
+                FontSize="24"
+                FontAttributes="Bold"
+                Margin="20,20,0,0"/>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="voyager"/>
+                <Label 
+                    Text="Вояджер-2 (143 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Margin="20,0,0,0">
+                <CheckBox 
+                    x:Name="ton"/>
+                <Label 
+                    Text="TON 618 (214 Mb)"
+                    VerticalTextAlignment="Center"/>
+            </HorizontalStackLayout>
+            <Button 
+                x:Name="apply"
+                Text="Принять"
+                TextColor="White"
+                Margin="20,5,0,0"
+                MinimumWidthRequest="300"
+                HorizontalOptions="Start"
+                BorderWidth="2"
+                BorderColor="{AppThemeBinding Light=Black, Dark=White}"
+                Clicked="apply_Clicked"/>
+            <Label 
+                Text="Внимание! Доступно только при наличии интернета!"
+                FontAttributes="Bold"
+                FontSize="14"
+                Margin="20,7,0,0"
+                TextColor="{AppThemeBinding Light=Red, Dark=DarkRed}"/>
+            <Label />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

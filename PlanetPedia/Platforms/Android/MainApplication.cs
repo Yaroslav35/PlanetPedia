@@ -1,5 +1,7 @@
 ﻿using Android.App;
+using Android.OS;
 using Android.Runtime;
+using Android.Views;
 
 namespace PlanetPedia
 {
@@ -12,5 +14,6 @@ namespace PlanetPedia
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+
     }
 }

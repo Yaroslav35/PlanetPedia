@@ -98,6 +98,7 @@
                             OnColor="#aaaaaa"/>
                         <Label
                             x:Name="vid_desc"
+                            TextColor="Black"
                             Text="Просмотр видео"
                             Margin="-100,9,0,0"/>
                     </StackLayout>
@@ -110,10 +111,12 @@
                         <Label
                             x:Name="obj_desc"
                             Text="Просмотр 3D"
+                            TextColor="Black"
                             Margin="-100,9,0,0"/>
                     </StackLayout>
                     <Label 
                         Text="Используйте данные настройки чтобы повысить производительность приложения!"
+                        TextColor="Black"
                         Margin="17,5,0,5"
                         FontSize="12"/>
                 </VerticalStackLayout>
@@ -136,6 +139,7 @@
                         <Label
                             x:Name="music_desc"
                             Text="Музыка"
+                            TextColor="Black"
                             Margin="-100,9,0,0"/>
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
@@ -147,8 +151,28 @@
                         <Label
                             x:Name="vibro_desc"
                             Text="Вибрация"
+                            TextColor="Black"
                             Margin="-100,9,0,5"/>
                     </StackLayout>
+                </VerticalStackLayout>
+            </Border>
+            <BoxView 
+                BackgroundColor="Black"
+                HeightRequest="3"/>
+            <Label 
+                Text="Оффлайн загрузка"
+                FontAttributes="Italic"
+                Margin="15,10,0,0"/>
+            <Border Stroke="Black" BackgroundColor="#dddddd" Margin="15,5,15,10">
+                <VerticalStackLayout>
+                    <Button 
+                        x:Name="offlineb"
+                        HorizontalOptions="Center"
+                        Text="Просмотр загрузок"
+                        Margin="30, 10"
+                        MaximumWidthRequest="500"
+                        TextColor="White"
+                        Clicked="offlineb_Clicked"/>
                 </VerticalStackLayout>
             </Border>
             <BoxView 
