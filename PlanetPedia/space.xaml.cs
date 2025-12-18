@@ -1,4 +1,5 @@
 using Microsoft.Maui.Graphics;
+using System.Diagnostics;
 
 namespace PlanetPedia;
 
@@ -8,6 +9,8 @@ public partial class space : ContentPage
     bool way_open = false;
     int lvl = 1;
     int expe = 0;
+    int strike = 1;
+    bool anim = false;
     Dictionary<int, string> titles = new Dictionary<int, string>()
         {
             {1, "Заморожённый январь"},
@@ -16,7 +19,7 @@ public partial class space : ContentPage
             {4, "Планетарный апрель" },
             {5, "Инопланетный май"},
             {6, "Солнечный июнь" },
-            {7, "Спутник июля" },
+            {7, "Звездопадный июль" },
             {8, "Экзоавгуст" },
             {9, "Сентябрь сверхновых" },
             {10, "Ядерный октябрь" },
@@ -26,17 +29,29 @@ public partial class space : ContentPage
     public space()
 	{
 		InitializeComponent();
+
+        List<VisualElement> elements = new List<VisualElement>() {title, bor1, bor2, bor3, bor4, bor5};
+        foreach (VisualElement element in elements) element.Opacity = 0;
+        anim = true;
+
+        bor1.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        bor2.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        bor3.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        bor4.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        bor5.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
     }
 
-    protected override void OnAppearing()
+    protected async override void OnAppearing()
     {
         base.OnAppearing();
+        List<VisualElement> elements = new List<VisualElement>() { title, bor1, bor2, bor3, bor4, bor5 };
         expe = Preferences.Get("exp",0);
         while (expe >= 100 * lvl && lvl <= 100)
         {
             expe -= 100 * lvl;
             lvl++;
         }
+        if (lvl == 101) lvl = 100;
         levelico.Text = lvl.ToString();
         level.Text = $"Уровень {lvl}";
         bonustitle.Text = titles[DateTime.Now.Month];
@@ -56,6 +71,20 @@ public partial class space : ContentPage
             bonus.IsEnabled = false;
         }
         Update();
+
+        await Task.Delay(300);
+        foreach (VisualElement element in elements)
+        {
+            float tr = anim ? 0f : 1f;
+            while (tr < 1)
+            {
+                tr += 0.1f;
+                element.Opacity = tr;
+                await Task.Delay(10);
+            }
+            await Task.Delay(10);
+        }
+        anim = false;
     }
 
     private void levelico_Clicked(object sender, EventArgs e)
@@ -221,7 +250,8 @@ public partial class space : ContentPage
         Preferences.Set("dates", date + ";" + DateTime.Now.ToString("dd.MM.yyyy"));
 
         int expe = Preferences.Get("exp",0);
-        Preferences.Set("exp", expe + 500);
+        if(strike > 1) Preferences.Set("exp", expe + 500 + strike * 50);
+        else Preferences.Set("exp", expe + 500);
         OnAppearing();
     }
 
@@ -236,7 +266,7 @@ public partial class space : ContentPage
         running = true;
         while (running)
         {
-            await Task.Delay(100);
+            await Task.Delay(300);
             lvl = 1;
             expe = 0;
             expe = Preferences.Get("exp", 0);
@@ -245,12 +275,14 @@ public partial class space : ContentPage
                 expe -= 100 * lvl;
                 lvl++;
             }
+            if (lvl == 101) lvl = 100;
             levelico.Text = lvl.ToString();
             level.Text = $"Уровень {lvl}";
             if (lvl < 100) exp.Text = $"Опыт: {expe} / {lvl * 100}";
             else exp.Text = "Опыт: MAX";
             color();
 
+            List<int> days = new List<int>();
             List<string> dates = Preferences.Get("dates", "").Split(";").ToList();
             if (!dates.Contains(DateTime.Now.ToString("dd.MM.yyyy")))
             {
@@ -262,6 +294,38 @@ public partial class space : ContentPage
                 bonus.Text = "Заходи завтра";
                 bonus.IsEnabled = false;
             }
+
+            /*
+            dates.RemoveAt(0);
+            foreach(string date in dates)
+            {
+                days.Add((int)Math.Floor((Convert.ToDateTime(date) - new DateTime(1900, 1, 1)).TotalDays));
+            }
+            days.Reverse();
+
+            if (days.Count > 0)
+            {
+                for (int i = 0; i < days.Count - 1; i++)
+                {
+                    if (days[i] - days[i + 1] == 1) strike++;
+                    else break;
+                }
+            }
+            else strike = 0;
+
+            if (strike > 1)
+            {
+                strikel.IsVisible = true;
+                strikel.Text = $"Страйк: {strike}";
+            }
+            else strikel.IsVisible = false;
+
+            if (strike <= 3) strikel.TextColor = Colors.Yellow;
+            else if (strike <= 10) strikel.TextColor = Colors.Coral;
+            else if (strike <= 20) strikel.TextColor = Colors.Red;
+            else if (strike <= 50) strikel.TextColor = Colors.Pink;
+            else if (strike > 50) strikel.TextColor = Colors.Purple;
+            */
         }
     }
 

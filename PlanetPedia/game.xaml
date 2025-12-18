@@ -23,15 +23,23 @@
                             Margin="10,0,0,5"/>
                     </VerticalStackLayout>
                 </Border>
-                <ImageButton 
+                <Image 
                     x:Name="img"
                     Source="island1.jfif"
                     MaximumWidthRequest="500"
                     MaximumHeightRequest="500"
                     HorizontalOptions="Center"
-                    Margin="40,30,40,0"
-                    CornerRadius="10"
-                    Clicked="ImageButton_Clicked" />
+                    Margin="40,30,40,0">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ImageButton_Clicked"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label 
+                    x:Name="parts"
+                    Text="Получаем фрагменты:"
+                    HorizontalTextAlignment="Center"
+                    FontAttributes="Bold"
+                    Margin="30,100,30,0"/>
                 <Button 
                     x:Name="play"
                     Text="ИГРАТЬ!"
@@ -42,7 +50,7 @@
                     BorderWidth="5"
                     BorderColor="DarkOrange"
                     MaximumWidthRequest="300"
-                    Margin="20,50,20,0"
+                    Margin="20,10,20,0"
                     Clicked="play_Clicked"/>
                 <Button 
                     x:Name="collection"
@@ -55,17 +63,6 @@
                     MaximumWidthRequest="300"
                     Margin="20,5"
                     Clicked="collection_Clicked"/>
-                <Button 
-                    x:Name="hyperarena"
-                    Text="Гипер-арена"
-                    Background="Purple"
-                    FontAttributes="Bold"
-                    TextColor="White"
-                    BorderWidth="3"
-                    BorderColor="Pink"
-                    MaximumWidthRequest="300"
-                    Margin="20,5"
-                    Clicked="hyperarena_Clicked"/>
             </VerticalStackLayout>
             <VerticalStackLayout x:Name="way" IsVisible="False">
                 <Button 
@@ -375,7 +372,7 @@
                     FontAttributes="Bold"
                     HorizontalOptions="Center"/>
                 <Label 
-                    Text="3001+ ⭐"
+                    Text="3001-4000 ⭐"
                     FontSize="22"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"/>
@@ -403,31 +400,96 @@
                             Margin="0,5"/>
                     </Border>
                 </HorizontalStackLayout>
+                <Label 
+                    Text="3 жизни"
+                    HorizontalOptions="Center"
+                    FontSize="22"
+                    Margin="0,10,0,0"/>
 
                 <Image 
-                    Source="hyperarena.jfif"
+                    Source="island8.jfif"
                     MaximumWidthRequest="500"
                     HorizontalOptions="Center"
                     Margin="40,70,40,0"/>
                 <Label 
-                    Text="Гипер-арена"
+                    Text="Зона 7"
                     FontSize="36"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"
                     Margin="0,5,0,0"/>
                 <Label 
+                    Text="Зимняя зона"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="4001-5000 ⭐"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="snow.png"
+                            Margin="0,5"/>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="wood.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="gift.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
+                <Label 
+                    Text="4 жизни"
+                    HorizontalOptions="Center"
+                    FontSize="22"
+                    Margin="0,10,0,0"/>
+
+                <Image 
+                    Source="island7.jpeg"
+                    MaximumWidthRequest="500"
+                    HorizontalOptions="Center"
+                    Margin="40,70,40,0"/>
+                <Label 
+                    Text="Зона 8"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    Margin="0,5,0,0"/>
+                <Label 
+                    Text="Адская зона"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
                     Text="5001+ ⭐"
                     FontSize="22"
                     FontAttributes="Bold"
                     HorizontalOptions="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Border Stroke="Black" Background="LightGreen" WidthRequest="75" Margin="3">
+                        <Image 
+                            Source="rage.png"
+                            Margin="0,5"/>
+                    </Border>
+                </HorizontalStackLayout>
                 <Label 
-                    Text="Новый рейтинг, больше жизней и бан карт"
-                    FontSize="22"
-                    Margin="20,0"
-                    FontAttributes="Italic"
+                    Text="ЯРОСТЬ КАРТ"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                <Label 
+                    Text="5 жизней"
                     HorizontalOptions="Center"
-                    HorizontalTextAlignment="Center"/>
-                
+                    FontSize="22"
+                    Margin="0,10,0,0"/>
                 <Label Text=""/>
             </VerticalStackLayout>
             <VerticalStackLayout x:Name="cards" IsVisible="False">
@@ -446,6 +508,21 @@
                     FontSize="28"
                     FontAttributes="Bold"
                     HorizontalTextAlignment="Center"/>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Label 
+                        Text="Нажмите на карту, чтобы увидеть"
+                        HorizontalOptions="Center"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        Margin="5,5,0,0"/>
+                    <Label 
+                        Text=" ярость"
+                        HorizontalOptions="Center"
+                        FontSize="18"
+                        TextColor="Red"
+                        FontAttributes="Bold"
+                        Margin="0,5,5,0"/>
+                </HorizontalStackLayout>
                 <Label 
                     Text="Зона 1: Зона орбиты"
                     FontSize="24"
@@ -484,7 +561,7 @@
                                 Margin="10,15,10,10"/>
                         </VerticalStackLayout>
                     </Border>
-                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                    <Border Stroke="DarkRed" Background="LightPink" Margin="10" WidthRequest="330">
                         <VerticalStackLayout>
                             <Label 
                                 Text="Солнце"
@@ -492,11 +569,23 @@
                                 FontSize="24"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="Center" />
+                            <Label 
+                                Text="Есть ярость"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Red"/>
                             <Image 
+                                x:Name="sunimg"
                                 Source="sunc.png"
                                 WidthRequest="250"
-                                Margin="0,10,0,0"/>
+                                Margin="0,10,0,0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Tapped="sunrage"/>
+                                </Image.GestureRecognizers>
+                            </Image>
                             <Label 
+                                x:Name="sunstates"
                                 Text="Здоровье: 40; Урон: 50"
                                 FontSize="18"
                                 FontAttributes="Italic"
@@ -504,6 +593,7 @@
                                 TextColor="Black"
                                 Margin="0,5,0,0"/>
                             <Label 
+                                x:Name="sundesc"
                                 Text="'Огромный воин, но с маленьким здоровьем и большим уроном'"
                                 TextColor="Black"
                                 HorizontalTextAlignment="Center"
@@ -669,11 +759,23 @@
                                 FontSize="24"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="Center" />
+                            <Label 
+                                Text="Есть ярость"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Red"/>
                             <Image 
+                                x:Name="jupiterimg"
                                 Source="jupiterc.png"
                                 WidthRequest="250"
-                                Margin="0,10,0,0"/>
+                                Margin="0,10,0,0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Tapped="jupiterrage"/>
+                                </Image.GestureRecognizers>
+                            </Image>
                             <Label 
+                                x:Name="jupiterstates"
                                 Text="Здоровье: 180; Урон: 3"
                                 FontSize="18"
                                 FontAttributes="Italic"
@@ -681,6 +783,7 @@
                                 TextColor="Black"
                                 Margin="0,5,0,0"/>
                             <Label 
+                                x:Name="jupiterdesc"
                                 Text="'Огромная планета с мощнейшим запасом здоровья, но очень уж дружелюбная'"
                                 TextColor="Black"
                                 HorizontalTextAlignment="Center"
@@ -820,11 +923,23 @@
                                 FontSize="24"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="Center" />
+                            <Label 
+                                Text="Есть ярость"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Red"/>
                             <Image 
+                                x:Name="netronimg"
                                 Source="netron.png"
                                 WidthRequest="250"
-                                Margin="0,10,0,0"/>
+                                Margin="0,10,0,0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Tapped="netronrage"/>
+                                </Image.GestureRecognizers>
+                            </Image>
                             <Label 
+                                x:Name="netronstates"
                                 Text="Здоровье: 100; Радиация: 10"
                                 FontSize="18"
                                 FontAttributes="Italic"
@@ -832,6 +947,7 @@
                                 TextColor="Black"
                                 Margin="0,5,0,0"/>
                             <Label 
+                                x:Name="netrondesc"
                                 Text="'Опасная звезда, наносящая периодический урон радиацией'"
                                 TextColor="Black"
                                 HorizontalTextAlignment="Center"
@@ -1023,18 +1139,31 @@
                                 FontSize="24"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="Center" />
+                            <Label 
+                                Text="Есть ярость"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Bold"
+                                TextColor="Red"/>
                             <Image 
+                                x:Name="quarkimg"
                                 Source="quark.png"
                                 WidthRequest="250"
-                                Margin="0,10,0,0"/>
+                                Margin="0,10,0,0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Tapped="quarkrage"/>
+                                </Image.GestureRecognizers>
+                            </Image>
                             <Label 
-                                Text="Здоровье: 1000; Урон: 80"
+                                x:Name="quarkstates"
+                                Text="Здоровье: 200; Урон: 80"
                                 FontSize="18"
                                 FontAttributes="Italic"
                                 HorizontalTextAlignment="Center"
                                 TextColor="Black"
                                 Margin="0,5,0,0"/>
                             <Label 
+                                x:Name="quarkdesc"
                                 Text="'Маленькая частица с большим уроном. После своего хода умирает'"
                                 TextColor="Black"
                                 HorizontalTextAlignment="Center"
@@ -1445,6 +1574,156 @@
                                 TextColor="Black"
                                 HorizontalTextAlignment="Center"
                                 Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+
+                <Label 
+                    Text="Зона 7: Зимняя зона"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты урона"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Снежная планета"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="snow.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 100; Урон: -5 врагу"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Хлоднокровный воин, способный заморозить каждого'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Stroke="Black" Background="LightPink" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Ёлка"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="wood.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Здоровье: 80; Радиация: 5"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Дикая новогодняя ёлка, наносящая всем урон радиацией'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+                <Label 
+                    Text="Карты усиления"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Подарок"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="gift.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Даёт случайный положительный эффект"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                Text="'Всем подарков от Галактического Деда Мороза! Даёт случайный эффект персонажу!'"
+                TextColor="Black"
+                HorizontalTextAlignment="Center"
+                Margin="10,15,10,10"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </FlexLayout>
+
+                <Label 
+                    Text="Зона 8: Адская зона"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,30,0,0"/>
+                <Label 
+                    Text="Карты усиления"
+                    FontSize="20"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <FlexLayout Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    <Border Stroke="Black" Background="LightGreen" Margin="10" WidthRequest="330">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Зелье ярости"
+                                TextColor="Black"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="Center" />
+                            <Image 
+                                Source="rage.png"
+                                WidthRequest="250"
+                                Margin="0,10,0,0"/>
+                            <Label 
+                                Text="Ярость карты"
+                                FontSize="18"
+                                FontAttributes="Italic"
+                                HorizontalTextAlignment="Center"
+                                TextColor="Black"
+                                Margin="0,5,0,0"/>
+                            <Label 
+                                Text="'Самое сильное зелье во Вселенной. Активирует уникальные яростные способности карт'"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                Margin="10,15,10,10"/>
+                            <Button
+                                x:Name="rage"
+                                Text="Ярости"
+                                TextColor="White"
+                                BorderColor="White"
+                                BackgroundColor="DarkRed"
+                                BorderWidth="2"
+                                WidthRequest="200"
+                                Margin="0,5"
+                                Clicked="rage_Clicked">
+                            </Button>
                         </VerticalStackLayout>
                     </Border>
                 </FlexLayout>

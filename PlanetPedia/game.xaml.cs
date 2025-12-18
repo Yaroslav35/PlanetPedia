@@ -6,13 +6,17 @@ public partial class game : ContentPage
     int star = 0;
     int currentZone = -1; // Добавляем переменную для отслеживания текущей зоны
 
+    Dictionary<string, bool> states = new Dictionary<string, bool>()
+    {
+        {"sun", false},
+        {"jupiter", false},
+        {"netron", false },
+        {"quark", false }
+    };
+
     public game()
     {
         InitializeComponent();
-#if ANDROID
-        img.Margin = new Thickness(40,-20,40,0);
-        play.Margin = new Thickness(20,0,20,0);
-#endif
     }
 
     protected override void OnAppearing()
@@ -65,11 +69,23 @@ public partial class game : ContentPage
             newImageSource = "island5.jfif";
             SetZoneIfChanged(4, newZoneText, newImageSource);
         }
-        else
+        else if (star > 3000 && star <= 4000)
         {
             newZoneText = "Пляжная зона";
             newImageSource = "island6.jfif";
             SetZoneIfChanged(5, newZoneText, newImageSource);
+        }
+        else if (star > 4000 && star <= 5000)
+        {
+            newZoneText = "Зимняя зона";
+            newImageSource = "island8.jfif";
+            SetZoneIfChanged(6, newZoneText, newImageSource);
+        }
+        else
+        {
+            newZoneText = "Адская зона";
+            newImageSource = "island7.jpeg";
+            SetZoneIfChanged(7, newZoneText, newImageSource);
         }
     }
 
@@ -111,7 +127,9 @@ public partial class game : ContentPage
         if (star >= 60) star -= 30;
         else star = 0;
         Preferences.Set("stars", star);
-        Navigation.PushModalAsync(new ingame(star));
+        if(star > 4000) Navigation.PushModalAsync(new ingame(star, true));
+        else Navigation.PushModalAsync(new ingame(star, false));
+
     }
 
     private async void Update()
@@ -121,6 +139,8 @@ public partial class game : ContentPage
         {
             await Task.Delay(1000); // Увеличиваем задержку до 1 секунды
             int newStar = Preferences.Get("stars", 0);
+            if (newStar > 4000) parts.Text = "Победа: +5 фрагментов ярости";
+            else parts.Text = "Получите более 5000 звёзд чтобы получить фрагменты ярости!";
 
             // Обновляем только если количество звезд изменилось
             if (newStar != star)
@@ -130,23 +150,83 @@ public partial class game : ContentPage
                 UpdateZone();
             }
 
-            if(newStar > 5000)
-            {
-                hyperarena.IsEnabled = true;
-                hyperarena.Background = Colors.Purple;
-                hyperarena.BorderColor = Colors.Pink;
-            }
-            else
-            {
-                hyperarena.IsEnabled = false;
-                hyperarena.Background = Colors.LightGray;
-                hyperarena.BorderColor = Colors.Gray;
-            }
         }
     }
 
-    private void hyperarena_Clicked(object sender, EventArgs e)
+    private void rage_Clicked(object sender, EventArgs e)
     {
+        Navigation.PushAsync(new rage());
+    }
 
+    private void sunrage(object sender, EventArgs e)
+    {
+        states["sun"] = !states["sun"];
+
+        if (states["sun"])
+        {
+            sunimg.Source = "sunrage.png";
+            sunstates.Text = $"Фрагменты {Math.Min(Preferences.Get("sun_rage", 0), 200)}/200";
+            sundesc.Text = "При гибели превращается в сверхновую";
+        }
+        else
+        {
+            sunimg.Source = "sunc.png";
+            sunstates.Text = "Здоровье: 40; Урон: 50";
+            sundesc.Text = "Огромный воин, но с маленьким здоровьем и большим уроном";
+        }
+    }
+
+    private void jupiterrage(object sender, EventArgs e)
+    {
+        states["jupiter"] = !states["jupiter"];
+
+        if (states["jupiter"])
+        {
+            jupiterimg.Source = "jupiterrage.png";
+            jupiterstates.Text = $"Фрагменты {Math.Min(Preferences.Get("jupiter_rage", 0), 200)}/200";
+            jupiterdesc.Text = "Возвращает урон обратно";
+        }
+        else
+        {
+            jupiterimg.Source = "jupiterc.png";
+            jupiterstates.Text = "Здоровье: 180; Урон: 3";
+            jupiterdesc.Text = "Огромная планета с мощнейшим запасом здоровья, но очень уж дружелюбная";
+        }
+    }
+
+    private void netronrage(object sender, EventArgs e)
+    {
+        states["netron"] = !states["netron"];
+
+        if (states["netron"])
+        {
+            netronimg.Source = "netronrage.png";
+            netronstates.Text = $"Фрагменты {Math.Min(Preferences.Get("netron_rage", 0), 200)}/200";
+            netrondesc.Text = "Усиленная радиация и иммунитет к ней";
+        }
+        else
+        {
+            netronimg.Source = "netron.png";
+            netronstates.Text = "Здоровье: 100; Радиация: 10";
+            netrondesc.Text = "Опасная звезда, наносящая периодический урон радиацией";
+        }
+    }
+
+    private void quarkrage(object sender, EventArgs e)
+    {
+        states["quark"] = !states["quark"];
+
+        if (states["quark"])
+        {
+            quarkimg.Source = "quarkrage.png";
+            quarkstates.Text = $"Фрагменты {Math.Min(Preferences.Get("quark_rage", 0), 200)}/200";
+            quarkdesc.Text = "Получает полураспад. Теперь кварк не умирает после атаки, а уменьшает свой урон вдвое. После достижения нулевого урона, погибает";
+        }
+        else
+        {
+            quarkimg.Source = "quark.png";
+            quarkstates.Text = "Здоровье: 200; Урон: 80";
+            quarkdesc.Text = "Маленькая частица с большим уроном. После своего хода умирает";
+        }
     }
 }

@@ -9,12 +9,24 @@ public partial class test : ContentPage
 	string title, dir;
     int count;
     int now = 1;
+    bool anim = false;
+    bool initialized = false;
+    List<VisualElement> second = new List<VisualElement>();
     public test(string title_get, string dir_get)
     {
         InitializeComponent();
+
+        List<VisualElement> elements = new List<VisualElement>() {num, question, a1, a2, a3, a4, flexbox, finish, tresh};
+        second.Add(result);
+        foreach (VisualElement element in elements) element.Opacity = 0;
+        anim = true;
+
         title = title_get;
         dir = dir_get;
         Title = title;
+
+        reset();
+
         string[] content = new string[0];
         #if WINDOWS
             content = File.ReadAllLines("tests/" + dir_get);
@@ -44,7 +56,46 @@ public partial class test : ContentPage
         a2.Content = data[0, 1].Split(";")[1];
         a3.Content = data[0, 1].Split(";")[2];
         a4.Content = data[0, 1].Split(";")[3];
+
+        initialized = true;
     }
+
+    private async void animating(List<VisualElement> els)
+    {
+        foreach (VisualElement el in els) el.Opacity = 0;
+
+        foreach (VisualElement element in els)
+        {
+            float tr = 0f;
+            while (tr < 1)
+            {
+                tr += 0.2f;
+                element.Opacity = tr;
+                await Task.Delay(2);
+            }
+        }
+    }
+
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        List<VisualElement> elements = new List<VisualElement>() { num, question, a1, a2, a3, a4, flexbox, finish, tresh };
+
+        await Task.Delay(300);
+        foreach (VisualElement element in elements)
+        {
+            float tr = anim ? 0f : 1f;
+            while (tr < 1)
+            {
+                tr += 0.1f;
+                element.Opacity = tr;
+                await Task.Delay(10);
+            }
+            await Task.Delay(10);
+        }
+        anim = false;
+    }
+
     private void previous_Clicked(object sender, EventArgs e)
     {
         if(now > 1)
@@ -56,6 +107,17 @@ public partial class test : ContentPage
             a2.Content = data[now - 1, 1].Split(";")[1];
             a3.Content = data[now - 1, 1].Split(";")[2];
             a4.Content = data[now - 1, 1].Split(";")[3];
+            reset();
+
+            if (!string.IsNullOrEmpty(rights[now - 1]))
+            {
+                if (rights[now - 1] == a1.Content.ToString()) a1.IsChecked = true;
+                if (rights[now - 1] == a2.Content.ToString()) a2.IsChecked = true;
+                if (rights[now - 1] == a3.Content.ToString()) a3.IsChecked = true;
+                if (rights[now - 1] == a4.Content.ToString()) a4.IsChecked = true;
+            }
+
+            animating(new List<VisualElement>() {num, question, a1, a2, a3, a4});
         }
     }
 
@@ -70,6 +132,17 @@ public partial class test : ContentPage
             a2.Content = data[now - 1, 1].Split(";")[1];
             a3.Content = data[now - 1, 1].Split(";")[2];
             a4.Content = data[now - 1, 1].Split(";")[3];
+            reset();
+
+            if (!string.IsNullOrEmpty(rights[now - 1]))
+            {
+                if (rights[now - 1] == a1.Content.ToString()) a1.IsChecked = true;
+                if (rights[now - 1] == a2.Content.ToString()) a2.IsChecked = true;
+                if (rights[now - 1] == a3.Content.ToString()) a3.IsChecked = true;
+                if (rights[now - 1] == a4.Content.ToString()) a4.IsChecked = true;
+            }
+
+            animating(new List<VisualElement>() { num, question, a1, a2, a3, a4 });
         }
     }
 
@@ -103,6 +176,7 @@ public partial class test : ContentPage
             name.FontAttributes = FontAttributes.Bold;
             name.HorizontalTextAlignment = TextAlignment.Center;
             name.Margin = new Thickness(0,30,0,0);
+            second.Add(name);
             answersview.Add(name);
 
             Label answer = new Label();
@@ -111,6 +185,7 @@ public partial class test : ContentPage
             answer.FontSize = 16;
             answer.HorizontalTextAlignment = TextAlignment.Center;
             answer.Margin = new Thickness(0, 10, 0, 0);
+            second.Add(answer);
             answersview.Add(answer);
 
             Label my = new Label();
@@ -118,6 +193,7 @@ public partial class test : ContentPage
             my.FontSize = 16;
             my.HorizontalTextAlignment = TextAlignment.Center;
             my.Margin = new Thickness(0, 10, 0, 0);
+            second.Add(my);
             answersview.Add(my);
         }
         if((float)n/(float)count >= 0.8f)
@@ -125,24 +201,26 @@ public partial class test : ContentPage
             string tests = Preferences.Get("tests", "");
             Preferences.Set("tests", tests + ";" + Title);
         }
+        animate();
     }
 
-    private void FlexLayout_SizeChanged(object sender, EventArgs e)
+    private async void animate()
     {
-        flexbox.Children.Clear();
-        if (flexbox.Width < 379)
+        foreach (VisualElement element in second) element.Opacity = 0;
+        await Task.Delay(300);
+        foreach (VisualElement element in second)
         {
-            flexbox.Children.Add(previous);
-            flexbox.Children.Add(next);
-            flexbox.Children.Add(apply);
-        }
-        else
-        {
-            flexbox.Children.Add(previous);
-            flexbox.Children.Add(apply);
-            flexbox.Children.Add(next);
+            float tr = 0f;
+            while (tr < 1)
+            {
+                tr += 0.1f;
+                element.Opacity = tr;
+                await Task.Delay(10);
+            }
+            await Task.Delay(10);
         }
     }
+
 
     private void apply_Clicked(object sender, EventArgs e)
     {
@@ -153,6 +231,46 @@ public partial class test : ContentPage
         if (a4.IsChecked) right = a4.Content.ToString();
         rights[now - 1] = right;
         next_Clicked(sender, e);
+    }
+
+    private void a1_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if(initialized)
+        {
+            if (a1.IsChecked) rights[now - 1] = a1.Content.ToString();
+        }
+    }
+
+    private void a2_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (initialized)
+        {
+            if (a2.IsChecked) rights[now - 1] = a2.Content.ToString();
+        }
+    }
+
+    private void a3_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (initialized)
+        {
+            if (a3.IsChecked) rights[now - 1] = a3.Content.ToString();
+        }
+    }
+
+    private void a4_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (initialized)
+        {
+            if (a4.IsChecked) rights[now - 1] = a4.Content.ToString();
+        }
+    }
+
+    private void reset()
+    {
+        a1.IsChecked = false;
+        a2.IsChecked = false;
+        a3.IsChecked = false;
+        a4.IsChecked = false;
     }
     
 }

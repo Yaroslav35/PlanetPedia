@@ -19,6 +19,7 @@ namespace PlanetPedia
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("FriendlySans-Regular.ttf", "FriendlySans");
                 });
 
 #if DEBUG

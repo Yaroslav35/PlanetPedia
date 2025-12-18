@@ -3,129 +3,140 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlanetPedia.neiro"
              Title="">
-    <ScrollView>
-    <VerticalStackLayout>
-        <Label 
-            Text="Нейро-уголок"
-            FontSize="30"
+    <Grid>
+        <Image 
+            Source="background.png"
+            Opacity="0.5"
+            Aspect="AspectFill"/>
+        <ScrollView>
+            <VerticalStackLayout>
+                <VerticalStackLayout x:Name="block">
+                <Label 
+                    x:Name="title"
+        Text="Нейро-уголок"
+        FontSize="30"
+        FontAttributes="Bold"
+        HorizontalOptions="Center" />
+                <Label 
+                    x:Name="desc"
+        Text="Данные картинки сгенерированы нейросетью"
+        FontSize="16"
+        HorizontalTextAlignment="Center"
+        Margin="10,10"/>
+                <Label 
+                    x:Name="tg"
+        Text="Сюда можно прислать свои картинки: @tezor8"
+        FontSize="16"
+        HorizontalTextAlignment="Center"
+        Margin="10,0"/>
+                </VerticalStackLayout>
+                <Frame x:Name="f1" HeightRequest="400" WidthRequest="350" Margin="0,20,0,0" BorderColor="Black">
+                    <Grid>
+                        <Label 
+                Text="Земля"
+                FontSize="24"
+                FontAttributes="Bold"
+                Margin="20,0,0,0"/>
+                        <Image 
+                Source="neiroearth.jpg"
+                HeightRequest="300"
+                WidthRequest="300"
+                Margin="0,50,0,0"/>
+                    </Grid>
+                </Frame>
+                <Frame x:Name="f2" HeightRequest="400" WidthRequest="350" Margin="0,20,0,0" BorderColor="Black">
+                    <Grid>
+                        <Label 
+                Text="Титан"
+                FontSize="24"
+                FontAttributes="Bold"
+                Margin="20,0,0,0"/>
+                        <Image 
+                Source="neirotitan.jpg"
+                HeightRequest="300"
+                WidthRequest="300"
+                Margin="0,50,0,0"/>
+                    </Grid>
+                </Frame>
+                <Frame x:Name="f3" HeightRequest="400" WidthRequest="350" Margin="0,20,0,0" BorderColor="Black">
+                    <Grid>
+                        <Label 
+            Text="Проксима Центавра b"
+            FontSize="24"
             FontAttributes="Bold"
-            HorizontalOptions="Center" />
-        <Label 
-            Text="Данные картинки сгенерированы нейросетью"
-            FontSize="16"
-            HorizontalTextAlignment="Center"
-            Margin="10,10"/>
-        <Label 
-            Text="Сюда можно прислать свои картинки: @tezor8"
-            FontSize="16"
-            HorizontalTextAlignment="Center"
-            Margin="10,0"/>
-        <Frame HeightRequest="400" WidthRequest="350" Margin="0,20,0,0">
-            <Grid>
-                <Label 
-                    Text="Земля"
-                    FontSize="24"
-                    FontAttributes="Bold"
-                    Margin="20,0,0,0"/>
-                <Image 
-                    Source="neiroearth.jpg"
-                    HeightRequest="300"
-                    WidthRequest="300"
-                    Margin="0,50,0,0"/>
-            </Grid>
-        </Frame>
-        <Frame HeightRequest="400" WidthRequest="350" Margin="0,20,0,0">
-            <Grid>
-                <Label 
-                    Text="Титан"
-                    FontSize="24"
-                    FontAttributes="Bold"
-                    Margin="20,0,0,0"/>
-                <Image 
-                    Source="neirotitan.jpg"
-                    HeightRequest="300"
-                    WidthRequest="300"
-                    Margin="0,50,0,0"/>
-            </Grid>
-        </Frame>
-        <Frame HeightRequest="400" WidthRequest="350" Margin="0,20,0,0">
-            <Grid>
-                <Label 
-                Text="Проксима Центавра b"
-                FontSize="24"
-                FontAttributes="Bold"
-                Margin="20,0,0,0"/>
-                <Image 
-                Source="neiroproxima.jpg"
-                HeightRequest="300"
-                WidthRequest="300"
-                Margin="0,50,0,0"/>
-            </Grid>
-        </Frame>
-        <Frame HeightRequest="400" WidthRequest="350" Margin="0,20,0,0">
-            <Grid>
-                <Label 
-                Text="Tres 2b"
-                FontSize="24"
-                FontAttributes="Bold"
-                Margin="20,0,0,0"/>
-                <Image 
-                Source="neirotres2.jpg"
-                HeightRequest="300"
-                WidthRequest="300"
-                Margin="0,50,0,0"/>
-            </Grid>
-        </Frame>
-        <Frame HeightRequest="400" WidthRequest="350" Margin="0,20,0,0">
-            <Grid>
-                <Button
-                x:Name="kepler"
-                Text="Kepler-22 b"
-                WidthRequest="170"
-                HorizontalOptions="Start"
-                HeightRequest="100"
-                VerticalOptions="Start"
-                BackgroundColor="Transparent"
-                TextColor="{AppThemeBinding Light=#444444, Dark=#dddddd}"
-                FontSize="24"
-                FontAttributes="Bold"
-                Margin="0,-32,0,0"
-                Clicked="kepler_Clicked"/>
-                <Image 
-                Source="neirokepler22.jpg"
-                HeightRequest="300"
-                WidthRequest="300"
-                Margin="0,50,0,0"/>
-            </Grid>
-        </Frame>
-        <Frame HeightRequest="400" WidthRequest="350" Margin="0,20,0,0">
-            <Grid>
-                <Label 
-                Text="Corot 7b"
-                FontSize="24"
-                FontAttributes="Bold"
-                Margin="20,0,0,0"/>
-                <Image 
-                Source="neirocorot7.jpg"
-                HeightRequest="300"
-                WidthRequest="300"
-                Margin="0,50,0,0"/>
-            </Grid>
-        </Frame>
-        <Frame HeightRequest="400" WidthRequest="350" Margin="0,20,0,0">
-            <Grid>
-                <Label 
-                Text="HD 189733 A b"
-                FontSize="24"
-                FontAttributes="Bold"
-                Margin="20,0,0,0"/>
-                <Image 
-                Source="neirohdglass.jpg"
-                HeightRequest="300"
-                WidthRequest="300"
-                Margin="0,50,0,0"/>
-            </Grid>
-        </Frame>
-    </VerticalStackLayout>
-    </ScrollView>
+            Margin="20,0,0,0"/>
+                        <Image 
+            Source="neiroproxima.jpg"
+            HeightRequest="300"
+            WidthRequest="300"
+            Margin="0,50,0,0"/>
+                    </Grid>
+                </Frame>
+                <Frame x:Name="f4" HeightRequest="400" WidthRequest="350" Margin="0,20,0,0" BorderColor="Black">
+                    <Grid>
+                        <Label 
+            Text="Tres 2b"
+            FontSize="24"
+            FontAttributes="Bold"
+            Margin="20,0,0,0"/>
+                        <Image 
+            Source="neirotres2.jpg"
+            HeightRequest="300"
+            WidthRequest="300"
+            Margin="0,50,0,0"/>
+                    </Grid>
+                </Frame>
+                <Frame x:Name="f5" HeightRequest="400" WidthRequest="350" Margin="0,20,0,0" BorderColor="Black">
+                    <Grid>
+                        <Button
+            x:Name="kepler"
+            Text="Kepler-22 b"
+            WidthRequest="170"
+            HorizontalOptions="Start"
+            HeightRequest="100"
+            VerticalOptions="Start"
+            BackgroundColor="Transparent"
+            TextColor="{AppThemeBinding Light=#444444, Dark=#dddddd}"
+            FontSize="24"
+            FontAttributes="Bold"
+            Margin="0,-32,0,0"
+            Clicked="kepler_Clicked"/>
+                        <Image 
+            Source="neirokepler22.jpg"
+            HeightRequest="300"
+            WidthRequest="300"
+            Margin="0,50,0,0"/>
+                    </Grid>
+                </Frame>
+                <Frame x:Name="f6" HeightRequest="400" WidthRequest="350" Margin="0,20,0,0" BorderColor="Black">
+                    <Grid>
+                        <Label 
+            Text="Corot 7b"
+            FontSize="24"
+            FontAttributes="Bold"
+            Margin="20,0,0,0"/>
+                        <Image 
+            Source="neirocorot7.jpg"
+            HeightRequest="300"
+            WidthRequest="300"
+            Margin="0,50,0,0"/>
+                    </Grid>
+                </Frame>
+                <Frame x:Name="f7" HeightRequest="400" WidthRequest="350" Margin="0,20,0,0" BorderColor="Black">
+                    <Grid>
+                        <Label 
+            Text="HD 189733 A b"
+            FontSize="24"
+            FontAttributes="Bold"
+            Margin="20,0,0,0"/>
+                        <Image 
+            Source="neirohdglass.jpg"
+            HeightRequest="300"
+            WidthRequest="300"
+            Margin="0,50,0,0"/>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

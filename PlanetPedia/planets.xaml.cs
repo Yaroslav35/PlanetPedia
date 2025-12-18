@@ -7,6 +7,7 @@ public partial class planets : ContentPage
 		InitializeComponent();
 	}
 
+
     private void back_Clicked(object sender, EventArgs e)
     {
 		Navigation.PopAsync();

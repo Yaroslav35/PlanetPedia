@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.planetsnew"
+             Title="">
+
+    <Grid>
+        <!-- Фоновое изображение -->
+        <Image Source="cosmos.png"
+               Opacity="0.9"
+               Aspect="AspectFill"/>
+        <Label 
+            x:Name="scroll"
+            Text="Скролл:"
+            TextColor="White"
+            HorizontalOptions="End"
+            Margin="5,5,15,5"
+            FontSize="16"
+            FontFamily="FriendlySans"/>
+        <!-- Основной контент -->
+        <ScrollView x:Name="scrollview" VerticalScrollBarVisibility="Never" Margin="0,30,0,0">
+            <VerticalStackLayout Spacing="50" Padding="20,30">
+                <Label 
+                    Text="PlanetPedia"
+                    TextColor="White"
+                    HorizontalTextAlignment="Center"
+                    FontSize="36"
+                    FontFamily="FriendlySans"/>
+                <Label 
+                    Text="Всё о космосе"
+                    TextColor="White"
+                    HorizontalTextAlignment="Center"
+                    FontSize="18"
+                    Margin="0,-40,0,100"
+                    FontFamily="FriendlySans"/>
+                <FlexLayout Direction="Row" JustifyContent="SpaceAround" Margin="20,0,20,0">
+                    <VerticalStackLayout>
+                        <Image x:Name="camerab" Source="camera.png" HeightRequest="100">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="camera_Tapped"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label 
+                            Text="Камера"
+                            TextColor="White"
+                            Margin="0,10,0,0"
+                            HorizontalTextAlignment="Center"
+                            FontSize="22"
+                            FontFamily="FriendlySans"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Image x:Name="settingsb" Source="settings.png" HeightRequest="100">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="settings_Tapped"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label 
+                            Text="Настройки"
+                            TextColor="White"
+                            HorizontalTextAlignment="Center"
+                            FontSize="22"
+                            Margin="0,10,0,0"
+                            FontFamily="FriendlySans"/>
+                    </VerticalStackLayout>
+                </FlexLayout>
+                <Label 
+                    Text="Исследуй Солнечную систему"
+                    HorizontalOptions="Center"
+                    TextColor="White"
+                    FontSize="20"
+                    Margin="10,0,10,0"
+                    FontFamily="FriendlySans"/>
+                <Label 
+                    Text=">>"
+                    HorizontalOptions="Center"
+                    TextColor="White"
+                    FontSize="36"
+                    FontFamily="FriendlySans"
+                    Rotation="90"
+                    FontAttributes="Bold"
+                    Margin="10,0,10,200"/>
+                <!-- Солнце -->
+                <VerticalStackLayout Spacing="15">
+                    <Frame BackgroundColor="Transparent"
+                           BorderColor="Transparent"
+                           Padding="0"
+                           CornerRadius="150"
+                           HorizontalOptions="Center">
+                        <Image Source="sun.png"
+                               HeightRequest="250"
+                               WidthRequest="250"
+                               Aspect="AspectFit">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="sunb_Clicked"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </Frame>
+                    <Label Text="Солнце"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="28"/>
+                </VerticalStackLayout>
+
+                <!-- Меркурий -->
+                <VerticalStackLayout Spacing="15">
+                    <Frame BackgroundColor="Transparent"
+                           Padding="0"
+                           BorderColor="Transparent"
+                           CornerRadius="75"
+                           HorizontalOptions="Center">
+                        <Image Source="mercury.png"
+                               HeightRequest="120"
+                               WidthRequest="120"
+                               Aspect="AspectFit">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="mercuryb_Clicked"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </Frame>
+                    <Label Text="Меркурий"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           Margin="0,0,0,50"
+                           FontSize="24"/>
+                </VerticalStackLayout>
+
+                <!-- Венера -->
+                <VerticalStackLayout Spacing="15">
+                    <Frame BackgroundColor="Transparent"
+                           Padding="0"
+                           BorderColor="Transparent"
+                           CornerRadius="80"
+                           HorizontalOptions="Center">
+                        <Image Source="venus.png"
+                               HeightRequest="130"
+                               WidthRequest="130"
+                               Aspect="AspectFit">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="venusb_Clicked"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </Frame>
+                    <Label Text="Венера"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           Margin="0,0,0,50"
+                           FontSize="24"/>
+                </VerticalStackLayout>
+
+                <!-- Земля и Луна -->
+                <VerticalStackLayout Spacing="25">
+                    <Label Text="Земля"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="24"
+                           Margin="0,50,0,-20"/>
+
+                    <!-- Контейнер для планеты и спутников -->
+                    <Grid x:Name="earthbox" WidthRequest="300" HeightRequest="300" HorizontalOptions="Center">
+                        <!-- Центральная точка для позиционирования -->
+                        <BoxView Color="Transparent" 
+                                 HorizontalOptions="Center" 
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" 
+                                 HeightRequest="1"/>
+
+                        <!-- Земля в центре -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="85"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="140"
+                               HeightRequest="140">
+                            <Image x:Name="earth"
+                                   Source="earth.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="earthb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Луна - орбитальный спутник (справа) -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="25"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="90"
+                               HeightRequest="50"
+                               TranslationX="110">
+                            <Image Source="moon.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="moonb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </Grid>
+
+                </VerticalStackLayout>
+
+                <!-- Марс и спутники -->
+                <VerticalStackLayout Spacing="25">
+                    <Label Text="Марс"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="24"
+                           Margin="0,0,0,-40"/>
+
+                    <Grid x:Name="marsbox" WidthRequest="300" HeightRequest="300" HorizontalOptions="Center">
+                        <!-- Центральная точка -->
+                        <BoxView Color="Transparent" 
+                                 HorizontalOptions="Center" 
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" 
+                                 HeightRequest="1"/>
+
+                        <!-- Марс в центре -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="110"
+                               HeightRequest="110">
+                            <Image x:Name="mars"
+                                    Source="mars.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="marsb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Фобос - сверху справа -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="15"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="30"
+                               HeightRequest="30"
+                               TranslationX="70"
+                               TranslationY="-70">
+                            <Image Source="fobos.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="fobosb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Деймос - снизу слева -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="12"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="25"
+                               HeightRequest="25"
+                               TranslationX="-70"
+                               TranslationY="70">
+                            <Image Source="deimos.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="deimosb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </Grid>
+
+                </VerticalStackLayout>
+
+                <!-- Юпитер и спутники -->
+                <VerticalStackLayout Spacing="25">
+                    <Label Text="Юпитер"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="24"
+                           Margin="0,0,0,-50"/>
+
+                    <Grid x:Name="jupiterbox" WidthRequest="400" HeightRequest="400" HorizontalOptions="Center">
+                        <!-- Центральная точка -->
+                        <BoxView Color="Transparent" 
+                                 HorizontalOptions="Center" 
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" 
+                                 HeightRequest="1"/>
+
+                        <!-- Юпитер в центре -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="100"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="160"
+                               HeightRequest="160">
+                            <Image x:Name="jupiter"
+                                    Source="jupiter.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="jupiterb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Ио - сверху слева -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="35"
+                               HeightRequest="35"
+                               TranslationX="0"
+                               TranslationY="-127">
+                            <Image Source="io.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="iob_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Европа - сверху справа -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="35"
+                               HeightRequest="35"
+                               TranslationX="0"
+                               TranslationY="127">
+                            <Image Source="europa.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="europab_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Ганимед - слева по центру -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="22"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="45"
+                               HeightRequest="45"
+                               TranslationX="-127"
+                               TranslationY="0">
+                            <Image Source="ganymede.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ganymedeb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Каллисто - справа по центру -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="20"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="40"
+                               HeightRequest="40"
+                               TranslationX="127"
+                               TranslationY="0">
+                            <Image Source="callisto.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="callisto_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </Grid>
+
+                </VerticalStackLayout>
+
+                <!-- Сатурн и спутники -->
+                <VerticalStackLayout Spacing="25">
+                    <Label Text="Сатурн"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="24"
+                           Margin="0,0,0,-50"/>
+
+                    <Grid x:Name="saturnbox" WidthRequest="450" HeightRequest="450" HorizontalOptions="Center">
+                        <!-- Центральная точка -->
+                        <BoxView Color="Transparent" 
+                                 HorizontalOptions="Center" 
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" 
+                                 HeightRequest="1"/>
+
+                        <!-- Сатурн в центре -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="90"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="150"
+                               HeightRequest="150">
+                            <Image x:Name="saturn"
+                                    Source="saturn.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="saturnb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Титан - сверху слева -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="25"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="50"
+                               HeightRequest="50"
+                               TranslationX="-80"
+                               TranslationY="-115">
+                            <Image Source="titan.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="titanb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Энцелад - сверху справа -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="12"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="25"
+                               HeightRequest="25"
+                               TranslationX="80"
+                               TranslationY="-115">
+                            <Image Source="enceladus.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="enceladusb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Рея - слева по центру -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="35"
+                               HeightRequest="35"
+                               TranslationX="-140"
+                               TranslationY="0">
+                            <Image Source="reya.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="reyab_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Мимас - справа по центру -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="11"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="22"
+                               HeightRequest="22"
+                               TranslationX="140"
+                               TranslationY="0">
+                            <Image Source="mimas.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="mimasb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Япет - внизу -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="35"
+                               HeightRequest="35"
+                               TranslationX="0"
+                               TranslationY="140">
+                            <Image Source="yapet.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="yapetb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </Grid>
+
+                </VerticalStackLayout>
+
+                <!-- Уран и спутники -->
+                <VerticalStackLayout Spacing="25">
+                    <Label Text="Уран"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="24"
+                           Margin="0,0,0,-50"/>
+
+                    <Grid x:Name="uranusbox" WidthRequest="350" HeightRequest="350" HorizontalOptions="Center">
+                        <!-- Центральная точка -->
+                        <BoxView Color="Transparent" 
+                                 HorizontalOptions="Center" 
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" 
+                                 HeightRequest="1"/>
+
+                        <!-- Уран в центре -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="80"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="130"
+                               HeightRequest="130">
+                            <Image x:Name="uranus"
+                                    Source="uranus.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="uranusb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Миранда - сверху слева -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="11"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="22"
+                               HeightRequest="22"
+                               TranslationX="-80"
+                               TranslationY="-80">
+                            <Image Source="miranda.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="mirandab_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Титания - сверху справа -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="35"
+                               HeightRequest="35"
+                               TranslationX="80"
+                               TranslationY="-80">
+                            <Image Source="titania.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="titaniab_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Оберон - внизу -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="18"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="35"
+                               HeightRequest="35"
+                               TranslationX="0"
+                               TranslationY="120">
+                            <Image Source="oberon.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="oberonb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </Grid>
+
+                </VerticalStackLayout>
+
+                <!-- Нептун и Тритон -->
+                <VerticalStackLayout Spacing="25">
+                    <Label Text="Нептун"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="24"
+                           Margin="0,0,0,-50"/>
+
+                    <Grid x:Name="neptunebox" WidthRequest="300" HeightRequest="300" HorizontalOptions="Center">
+                        <!-- Центральная точка -->
+                        <BoxView Color="Transparent" 
+                                 HorizontalOptions="Center" 
+                                 VerticalOptions="Center"
+                                 WidthRequest="1" 
+                                 HeightRequest="1"/>
+
+                        <!-- Нептун в центре -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="80"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="130"
+                               HeightRequest="130">
+                            <Image x:Name="neptune"
+                                    Source="neptune.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="neptuneb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <!-- Тритон - справа от планеты -->
+                        <Frame BackgroundColor="Transparent"
+                               Padding="0"
+                               BorderColor="Transparent"
+                               CornerRadius="22"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               WidthRequest="45"
+                               HeightRequest="45"
+                               TranslationX="100">
+                            <Image Source="tritone.png"
+                                   Aspect="AspectFit">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="tritoneb_Clicked"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </Grid>
+
+                </VerticalStackLayout>
+                <Label 
+                    Text="Пространство"
+                    TextColor="White"
+                    HorizontalOptions="Center"
+                    FontAttributes="Bold"
+                    FontSize="24"/>
+                <Label 
+                    Text="5 тестов для разблокировки"
+                    FontSize="14"
+                    HorizontalOptions="Center"
+                    TextColor="White"
+                    Margin="10,-30,10,0"/>
+                <Image x:Name="spacei" Source="space.png" WidthRequest="150">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="spaceb_Clicked"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Grid Margin="0,100,0,15" Opacity="0.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <BoxView 
+                        Grid.Column="0"
+                        HeightRequest="5"
+                        CornerRadius="3"
+                        Margin="10,0,0,0"
+                        BackgroundColor="White"/>
+                    <Label 
+                        Grid.Column="1"
+                        Text="Странная зона"
+                        TextColor="White"
+                        HorizontalTextAlignment="Center"
+                        FontSize="20"/>
+                    <BoxView 
+                        Grid.Column="2"
+                        HeightRequest="5"
+                        CornerRadius="3"
+                        Margin="0,0,10,0"
+                        BackgroundColor="White"/>
+                </Grid>
+
+                <VerticalStackLayout Margin="70,1500,0,0" HorizontalOptions="Start">
+                    <Image 
+                        Source="tg.png"
+                        HeightRequest="100">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="tg_Tapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label 
+                        Text="@tezoria8"
+                        TextColor="White"
+                        HorizontalOptions="Center"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Margin="0,2500,0,0" HorizontalOptions="Center">
+                    <Label 
+                        Text="Нейро-уголок"
+                        HorizontalOptions="Center"
+                        TextColor="White"
+                        Margin="0,0,10,0"
+                        FontSize="18"/>
+                                    <Image 
+                                        Source="neiroico.png"
+                                        HeightRequest="90"
+                                        HorizontalOptions="Center">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="neiro_Clicked"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Margin="0,2500,30,0" HorizontalOptions="End">
+                    <Label 
+                        Text="s0 LoNeLy..."
+                        VerticalOptions="Center"
+                        TextColor="White"
+                        FontSize="18"/>
+                    <Image 
+                        Source="voyager2.png"
+                        HeightRequest="50" >
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="voyager_Clicked"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Margin="50,2500,0,0">
+                    <Image 
+                        Source="asteroid.png"
+                        HeightRequest="50"/>
+                    <Label 
+                        Text="?"
+                        VerticalOptions="Center"
+                        TextColor="White"
+                        FontSize="10"
+                        Margin="10,0,0,0"/>
+                </HorizontalStackLayout>
+                <Image 
+                    x:Name="astro"
+                    Margin="0,3000,0,0"
+                    Source="astronaut.png"
+                    HeightRequest="30"/>
+                <Image 
+                    Source="chest.png"
+                    Opacity="0.1"
+                    HeightRequest="80"
+                    HorizontalOptions="End"
+                    Margin="0,3000,110,0"/>
+                <Image 
+                    Source="proximab.png"
+                    Opacity="0.03"
+                    HeightRequest="80"
+                    HorizontalOptions="Start"
+                    Margin="110,2700,0,0"/>
+                <Image 
+                    Source="ton618.png"
+                    Opacity="0.5"
+                    Margin="0,5000,0,0"
+                    MinimumWidthRequest="300">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ton_Clicked"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label 
+                    Text="TON 618 - Одна из крупнейших чёрных дыр"
+                    TextColor="White"
+                    HorizontalTextAlignment="Center"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Margin="10,-50,10,5000"/>
+                <Label 
+                    x:Name="final"
+                    TextColor="DarkGreen"
+                    Margin="10,0,10,0"
+                    FontSize="10"
+                    HorizontalTextAlignment="Center"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

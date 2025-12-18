@@ -3,59 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlanetPedia.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Label 
-                Text="PlanetPedia"
-                FontSize="36"
-                FontAttributes="Bold"
-                HorizontalTextAlignment="Center"
-                Margin="0,10,0,0"/>
-            <Label 
-                Text="Всё о космосе"
-                FontSize="16"
-                FontAttributes="Italic"
-                HorizontalTextAlignment="Center"
-                Margin="0,-20,0,0"/>
-            <Button 
-                x:Name="planetb"
-                Text="Планеты"
-                TextColor="White"
-                CornerRadius="5"
-                HorizontalOptions="Center"
-                MinimumWidthRequest="150"
-                Margin="0,50,0,0"
-                Clicked="planetb_Clicked"/>
-            <Button 
-                x:Name="moons"
-                Text="Спутники"
-                CornerRadius="5"
-                HorizontalOptions="Center"
-                MinimumWidthRequest="150"
-                Margin="0,10,0,0"
-                TextColor="White"
-                Clicked="moons_Clicked"/>
-            <Button 
-                x:Name="camera"
-                Text="Камера"
-                CornerRadius="5"
-                HorizontalOptions="Center"
-                MinimumWidthRequest="150"
-                Margin="0,10,0,0"
-                TextColor="White"
-                Clicked="camera_Clicked"/>
-            <Button 
-                x:Name="settings"
-                Text="Настройки"
-                CornerRadius="5"
-                HorizontalOptions="Center"
-                MinimumWidthRequest="150"
-                Margin="0,10,0,0"
-                TextColor="White"
-                Clicked="settings_Clicked"/>
-        </VerticalStackLayout>
-    </ScrollView>
+    <Grid>
+        <!-- Фоновое изображение -->
+        <Image Source="background.png"
+               Aspect="AspectFill"
+               Opacity="0.5"
+               VerticalOptions="Fill"
+               HorizontalOptions="Fill" />
+
+        <!-- Основной контент -->
+        <ScrollView>
+            <VerticalStackLayout
+                Padding="30,0"
+                Spacing="25">
+                <Label 
+                    Text="PlanetPedia"
+                    FontSize="36"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,10,0,0"/>
+                <Label 
+                    Text="Всё о космосе"
+                    FontSize="16"
+                    FontAttributes="Italic"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,-20,0,0"/>
+                <Button 
+                    x:Name="planetb"
+                    Text="Планеты"
+                    TextColor="White"
+                    CornerRadius="5"
+                    HorizontalOptions="Center"
+                    MinimumWidthRequest="150"
+                    Margin="0,50,0,0"
+                    Clicked="planetb_Clicked"/>
+                <Button 
+                    x:Name="camera"
+                    Text="Камера"
+                    CornerRadius="5"
+                    HorizontalOptions="Center"
+                    MinimumWidthRequest="150"
+                    Margin="0,10,0,0"
+                    TextColor="White"
+                    Clicked="camera_Clicked"/>
+                <Button 
+                    x:Name="settings"
+                    Text="Настройки"
+                    CornerRadius="5"
+                    HorizontalOptions="Center"
+                    MinimumWidthRequest="150"
+                    Margin="0,10,0,0"
+                    TextColor="White"
+                    Clicked="settings_Clicked"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 
 </ContentPage>

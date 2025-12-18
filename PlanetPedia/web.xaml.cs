@@ -17,13 +17,12 @@ public partial class web : ContentPage
 		if(modal) backl.IsVisible = true;
     }
 
-    private void webview_Navigating(object sender, WebNavigatingEventArgs e)
+    private async  void webview_Navigating(object sender, WebNavigatingEventArgs e)
     {
-		if(e.Url.StartsWith("maui://"))
+		if(e.Url.StartsWith("tg:"))
 		{
 			e.Cancel = true;
-			string action = e.Url.Replace("maui://","");
-			if (action == "sun/") Navigation.PushAsync(new card("sun.txt","sunmoons.txt"));
+            await Launcher.OpenAsync(e.Url);
 		}
     }
 

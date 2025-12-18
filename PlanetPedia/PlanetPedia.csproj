@@ -107,6 +107,12 @@
 	  <MauiXaml Update="planets.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="planetsnew.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="rage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="settings.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

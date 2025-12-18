@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.rage"
+             Title="">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label 
+                Text="Ярости карт"
+                HorizontalOptions="Center"
+                TextColor="DarkRed"
+                Margin="0,10"
+                FontSize="36"
+                FontAttributes="Bold" />
+            <Border x:Name="freerage" Stroke="Black" Background="#dddddd" Margin="10">
+                <VerticalStackLayout>
+                    <Label 
+                        Text="Бесплатная ярость"
+                        HorizontalTextAlignment="Center"
+                        Margin="10,10,10,0"
+                        FontSize="30"
+                        FontAttributes="Bold"/>
+                    <Label 
+                        Text="Почувствуй вкус огня!"
+                        HorizontalOptions="Center"
+                        FontSize="18"
+                        Margin="5,5,5,15"/>
+                    <Image 
+                        Source="randomrage.png"
+                        WidthRequest="300"/>
+                    <Button 
+                        x:Name="get"
+                        Text="Забрать!"
+                        TextColor="White"
+                        BackgroundColor="DarkRed"
+                        WidthRequest="200"
+                        Margin="10"
+                        BorderColor="Black"
+                        BorderWidth="2"
+                        Clicked="get_Clicked"/>
+                </VerticalStackLayout>
+            </Border>
+            <Border Stroke="Black" Background="LightPink" Margin="10">
+                <VerticalStackLayout>
+                    <Image 
+                        Source="sunragegif.gif"
+                        IsAnimationPlaying="True"
+                        Margin="10"
+                        WidthRequest="300" />
+                    <VerticalStackLayout>
+                        <Label 
+                            Text="Солнце"
+                            HorizontalOptions="Center"
+                            Margin="10,10,10,5"
+                            FontSize="30"
+                            FontAttributes="Bold"/>
+                        <Label 
+                            Text="Ярость"
+                            HorizontalOptions="Center"
+                            Margin="10,0"
+                            FontSize="20"
+                            TextColor="Red"/>
+                        <Label 
+                            Text="- Способность: После гибели превращается в сверхновую"
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            Text="Солнце стало поистине злым и жгучим. Теперь при гибели оно оставляет сверхновую. Просто жгучь!"
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            x:Name="sun"
+                            Text="Собрано фрагментов: 0/200"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            Margin="0,15,0,0"/>
+                        <Label />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="Black" Background="LightPink" Margin="10">
+                <VerticalStackLayout>
+                    <Image 
+                        Source="jupiterragegif.gif"
+                        IsAnimationPlaying="True"
+                        Margin="10"
+                        WidthRequest="300" />
+                    <VerticalStackLayout>
+                        <Label 
+                            Text="Юпитер"
+                            HorizontalOptions="Center"
+                            Margin="10,10,10,5"
+                            FontSize="30"
+                            FontAttributes="Bold"/>
+                        <Label 
+                            Text="Ярость"
+                            HorizontalOptions="Center"
+                            Margin="10,0"
+                            FontSize="20"
+                            TextColor="Red"/>
+                        <Label 
+                            Text="- Способность: Возвращает урон обратно"
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            Text="Юпитер пробудил в себе демона. Теперь он возвращает урон врагам. Гигант зла!"
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            x:Name="jupiter"
+                            Text="Собрано фрагментов: 0/200"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            Margin="0,15,0,0"/>
+                        <Label />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="Black" Background="LightPink" Margin="10">
+                <VerticalStackLayout>
+                    <Image 
+                        Source="netronragegif.gif"
+                        IsAnimationPlaying="True"
+                        Margin="10"
+                        WidthRequest="300" />
+                    <VerticalStackLayout>
+                        <Label 
+                            Text="Нейтронная звезда"
+                            HorizontalOptions="Center"
+                            Margin="10,10,10,5"
+                            FontSize="30"
+                            FontAttributes="Bold"/>
+                        <Label 
+                            Text="Ярость"
+                            HorizontalOptions="Center"
+                            Margin="10,0"
+                            FontSize="20"
+                            TextColor="Red"/>
+                        <Label 
+                            Text="- Способность: Иммунитет от радиации и дополнительный урон"
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            Text="БОЛЬШЕ РАДИАЦИИ! Теперь нейтронная звезда не только наносит больше урона, но и становится полностью не восприимчива к ней."
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            x:Name="netron"
+                            Text="Собрано фрагментов: 0/200"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            Margin="0,15,0,0"/>
+                        <Label />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Stroke="Black" Background="LightPink" Margin="10">
+                <VerticalStackLayout>
+                    <Image 
+                        Source="quarkragegif.gif"
+                        IsAnimationPlaying="True"
+                        Margin="10"
+                        WidthRequest="300" />
+                    <VerticalStackLayout>
+                        <Label 
+                            Text="Кварк"
+                            HorizontalOptions="Center"
+                            Margin="10,10,10,5"
+                            FontSize="30"
+                            FontAttributes="Bold"/>
+                        <Label 
+                            Text="Ярость"
+                            HorizontalOptions="Center"
+                            Margin="10,0"
+                            FontSize="20"
+                            TextColor="Red"/>
+                        <Label 
+                            Text="- Способность: Понижение урона в 2 раза; Жив, пока есть урон"
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            Text="Кварк получает стабильный полураспад. Теперь он не умирает после одного удара, но после каждой атаки урон уменьшается вдвое. После потери всего урона, он погибает."
+                            HorizontalTextAlignment="Center"
+                            FontSize="16"
+                            Margin="10,10,10,0"/>
+                        <Label 
+                            x:Name="quark"
+                            Text="Собрано фрагментов: 0/200"
+                            HorizontalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            Margin="0,15,0,0"/>
+                        <Label />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

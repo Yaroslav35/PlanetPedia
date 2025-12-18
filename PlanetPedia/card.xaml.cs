@@ -11,11 +11,28 @@ public partial class card : ContentPage
 	string source = "";
 	string vid_url = "";
 	string obj_url = "";
+	bool anim = false;
+
 	public card(string file_get, string file_moons_get)
 	{
-		InitializeComponent();
-		file = file_get;
+        InitializeComponent();
+        List<VisualElement> elements = new List<VisualElement>() { title, img, block1, block2, block3, block4, block5, block6, block7, block8};
+        file = file_get;
 		file_moons = file_moons_get;
+		anim = true;
+		
+
+        foreach (VisualElement element in elements) element.Opacity = 0;
+
+        propertybox.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+		aboutbox.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        uniquebox.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+		moonsbox.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+		picbox.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+		vidbox.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+		box3d.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+		tests.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+
         read();
 	}
     async private void read()
@@ -154,7 +171,7 @@ public partial class card : ContentPage
 
         if (data[0] == "Сатурн") img.WidthRequest = 400;
 
-		stack.Children.Remove(wiki);
+		wikibox.Children.Remove(wiki);
 
         List<string> datamoon = new List<string>();
         using var streammoon = await FileSystem.OpenAppPackageFileAsync(file_moons);
@@ -312,7 +329,28 @@ public partial class card : ContentPage
         }
 #endif
 
-        stack.Children.Add(wiki);
+        wikibox.Children.Add(wiki);
+    }
+
+    protected async override void OnAppearing()
+    {
+        List<VisualElement> elements = new List<VisualElement>() { title, img, block1, block2, block3, block4, block5, block6, block7, block8 };
+        base.OnAppearing();
+
+        //плавное проявление
+        await Task.Delay(300);
+        foreach (VisualElement element in elements)
+		{
+			float tr = anim ? 0f : 1f;
+			while(tr < 1)
+			{
+				tr += 0.1f;
+				element.Opacity = tr;
+				await Task.Delay(10);
+			}
+			await Task.Delay(10);
+		}
+		anim = false;
     }
 
     private void test_go(object? sender, TappedEventArgs e, string title, string dir)

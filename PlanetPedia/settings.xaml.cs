@@ -10,20 +10,32 @@ public partial class settings : ContentPage
     bool vib;
     bool isrun = false;
     bool initialized = false;
+    bool anim = false;
     public settings()
 	{
 		InitializeComponent();
-        #if ANDROID
+        List<VisualElement> elements = new List<VisualElement>() {check, block1, block2, block3, block4, block5};
+        anim = true;
+#if ANDROID
             vid_desc.Margin = new Thickness(5,13,0,0);
             obj_desc.Margin = new Thickness(5,13,0,0);
             music_desc.Margin = new Thickness(5,13,0,0);
             vibro_desc.Margin = new Thickness(5,13,0,0);
-        #endif
+#endif
+
+        foreach (VisualElement element in elements) element.Opacity = 0;
+
+        border1.BackgroundColor = Color.FromRgba(105,108,138,0.3);
+        border2.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        border3.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        border4.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        border5.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
     }
 
-    protected override void OnAppearing()
+    protected async override void OnAppearing()
     {
         base.OnAppearing();
+        List<VisualElement> elements = new List<VisualElement>() { check, block1, block2, block3, block4, block5 };
         update();
         video = Preferences.Get("video", true);
         videos.IsToggled = video;
@@ -62,6 +74,20 @@ public partial class settings : ContentPage
             hor.Add(name);
         }
         initialized = true;
+
+        await Task.Delay(300);
+        foreach (VisualElement element in elements)
+        {
+            float tr = anim ? 0f : 1f;
+            while (tr < 1)
+            {
+                tr += 0.1f;
+                element.Opacity = tr;
+                await Task.Delay(10);
+            }
+            await Task.Delay(10);
+        }
+        anim = false;
     }
     private void back_Clicked(object sender, EventArgs e)
     {
@@ -71,11 +97,6 @@ public partial class settings : ContentPage
     private void wikib_Clicked(object sender, EventArgs e)
     {
         Navigation.PushAsync(new web("https://ru.wikipedia.org"));
-    }
-
-    private void ton_Clicked(object sender, EventArgs e)
-    {
-        Navigation.PushAsync(new card("ton618.txt","sunmoons.txt"));
     }
 
     private void cosmob_Clicked(object sender, EventArgs e)
@@ -114,7 +135,7 @@ public partial class settings : ContentPage
                 if(reply.Status == IPStatus.Success)
                 {
                     check.Text = "Подключение в норме!";
-                    check.SetAppThemeColor(Label.TextColorProperty, Colors.Green, Colors.LightGreen);
+                    check.SetAppThemeColor(Label.TextColorProperty, Colors.LightGreen, Colors.LightGreen);
                 }
                 else
                 {
@@ -166,4 +187,5 @@ public partial class settings : ContentPage
         status = await Permissions.RequestAsync<T>();
         return status;
     }
+
 }

@@ -3,95 +3,97 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlanetPedia.test"
              Title="">
-    <ScrollView>
-        <VerticalStackLayout>
-            <VerticalStackLayout x:Name="testview" RadioButtonGroup.GroupName="main" IsVisible="True">
-                <Label 
-                    x:Name="num"
-                    Text="Вопрос 1/10"
-                    FontSize="30"
-                    FontAttributes="Bold"
-                    HorizontalTextAlignment="Center"
-                    Margin="0,10"/>
-                <Label 
-                    x:Name="question"
-                    Text="Текст вопроса"
-                    FontSize="18"
-                    FontAttributes="Italic"
-                    HorizontalTextAlignment="Center"
-                    Margin="10,10,10,70"/>
-                <RadioButton 
-                    x:Name="a1"
-                    Content="Ответ1"
-                    HorizontalOptions="Center"
-                    Margin="5,0,5,10"/>
-                <RadioButton 
-                    x:Name="a2"
-                    Content="Ответ2"
-                    HorizontalOptions="Center"
-                    Margin="5,0,5,10"/>
-                <RadioButton 
-                    x:Name="a3"
-                    Content="Ответ3"
-                    HorizontalOptions="Center"
-                    Margin="5,0,5,10"/>
-                <RadioButton 
-                    x:Name="a4"
-                    Content="Ответ4"
-                    HorizontalOptions="Center"
-                    Margin="5,0,5,10"/>
-                <FlexLayout x:Name ="flexbox" Direction="Row" Wrap="Wrap" JustifyContent="Center" AlignItems="Center" AlignContent="Center" Margin="10,20,10,30" SizeChanged="FlexLayout_SizeChanged">
-                    <Button 
-                        x:Name="previous"
-                        Text="Предыдущий"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        BorderWidth="2"
-                        BorderColor="{AppThemeBinding Light=Black, Dark=White}"
-                        HorizontalOptions="Center"
-                        Margin="5,0"
-                        Clicked="previous_Clicked" />
-                    <Button 
-                        x:Name="apply"
-                        Text="Принять"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        BorderWidth="2"
-                        BorderColor="{AppThemeBinding Light=Black, Dark=White}"
-                        HorizontalOptions="Center"
-                        Margin="5,0"
-                        Clicked="apply_Clicked" />
-                    <Button 
-                        x:Name="next"
-                        Text="Следующий"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        BorderWidth="2"
-                        BorderColor="{AppThemeBinding Light=Black, Dark=White}"
-                        HorizontalOptions="Center"
-                        Margin="5"
-                        Clicked="next_Clicked" />
-                </FlexLayout>
-                <Button 
-                    x:Name="finish"
-                    Text="Завершить"
-                    TextColor="{AppThemeBinding Light=Black, Dark=White}"
+    <Grid>
+        <Image 
+            Source="background.png"
+            Opacity="0.5"
+            Aspect="AspectFill"/>
+        <ScrollView>
+            <VerticalStackLayout>
+                <VerticalStackLayout x:Name="testview" RadioButtonGroup.GroupName="main" IsVisible="True">
+                    <Label 
+                x:Name="num"
+                Text="Вопрос 1/10"
+                FontSize="30"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                Margin="0,10"/>
+                    <Label 
+                x:Name="question"
+                Text="Текст вопроса"
+                FontSize="18"
+                FontAttributes="Italic"
+                HorizontalTextAlignment="Center"
+                Margin="10,10,10,70"/>
+                    <RadioButton 
+                x:Name="a1"
+                Content="Ответ1"
+                HorizontalOptions="Center"
+                Margin="5,0,5,10"
+                        CheckedChanged="a1_CheckedChanged"/>
+                    <RadioButton 
+                x:Name="a2"
+                Content="Ответ2"
+                HorizontalOptions="Center"
+                Margin="5,0,5,10"
+                        CheckedChanged="a2_CheckedChanged"/>
+                    <RadioButton 
+                x:Name="a3"
+                Content="Ответ3"
+                HorizontalOptions="Center"
+                Margin="5,0,5,10"
+                        CheckedChanged="a3_CheckedChanged"/>
+                    <RadioButton 
+                x:Name="a4"
+                Content="Ответ4"
+                HorizontalOptions="Center"
+                Margin="5,0,5,10"
+                        CheckedChanged="a4_CheckedChanged"/>
+                    <FlexLayout x:Name ="flexbox" Direction="Row" Wrap="Wrap" JustifyContent="Center" AlignItems="Center" AlignContent="Center" Margin="10,20,10,30">
+                        <Button 
+                    x:Name="previous"
+                    Text="Предыдущий"
+                    TextColor="White"
                     BorderWidth="2"
                     BorderColor="{AppThemeBinding Light=Black, Dark=White}"
                     HorizontalOptions="Center"
-                    Clicked="finish_Clicked" />
-                <Label 
-                    Text="Made with TRESH"
+                    Margin="5,0"
+                    Clicked="previous_Clicked" />
+                        <Button 
+                    x:Name="next"
+                    Text="Следующий"
+                    TextColor="White"
+                    BorderWidth="2"
+                    BorderColor="{AppThemeBinding Light=Black, Dark=White}"
                     HorizontalOptions="Center"
-                    FontAttributes="Italic"
-                    Margin="0,20"/>
+                    Margin="5"
+                    Clicked="next_Clicked" />
+                    </FlexLayout>
+                    <Button 
+                x:Name="finish"
+                Text="Завершить"
+                TextColor="White"
+                BorderWidth="2"
+                BorderColor="{AppThemeBinding Light=Black, Dark=White}"
+                HorizontalOptions="Center"
+                Clicked="finish_Clicked" />
+                    <Label 
+                        x:Name="tresh"
+                Text="Made with TRESH"
+                HorizontalOptions="Center"
+                FontAttributes="Italic"
+                Margin="0,20"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout x:Name="answersview" IsVisible="False">
+                    <Label 
+                x:Name="result"
+                Text="Правильные ответы: 1/10"
+                FontSize="30"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                Margin="10"/>
+                </VerticalStackLayout>
             </VerticalStackLayout>
-            <VerticalStackLayout x:Name="answersview" IsVisible="False">
-                <Label 
-                    x:Name="result"
-                    Text="Правильные ответы: 1/10"
-                    FontSize="30"
-                    FontAttributes="Bold"
-                    HorizontalTextAlignment="Center"
-                    Margin="10"/>
-            </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </Grid>
 </ContentPage>

@@ -17,13 +17,9 @@
 
         private void planetb_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new planets());
+            Navigation.PushAsync(new planetsnew());
         }
 
-        private void moons_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new moons());
-        }
 
         private void settings_Clicked(object sender, EventArgs e)
         {

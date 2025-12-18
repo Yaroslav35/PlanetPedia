@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.tezor.planetpedia" android:versionCode="235" android:versionName="2.3.5">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.tezor.planetpedia" android:versionCode="324" android:versionName="3.2.4">
 	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:label="PlanetPedia"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />

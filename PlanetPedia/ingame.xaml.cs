@@ -16,6 +16,7 @@ public partial class ingame : ContentPage
     private int energy = 10;
     private int target = 0;
     private bool myTurn = true;
+    private int loses = 0;
 
     private List<Hero?> enemyheroes = new List<Hero?>() { null, null, null };
     private List<Sup?> enemysupes = new List<Sup?>() { null, null, null };
@@ -36,10 +37,13 @@ public partial class ingame : ContentPage
         "12:Дискошар:95:0:140:0:6:disco.png",
         "13:Тыква:110:1:165:80:5:pumpkin.png",
         "14:Мрачник:80:30:120:45:4:gloomy.png",
+        "15:Призрак:70:25:105:38:5:ghost.png",
         "16:Водяная планета:60:30:90:45:4:waterplanet.png",
         "17:Комета:130:40:195:60:5:cometc.png",
         "18:Кокос:150:10:225:15:6:cocos.png",
-        "19:Песчаный:100:30:150:45:4:sandy.png"
+        "19:Песчаный:100:30:150:45:4:sandy.png",
+        "20:Снежная планета:100:5:150:8:6:snow.png",
+        "21:Ёлка:80:10:120:15:6:wood.png"
     };
 
     private List<string> sups = new List<string>()
@@ -58,18 +62,65 @@ public partial class ingame : ContentPage
         "12:Зелье радиации:5:radiation.png",
         "13:Мрачное зелье:999:disablepotion.png",
         "14:Монета обмена:6:change.png",
-        "15:Конфеты:5:candies_pumpkin.png"
+        "15:Конфеты:5:candies_pumpkin.png",
+        "16:Подарок:5:gift.png",
+        "17:Зелье ярости:4:rage.png"
     };
 
     private List<Hero?> heroes = new List<Hero?>() { null, null, null };
     private List<Sup?> supes = new List<Sup?>() { null, null, null };
 
-    public ingame(int stars_get)
+    bool parts = false;
+
+    // Словарь для быстрого доступа к картам по ID
+    private Dictionary<int, string> heroDictionary = new Dictionary<int, string>();
+    private Dictionary<int, string> supDictionary = new Dictionary<int, string>();
+
+    public ingame(int stars_get, bool parts_get)
     {
         InitializeComponent();
         stars = stars_get;
+        parts = parts_get;
         vibro = Preferences.Get("vibro", true);
+
+        if(stars > 3000 && stars <= 4000)
+        {
+            botlifes = 3;
+            mylifes = 3;
+        }
+        else if(stars > 4000 && stars <= 5000)
+        {
+            botlifes = 4;
+            mylifes = 4;
+        }
+        else if(stars > 5000)
+        {
+            botlifes = 5;
+            mylifes = 5;
+        }
+
+            // Инициализируем словари
+            InitializeDictionaries();
         InitializeGame();
+    }
+
+    private void InitializeDictionaries()
+    {
+        // Инициализируем словарь героев
+        foreach (var hero in heros)
+        {
+            string[] data = hero.Split(':');
+            int id = int.Parse(data[0]);
+            heroDictionary[id] = hero;
+        }
+
+        // Инициализируем словарь зелий
+        foreach (var sup in sups)
+        {
+            string[] data = sup.Split(':');
+            int id = int.Parse(data[0]);
+            supDictionary[id] = sup;
+        }
     }
 
     private void InitializeGame()
@@ -78,28 +129,129 @@ public partial class ingame : ContentPage
         Update();
         timer_control();
 
-        int idcard = GetRandomCardId();
-        string[] data = heros[idcard].Split(":");
+        // Получаем случайный ID героя, а не индекс
+        int heroId = GetRandomHeroId();
+        string heroData = heroDictionary[heroId];
+        string[] data = heroData.Split(":");
         hero1.BackgroundColor = Colors.LightPink;
-        heroes[0] = new Hero(data[1], int.Parse(data[2]), int.Parse(data[3]),
+
+        var initialHero = new Hero(data[1], int.Parse(data[2]), int.Parse(data[3]),
                            int.Parse(data[4]), int.Parse(data[5]), 0,
                            int.Parse(data[6]), true, data[7]);
+
+        CheckRageAbility(initialHero);
+        heroes[0] = initialHero;
 
         UpdateTargetHighlight();
         draw();
     }
 
-    private int GetRandomCardId()
+    private int GetRandomHeroId()
     {
-        int maxCardId;
-        if (stars >= 0 && stars <= 500) maxCardId = 3;
-        else if (stars > 500 && stars <= 1000) maxCardId = 6;
-        else if (stars > 1000 && stars <= 1500) maxCardId = 9;
-        else if (stars > 1500 && stars <= 2000) maxCardId = 12;
-        else if (stars > 2000 && stars <= 3000) maxCardId = 15;
-        else maxCardId = 19;
+        List<int> availableIds = new List<int>();
 
-        return rand.Next(0, maxCardId);
+        // Определяем доступные ID героев в зависимости от звёзд
+        if (stars >= 0 && stars <= 500)
+        {
+            // 0-500: астронавт солнце луна (ID 1-3)
+            availableIds.AddRange(new[] { 1, 2, 3 });
+        }
+        else if (stars > 500 && stars <= 1000)
+        {
+            // 501-1000: венера юпитер плутон (ID 4-6)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6 });
+        }
+        else if (stars > 1000 && stars <= 1500)
+        {
+            // 1001-1500: пульсар сверхновая экзопланета (ID 7-9)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+        }
+        else if (stars > 1500 && stars <= 2000)
+        {
+            // 1501-2000: пиньята кварк дискошар (ID 10-12)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
+        }
+        else if (stars > 2000 && stars <= 3000)
+        {
+            // 2001-3000: тыква мрачник призрак (ID 13-15)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 });
+        }
+        else if (stars > 3000 && stars <= 4000)
+        {
+            // 3001-4000: водная планета, комета кокос песчанный (ID 16-19)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
+        }
+        else if (stars > 4000 && stars <= 5000)
+        {
+            // 4001-5000: снежная планета, ёлка (ID 20-21)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 });
+        }
+        else
+        {
+            // 5000+: все карты
+            availableIds.AddRange(heroDictionary.Keys);
+        }
+
+        if (availableIds.Count == 0)
+            return 1; // Возвращаем ID 1 (Астронавт) по умолчанию
+
+        return availableIds[rand.Next(availableIds.Count)];
+    }
+
+    private int GetRandomSupId()
+    {
+        List<int> availableIds = new List<int>();
+
+        // Определяем доступные ID зелий в зависимости от звёзд
+        if (stars >= 0 && stars <= 500)
+        {
+            // 0-500: исцеление урон смесь (ID 1-3)
+            availableIds.AddRange(new[] { 1, 2, 3 });
+        }
+        else if (stars > 500 && stars <= 1000)
+        {
+            // 501-1000: ослабление доп жизнь большое исцеление (ID 4-6)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6 });
+        }
+        else if (stars > 1000 && stars <= 1500)
+        {
+            // 1001-1500: чёрная дыра галактика экскалибур (ID 7-9)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+        }
+        else if (stars > 1500 && stars <= 2000)
+        {
+            // 1501-2000: антиматерия странное зелье и зелье радиации (ID 10-12)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
+        }
+        else if (stars > 2000 && stars <= 3000)
+        {
+            // 2001-3000: монета обмена, конфеты (ID 14-15)
+            // Странное зелье (ID 11) уже есть с предыдущего уровня
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15 });
+        }
+        else if (stars > 3000 && stars <= 4000)
+        {
+            // 3001-4000: все предыдущие + ничего нового
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15 });
+        }
+        else if (stars > 4000 && stars <= 5000)
+        {
+            // 4001-5000: подарок (ID 16)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16 });
+        }
+        else if (stars > 5000)
+        {
+            // 5000+: все зелья включая ярость (ID 17)
+            availableIds.AddRange(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17 });
+        }
+
+        // Всегда доступно мрачное зелье (ID 13)
+        availableIds.Add(13);
+
+        if (availableIds.Count == 0)
+            return 1; // Возвращаем ID 1 (Исцеление) по умолчанию
+
+        return availableIds[rand.Next(availableIds.Count)];
     }
 
     public void switch_card()
@@ -115,8 +267,31 @@ public partial class ingame : ContentPage
 
         if (type == 0)
         {
-            int supId = rand.Next(0, sups.Count);
-            string[] data = sups[supId].Split(':');
+            // Для зелий
+            int supId = GetRandomSupId();
+
+            // Специальная логика для зелья ярости (только с 5000+ и 20% шанс)
+            if (rand.Next(0, 5) != 0 && stars >= 5000)
+            {
+                if (supId == 17 && stars >= 5000)
+                {
+                    // Оставляем зелье ярости
+                }
+                else if (supId == 17)
+                {
+                    // Если выпало зелье ярости, но не должно было, берем другое
+                    supId = GetRandomSupId();
+                    // Убедимся что это не зелье ярости
+                    while (supId == 17)
+                    {
+                        supId = GetRandomSupId();
+                    }
+                }
+            }
+            else supId = 17;
+
+            string supData = supDictionary[supId];
+            string[] data = supData.Split(':');
 
             border.BackgroundColor = Colors.LightGreen;
             hp.Text = "0";
@@ -127,15 +302,48 @@ public partial class ingame : ContentPage
         }
         else
         {
-            int heroId = GetRandomCardId();
-            string[] data = heros[heroId].Split(':');
+            int heroId = GetRandomHeroId();
+            string heroData = heroDictionary[heroId];
+            string[] data = heroData.Split(':');
+
+            string heroName = data[1];
+            bool hasRageAbility = false;
+
+            // Проверяем, есть ли у игрока яростная способность для этого героя (только с 5000+)
+            if (stars >= 5000)
+            {
+                switch (heroName)
+                {
+                    case "Солнце":
+                        hasRageAbility = Preferences.Get("sun_rage", 0) >= 200;
+                        break;
+                    case "Юпитер":
+                        hasRageAbility = Preferences.Get("jupiter_rage", 0) >= 200;
+                        break;
+                    case "Пульсар":
+                        hasRageAbility = Preferences.Get("netron_rage", 0) >= 200;
+                        break;
+                    case "Кварк":
+                        hasRageAbility = Preferences.Get("quark_rage", 0) >= 200;
+                        break;
+                }
+            }
 
             border.BackgroundColor = Colors.LightPink;
             hp.Text = data[2];
             dmg.Text = data[3];
             en.Text = data[6];
             img.Source = data[7];
-            title.Text = data[1];
+
+            if (hasRageAbility)
+            {
+                title.Text = $"{heroName} [Яростный]";
+                border.BackgroundColor = Colors.Gold;
+            }
+            else
+            {
+                title.Text = heroName;
+            }
         }
     }
 
@@ -166,9 +374,9 @@ public partial class ingame : ContentPage
 
         if (energy < energyCost) return;
 
-        if (buyBorder.BackgroundColor == Colors.LightPink)
+        if (buyBorder.BackgroundColor == Colors.LightPink || buyBorder.BackgroundColor == Colors.Gold)
         {
-            BuyHero(titleLabel.Text, int.Parse(hpLabel.Text), int.Parse(dmgLabel.Text),
+            BuyHero(titleLabel.Text.Replace(" [Яростный]", ""), int.Parse(hpLabel.Text), int.Parse(dmgLabel.Text),
                    energyCost, img.Source.ToString().Replace("File: ", ""));
         }
         else if (buyBorder.BackgroundColor == Colors.LightGreen)
@@ -187,17 +395,47 @@ public partial class ingame : ContentPage
         {
             if (heroes[i] == null)
             {
-                heroes[i] = new Hero(name, hp, dmg, (int)(hp * 1.5), (int)(dmg * 1.5),
+                var newHero = new Hero(name, hp, dmg, (int)(hp * 1.5), (int)(dmg * 1.5),
                                    0, energyCost, true, image);
+
+                CheckRageAbility(newHero);
+                heroes[i] = newHero;
                 return;
             }
-            else if (heroes[i].name == name)
+            else if (heroes[i].name == name || heroes[i].name == name.Replace(" [Ярость]", "").Replace(" [Готов к ярости]", ""))
             {
-                heroes[i] = new Hero(heroes[i].name, (int)(heroes[i].hp * 1.5),
+                bool wasEnraged = heroes[i].isEnraged;
+                int rageType = heroes[i].rageType;
+                bool hadRageAbility = heroes[i].hasRageAbility;
+
+                heroes[i] = new Hero(heroes[i].name.Replace(" [Ярость]", "").Replace(" [Готов к ярости]", ""),
+                                   (int)(heroes[i].hp * 1.5),
                                    (int)(heroes[i].damage * 1.5),
                                    (int)(heroes[i].max_hp * 1.5),
                                    (int)(heroes[i].max_damage * 1.5),
                                    0, heroes[i].energy + energyCost, true, heroes[i].pic);
+
+                CheckRageAbility(heroes[i]);
+
+                if (wasEnraged && heroes[i].hasRageAbility)
+                {
+                    heroes[i].isEnraged = true;
+                    heroes[i].rageType = rageType;
+
+                    // Восстанавливаем яростную картинку
+                    switch (heroes[i].rageType)
+                    {
+                        case 1: heroes[i].pic = "sunrage.png"; break;
+                        case 2: heroes[i].pic = "jupiterrage.png"; break;
+                        case 3: heroes[i].pic = "netronrage.png"; break;
+                        case 4: heroes[i].pic = "quarkrage.png"; break;
+                    }
+                }
+                else
+                {
+                    heroes[i].isEnraged = false;
+                }
+
                 return;
             }
         }
@@ -218,6 +456,84 @@ public partial class ingame : ContentPage
                     supes[i] = new Sup(id, name, energyCost, image);
                     return;
                 }
+            }
+        }
+    }
+
+    private void CheckRageAbility(Hero hero)
+    {
+        if (stars < 5000) return; // Ярость доступна только с 5000+ звёзд
+
+        hero.hasRageAbility = false;
+        hero.isEnraged = false;
+        hero.rageType = 0;
+
+        switch (hero.name)
+        {
+            case "Солнце":
+                int sunRage = Preferences.Get("sun_rage", 0);
+                if (sunRage >= 200)
+                {
+                    hero.hasRageAbility = true;
+                    hero.rageType = 1;
+                }
+                break;
+
+            case "Юпитер":
+                int jupiterRage = Preferences.Get("jupiter_rage", 0);
+                if (jupiterRage >= 200)
+                {
+                    hero.hasRageAbility = true;
+                    hero.rageType = 2;
+                }
+                break;
+
+            case "Пульсар":
+                int netronRage = Preferences.Get("netron_rage", 0);
+                if (netronRage >= 200)
+                {
+                    hero.hasRageAbility = true;
+                    hero.rageType = 3;
+                }
+                break;
+
+            case "Кварк":
+                int quarkRage = Preferences.Get("quark_rage", 0);
+                if (quarkRage >= 200)
+                {
+                    hero.hasRageAbility = true;
+                    hero.rageType = 4;
+                }
+                break;
+        }
+    }
+
+    private void CheckEnemyRageAbility(Hero hero)
+    {
+        if (stars >= 5000 && rand.Next(0, 100) < 30) // Враги могут иметь ярость только с 5000+
+        {
+            switch (hero.name)
+            {
+                case "Солнце":
+                    hero.hasRageAbility = true;
+                    hero.rageType = 1;
+                    hero.pic = "sunc.png";
+                    break;
+                case "Юпитер":
+                    hero.hasRageAbility = true;
+                    hero.rageType = 2;
+                    hero.pic = "jupiterc.png";
+                    break;
+                case "Пульсар":
+                    hero.hasRageAbility = true;
+                    hero.rageType = 3;
+                    hero.pic = "netron.png";
+                    break;
+                case "Кварк":
+                    hero.hasRageAbility = true;
+                    hero.rageType = 4;
+                    hero.pic = "quark.png";
+                    break;
             }
         }
     }
@@ -333,8 +649,44 @@ public partial class ingame : ContentPage
 
             en.Text = hero.energy.ToString();
 
-            img.Source = hero.pic;
-            title.Text = hero.name;
+            if (hero.isEnraged)
+            {
+                switch (hero.name)
+                {
+                    case "Солнце":
+                        img.Source = "sunrage.png";
+                        break;
+                    case "Юпитер":
+                        img.Source = "jupiterrage.png";
+                        break;
+                    case "Пульсар":
+                        img.Source = "netronrage.png";
+                        break;
+                    case "Кварк":
+                        img.Source = "quarkrage.png";
+                        break;
+                    default:
+                        img.Source = hero.pic;
+                        break;
+                }
+            }
+            else
+            {
+                img.Source = hero.pic;
+            }
+
+            if (hero.isEnraged)
+            {
+                title.Text = $"{hero.name} [Ярость]";
+            }
+            else if (hero.hasRageAbility && !hero.isEnraged)
+            {
+                title.Text = $"{hero.name} [Готов к ярости]";
+            }
+            else
+            {
+                title.Text = hero.name;
+            }
         }
         else if (hero != null && !hero.alive)
         {
@@ -374,8 +726,44 @@ public partial class ingame : ContentPage
 
             en.Text = hero.radiation.ToString();
 
-            img.Source = hero.pic;
-            title.Text = hero.name;
+            if (hero.isEnraged)
+            {
+                switch (hero.name)
+                {
+                    case "Солнце":
+                        img.Source = "sunrage.png";
+                        break;
+                    case "Юпитер":
+                        img.Source = "jupiterrage.png";
+                        break;
+                    case "Пульсар":
+                        img.Source = "netronrage.png";
+                        break;
+                    case "Кварк":
+                        img.Source = "quarkrage.png";
+                        break;
+                    default:
+                        img.Source = hero.pic;
+                        break;
+                }
+            }
+            else
+            {
+                img.Source = hero.pic;
+            }
+
+            if (hero.isEnraged)
+            {
+                title.Text = $"{hero.name} [Ярость]";
+            }
+            else if (hero.hasRageAbility && !hero.isEnraged)
+            {
+                title.Text = $"{hero.name} [Готов к ярости]";
+            }
+            else
+            {
+                title.Text = hero.name;
+            }
         }
         else if (hero != null && !hero.alive)
         {
@@ -413,7 +801,7 @@ public partial class ingame : ContentPage
 
     private void CreateEnemyTeam()
     {
-        int enemyenergy = 10 * loop;
+        int enemyenergy = 10 * loop - 5 * loses;
         int h = 0, s = 0;
         int iter = 0;
 
@@ -423,24 +811,45 @@ public partial class ingame : ContentPage
 
             if (type == 0 && s < 3)
             {
-                int supId = rand.Next(0, sups.Count);
-                string[] data = sups[supId].Split(':');
+                int supId = GetRandomSupId();
+
+                // Специальная логика для зелья ярости у врага
+                if (supId == 17 && stars >= 5000 && rand.Next(0, 5) == 0 && enemyenergy >= 4)
+                {
+                    // Оставляем зелье ярости
+                }
+                else if (supId == 17)
+                {
+                    // Если выпало зелье ярости, но не должно было, берем другое
+                    supId = GetRandomSupId();
+                    while (supId == 17)
+                    {
+                        supId = GetRandomSupId();
+                    }
+                }
+
+                string supData = supDictionary[supId];
+                string[] data = supData.Split(':');
                 if (enemyenergy >= int.Parse(data[2]))
                 {
-                    enemysupes[s] = new Sup(supId + 1, data[1], int.Parse(data[2]), data[3]);
+                    enemysupes[s] = new Sup(supId, data[1], int.Parse(data[2]), data[3]);
                     enemyenergy -= int.Parse(data[2]);
                     s++;
                 }
             }
             else if (type == 1 && h < 3)
             {
-                int heroId = GetRandomCardId();
-                string[] data = heros[heroId].Split(':');
+                int heroId = GetRandomHeroId();
+                string heroData = heroDictionary[heroId];
+                string[] data = heroData.Split(':');
                 if (enemyenergy >= int.Parse(data[6]))
                 {
-                    enemyheroes[h] = new Hero(data[1], int.Parse(data[2]), int.Parse(data[3]),
-                                            int.Parse(data[4]), int.Parse(data[5]), 0,
-                                            int.Parse(data[6]), true, data[7]);
+                    var enemyHero = new Hero(data[1], int.Parse(data[2]), int.Parse(data[3]),
+                                           int.Parse(data[4]), int.Parse(data[5]), 0,
+                                           int.Parse(data[6]), true, data[7]);
+
+                    CheckEnemyRageAbility(enemyHero);
+                    enemyheroes[h] = enemyHero;
                     enemyenergy -= int.Parse(data[6]);
                     h++;
                 }
@@ -450,7 +859,8 @@ public partial class ingame : ContentPage
 
         if (enemyheroes.All(h => h == null))
         {
-            enemyheroes[0] = new Hero("Астронавт", 100, 20, 150, 30, 0, 3, true, "astronaut.png");
+            var defaultHero = new Hero("Астронавт", 100, 20, 150, 30, 0, 3, true, "astronaut.png");
+            enemyheroes[0] = defaultHero;
         }
     }
 
@@ -606,7 +1016,44 @@ public partial class ingame : ContentPage
 
         turn.Text = $"{enemy.name} атакует {player.name}!";
 
-        if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(enemy.name))
+        // Новые карты
+        if (enemy.name == "Ёлка")
+        {
+            // Ёлка наносит небольшой урон радиацией всем
+            foreach (var hero in heroes)
+            {
+                if (hero != null && hero.alive)
+                {
+                    hero.radiation += 5; // Небольшой урон радиацией всем
+                }
+            }
+            turn.Text = "Ёлка наносит радиацию всем героям!";
+        }
+        else if (enemy.name == "Снежная планета")
+        {
+            // Снежная планета немного уменьшает урон всем героям
+            foreach (var hero in heroes)
+            {
+                if (hero != null && hero.alive)
+                {
+                    hero.damage = Math.Max(0, hero.damage - 5);
+                }
+            }
+            turn.Text = "Снежная планета уменьшает урон всех героев!";
+        }
+        else if (enemy.name == "Призрак")
+        {
+            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
+            {
+                turn.Text = $"{player.name} увернулся от атаки призрака!";
+            }
+            else
+            {
+                player.hp -= enemy.damage;
+                CheckPlayerDeath(playerIndex);
+            }
+        }
+        else if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(enemy.name))
         {
             if (player.name == "Призрак" && rand.Next(0, 2) == 0)
             {
@@ -614,8 +1061,26 @@ public partial class ingame : ContentPage
             }
             else
             {
-                player.hp -= enemy.damage;
-                CheckPlayerDeath(playerIndex);
+                int damageDealt = enemy.damage;
+
+                // Проверяем ярость Юпитера
+                if (enemy.name == "Юпитер" && enemy.isEnraged)
+                {
+                    player.hp -= damageDealt;
+                    enemy.hp -= damageDealt;
+                    turn.Text = $"{enemy.name} в ярости отражает {damageDealt} урона обратно!";
+
+                    if (enemy.hp <= 0)
+                    {
+                        CheckEnemyDeath(enemyIndex);
+                    }
+                    CheckPlayerDeath(playerIndex);
+                }
+                else
+                {
+                    player.hp -= damageDealt;
+                    CheckPlayerDeath(playerIndex);
+                }
             }
         }
         else if (enemy.name == "Экзопланета")
@@ -638,7 +1103,15 @@ public partial class ingame : ContentPage
             }
             else
             {
-                player.radiation += 10;
+                if (enemy.isEnraged)
+                {
+                    player.radiation += 25;
+                    turn.Text = $"{enemy.name} в ярости накладывает 25 радиации!";
+                }
+                else
+                {
+                    player.radiation += 10;
+                }
             }
         }
         else if (enemy.name == "Сверхновая")
@@ -680,10 +1153,32 @@ public partial class ingame : ContentPage
             }
             else
             {
-                player.hp -= enemy.damage;
+                int damageDealt = enemy.damage;
+                player.hp -= damageDealt;
                 CheckPlayerDeath(playerIndex);
-                enemy.alive = false;
-                enemyheroes[enemyIndex] = null;
+
+                if (!enemy.isEnraged)
+                {
+                    enemy.alive = false;
+                    enemyheroes[enemyIndex] = null;
+                    turn.Text = $"{enemy.name} жертвует собой для нанесения урона!";
+                }
+                else
+                {
+                    int oldDamage = enemy.damage;
+                    enemy.damage = Math.Max(1, enemy.damage / 2);
+
+                    if (enemy.damage <= 1)
+                    {
+                        enemy.alive = false;
+                        enemyheroes[enemyIndex] = null;
+                        turn.Text = $"{enemy.name} исчерпал свою ярость и погибает!";
+                    }
+                    else
+                    {
+                        turn.Text = $"{enemy.name} в ярости! Урон уменьшен с {oldDamage} до {enemy.damage}!";
+                    }
+                }
             }
         }
         else if (enemy.name == "Дискошар")
@@ -719,18 +1214,6 @@ public partial class ingame : ContentPage
             if (player.name == "Призрак" && rand.Next(0, 2) == 0)
             {
                 turn.Text = $"{player.name} увернулся от атаки!";
-            }
-            else
-            {
-                player.hp -= enemy.damage;
-                CheckPlayerDeath(playerIndex);
-            }
-        }
-        else if (enemy.name == "Призрак")
-        {
-            if (player.name == "Призрак" && rand.Next(0, 2) == 0)
-            {
-                turn.Text = $"{player.name} увернулся от атаки призрака!";
             }
             else
             {
@@ -832,6 +1315,103 @@ public partial class ingame : ContentPage
         var sup = selectedSup.sup;
         var target = enemyheroes[targetIndex];
 
+        if (sup.id == 17) // Зелье ярости
+        {
+            if (!target.hasRageAbility)
+            {
+                return await ExecuteEnemyAttack();
+            }
+
+            if (target.isEnraged)
+            {
+                return await ExecuteEnemyAttack();
+            }
+
+            target.isEnraged = true;
+
+            switch (target.rageType)
+            {
+                case 1:
+                    target.pic = "sunrage.png";
+                    turn.Text = $"Враг активировал ярость у {target.name}!";
+                    break;
+                case 2:
+                    target.pic = "jupiterrage.png";
+                    turn.Text = $"Враг активировал ярость у {target.name}!";
+                    break;
+                case 3:
+                    target.pic = "netronrage.png";
+                    turn.Text = $"Враг активировал ярость у {target.name}!";
+                    target.radiation = 0;
+                    break;
+                case 4:
+                    target.pic = "quarkrage.png";
+                    turn.Text = $"Враг активировал ярость у {target.name}!";
+                    break;
+            }
+
+            enemysupes[selectedSup.index] = null;
+            UpdateAllEnemyDisplays();
+            await Task.Delay(300);
+            return true;
+        }
+        else if (sup.id == 16) // Подарок
+        {
+            // Подарок превращается в случайное усиление
+            int randomEffect = rand.Next(1, 8); // 1-7 случайные эффекты
+            turn.Text = $"Враг использует Подарок! Получено случайное усиление!";
+
+            switch (randomEffect)
+            {
+                case 1: // Исцеление
+                    target.hp = Math.Min(target.max_hp, target.hp + 20);
+                    turn.Text = $"Подарок: {target.name} исцелен на 20 HP!";
+                    break;
+                case 2: // Урон
+                    target.damage = Math.Min(target.max_damage, target.damage + 20);
+                    turn.Text = $"Подарок: {target.name} получил +20 к урону!";
+                    break;
+                case 3: // Смесь
+                    target.hp = Math.Min(target.max_hp, target.hp + 20);
+                    target.damage = Math.Min(target.max_damage, target.damage + 15);
+                    turn.Text = $"Подарок: {target.name} получил +20 HP и +15 к урону!";
+                    break;
+                case 4: // Ослабление врага
+                    var alivePlayers = heroes.Where(h => h != null && h.alive).ToList();
+                    if (alivePlayers.Count > 0)
+                    {
+                        var randomPlayer = alivePlayers[rand.Next(alivePlayers.Count)];
+                        randomPlayer.damage = Math.Max(0, randomPlayer.damage - 20);
+                        turn.Text = $"Подарок: {randomPlayer.name} получил -20 к урону!";
+                    }
+                    break;
+                case 5: // Большое исцеление
+                    target.hp = Math.Min(target.max_hp, target.hp + 30);
+                    turn.Text = $"Подарок: {target.name} исцелен на 30 HP!";
+                    break;
+                case 6: // Чёрная дыра
+                    var alivePlayersForBlackHole = heroes.Where(h => h != null && h.alive).ToList();
+                    if (alivePlayersForBlackHole.Count > 0)
+                    {
+                        var randomPlayer = alivePlayersForBlackHole[rand.Next(alivePlayersForBlackHole.Count)];
+                        randomPlayer.alive = false;
+                        randomPlayer.hp = 0;
+                        turn.Text = $"Подарок: {randomPlayer.name} уничтожен черной дырой!";
+                    }
+                    break;
+                case 7: // Экскалибур
+                    target.damage = Math.Min(target.max_damage, target.damage + 35);
+                    turn.Text = $"Подарок: {target.name} получил Экскалибур (+35 урона)!";
+                    break;
+            }
+
+            enemysupes[selectedSup.index] = null;
+            UpdateAllBattleDisplays();
+            UpdateAllEnemyDisplays();
+            await Task.Delay(300);
+            return true;
+        }
+
         turn.Text = $"Противник использует {sup.name}!";
 
         switch (sup.id)
@@ -909,8 +1489,9 @@ public partial class ingame : ContentPage
                 target.max_damage = Math.Max(target.max_damage, target.damage);
                 break;
             case 15:
-                int randomHeroId = rand.Next(0, heros.Count);
-                string[] newHeroData = heros[randomHeroId].Split(':');
+                int randomHeroId = GetRandomHeroId();
+                string heroData = heroDictionary[randomHeroId];
+                string[] newHeroData = heroData.Split(':');
                 enemyheroes[targetIndex] = new Hero(
                     newHeroData[1],
                     int.Parse(newHeroData[2]),
@@ -943,10 +1524,58 @@ public partial class ingame : ContentPage
 
         turn.Text = $"{hero.name} атакует {enemy.name}!";
 
-        if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(hero.name))
+        // Новые карты
+        if (hero.name == "Ёлка")
+        {
+            // Ёлка наносит небольшой урон радиацией всем врагам
+            foreach (var enemyHero in enemyheroes)
+            {
+                if (enemyHero != null && enemyHero.alive)
+                {
+                    enemyHero.radiation += 5; // Небольшой урон радиацией всем врагам
+                }
+            }
+            turn.Text = "Ёлка наносит радиацию всем врагам!";
+        }
+        else if (hero.name == "Снежная планета")
+        {
+            // Снежная планета немного уменьшает урон всем врагам
+            foreach (var enemyHero in enemyheroes)
+            {
+                if (enemyHero != null && enemyHero.alive)
+                {
+                    enemyHero.damage = Math.Max(0, enemyHero.damage - 5);
+                }
+            }
+            turn.Text = "Снежная планета уменьшает урон всех врагов!";
+        }
+        else if (hero.name == "Призрак")
         {
             enemy.hp -= hero.damage;
             CheckEnemyDeath(enemyIndex);
+        }
+        else if (new string[] { "Астронавт", "Солнце", "Луна", "Венера", "Юпитер", "Плутон" }.Contains(hero.name))
+        {
+            int damageDealt = hero.damage;
+
+            // Проверяем ярость Юпитера
+            if (hero.name == "Юпитер" && hero.isEnraged)
+            {
+                enemy.hp -= damageDealt;
+                hero.hp -= damageDealt;
+                turn.Text = $"{hero.name} в ярости отражает {damageDealt} урона обратно!";
+
+                if (hero.hp <= 0)
+                {
+                    CheckPlayerDeath(heroIndex);
+                }
+                CheckEnemyDeath(enemyIndex);
+            }
+            else
+            {
+                enemy.hp -= damageDealt;
+                CheckEnemyDeath(enemyIndex);
+            }
         }
         else if (hero.name == "Экзопланета")
         {
@@ -955,7 +1584,15 @@ public partial class ingame : ContentPage
         }
         else if (hero.name == "Пульсар")
         {
-            enemy.radiation += 10;
+            if (hero.isEnraged)
+            {
+                enemy.radiation += 25;
+                turn.Text = $"{hero.name} в ярости накладывает 25 радиации!";
+            }
+            else
+            {
+                enemy.radiation += 10;
+            }
         }
         else if (hero.name == "Сверхновая")
         {
@@ -976,10 +1613,32 @@ public partial class ingame : ContentPage
         }
         else if (hero.name == "Кварк")
         {
-            enemy.hp -= hero.damage;
+            int damageDealt = hero.damage;
+            enemy.hp -= damageDealt;
             CheckEnemyDeath(enemyIndex);
-            hero.alive = false;
-            heroes[heroIndex] = null;
+
+            if (!hero.isEnraged)
+            {
+                hero.alive = false;
+                heroes[heroIndex] = null;
+                turn.Text = $"{hero.name} жертвует собой для нанесения урона!";
+            }
+            else
+            {
+                int oldDamage = hero.damage;
+                hero.damage = Math.Max(1, hero.damage / 2);
+
+                if (hero.damage <= 1)
+                {
+                    hero.alive = false;
+                    heroes[heroIndex] = null;
+                    turn.Text = $"{hero.name} исчерпал свою ярость и погибает!";
+                }
+                else
+                {
+                    turn.Text = $"{hero.name} в ярости! Урон уменьшен с {oldDamage} до {hero.damage}!";
+                }
+            }
         }
         else if (hero.name == "Дискошар")
         {
@@ -996,11 +1655,6 @@ public partial class ingame : ContentPage
             CheckEnemyDeath(enemyIndex);
         }
         else if (hero.name == "Мрачник")
-        {
-            enemy.hp -= hero.damage;
-            CheckEnemyDeath(enemyIndex);
-        }
-        else if (hero.name == "Призрак")
         {
             enemy.hp -= hero.damage;
             CheckEnemyDeath(enemyIndex);
@@ -1046,6 +1700,30 @@ public partial class ingame : ContentPage
         var enemy = enemyheroes[enemyIndex];
         if (enemy != null && enemy.hp <= 0)
         {
+            // Проверяем ярость Солнца у врага
+            if (enemy.name == "Солнце" && enemy.isEnraged)
+            {
+                enemy.alive = true;
+                enemy.hp = 90;
+                enemy.damage = 20;
+                enemy.max_hp = 135;
+                enemy.max_damage = 30;
+                enemy.name = "Сверхновая";
+                enemy.pic = "supernova.png";
+                enemy.isEnraged = false;
+                enemy.hasRageAbility = false;
+
+                turn.Text = "Враг: Солнце в ярости превращается в Сверхновую!";
+                UpdateAllEnemyDisplays();
+                return;
+            }
+
+            // Сбрасываем ярость при смерти для других героев
+            if (enemy.isEnraged)
+            {
+                enemy.isEnraged = false;
+            }
+
             enemy.alive = false;
             enemy.hp = 0;
 
@@ -1098,6 +1776,30 @@ public partial class ingame : ContentPage
         var player = heroes[playerIndex];
         if (player != null && player.hp <= 0)
         {
+            // Проверяем ярость Солнца
+            if (player.name == "Солнце" && player.isEnraged)
+            {
+                player.alive = true;
+                player.hp = 90;
+                player.damage = 20;
+                player.max_hp = 135;
+                player.max_damage = 30;
+                player.name = "Сверхновая";
+                player.pic = "supernova.png";
+                player.isEnraged = false;
+                player.hasRageAbility = false;
+
+                turn.Text = "Солнце в ярости превращается в Сверхновую!";
+                UpdateAllBattleDisplays();
+                return;
+            }
+
+            // Сбрасываем ярость при смерти для других героев
+            if (player.isEnraged)
+            {
+                player.isEnraged = false;
+            }
+
             player.alive = false;
             player.hp = 0;
 
@@ -1158,6 +1860,13 @@ public partial class ingame : ContentPage
             var hero = heroes[i];
             if (hero != null && hero.alive)
             {
+                // Пульсар в ярости иммунен к радиации
+                if (hero.name == "Пульсар" && hero.isEnraged)
+                {
+                    hero.radiation = 0;
+                    continue;
+                }
+
                 int oldHp = hero.hp;
                 hero.hp -= hero.radiation;
                 if (hero.hp <= 0)
@@ -1178,6 +1887,13 @@ public partial class ingame : ContentPage
             var enemy = enemyheroes[i];
             if (enemy != null && enemy.alive)
             {
+                // Пульсар врага в ярости иммунен к радиации
+                if (enemy.name == "Пульсар" && enemy.isEnraged)
+                {
+                    enemy.radiation = 0;
+                    continue;
+                }
+
                 int oldHp = enemy.hp;
                 enemy.hp -= enemy.radiation;
                 if (enemy.hp <= 0)
@@ -1243,19 +1959,42 @@ public partial class ingame : ContentPage
             }
         }
 
+        // Оставляем только сброс радиации, но сохраняем ярость
         foreach (var hero in heroes)
         {
-            if (hero != null && hero.alive)
+            if (hero != null)
             {
-                hero.radiation = 0;
+                hero.radiation = 0; // Сбрасываем только радиацию
+                // Ярость НЕ сбрасываем: hero.isEnraged остается как есть
             }
         }
 
         foreach (var enemy in enemyheroes)
         {
-            if (enemy != null && enemy.alive)
+            if (enemy != null)
             {
+                enemy.isEnraged = false;
                 enemy.radiation = 0;
+
+                // Возвращаем оригинальную картинку для врагов
+                if (enemy.hasRageAbility)
+                {
+                    switch (enemy.rageType)
+                    {
+                        case 1:
+                            enemy.pic = "sunc.png";
+                            break;
+                        case 2:
+                            enemy.pic = "jupiterc.png";
+                            break;
+                        case 3:
+                            enemy.pic = "netron.png";
+                            break;
+                        case 4:
+                            enemy.pic = "quark.png";
+                            break;
+                    }
+                }
             }
         }
 
@@ -1265,6 +2004,7 @@ public partial class ingame : ContentPage
         if (!playerHasAliveHeroes)
         {
             mylifes--;
+            loses++;
             energy += 10;
         }
         if (!enemyHasAliveHeroes) botlifes--;
@@ -1283,6 +2023,52 @@ public partial class ingame : ContentPage
             int exp = Preferences.Get("exp", 0);
             Preferences.Set("exp", exp + 1000);
             Preferences.Set("stars", stars + 60);
+
+            if (parts && stars >= 5000) // Фрагменты ярости только с 5000+
+            {
+                Random rand = new Random();
+                int maxRage = 200;
+
+                // Создаем список доступных вариантов
+                var availableRages = new List<int>();
+
+                if (Preferences.Get("sun_rage", 0) < maxRage)
+                    availableRages.Add(1);
+                if (Preferences.Get("jupiter_rage", 0) < maxRage)
+                    availableRages.Add(2);
+                if (Preferences.Get("netron_rage", 0) < maxRage)
+                    availableRages.Add(3);
+                if (Preferences.Get("quark_rage", 0) < maxRage)
+                    availableRages.Add(4);
+
+                if (availableRages.Count > 0)
+                {
+                    // Выбираем случайный из доступных
+                    int selectedRage = availableRages[rand.Next(0, availableRages.Count)];
+                    int add = 0;
+
+                    switch (selectedRage)
+                    {
+                        case 1:
+                            add = Preferences.Get("sun_rage", 0);
+                            Preferences.Set("sun_rage", add + 10);
+                            break;
+                        case 2:
+                            add = Preferences.Get("jupiter_rage", 0);
+                            Preferences.Set("jupiter_rage", add + 10);
+                            break;
+                        case 3:
+                            add = Preferences.Get("netron_rage", 0);
+                            Preferences.Set("netron_rage", add + 10);
+                            break;
+                        case 4:
+                            add = Preferences.Get("quark_rage", 0);
+                            Preferences.Set("quark_rage", add + 10);
+                            break;
+                    }
+                }
+            }
+
             await Navigation.PopModalAsync();
         }
         else
@@ -1354,6 +2140,127 @@ public partial class ingame : ContentPage
 
         var hero = heroes[target];
         var sup = supes[n];
+
+        if (sup.id == 17) // Зелье ярости (только для 5000+)
+        {
+            if (stars < 5000)
+            {
+                turn.Text = "Зелье ярости доступно только с 5000 звёзд!";
+                return;
+            }
+
+            if (!hero.hasRageAbility)
+            {
+                turn.Text = $"У {hero.name} нет доступа к яростной способности!";
+                return;
+            }
+
+            if (hero.isEnraged)
+            {
+                turn.Text = $"{hero.name} уже в ярости!";
+                return;
+            }
+
+            hero.isEnraged = true;
+
+            switch (hero.rageType)
+            {
+                case 1: // Солнце
+                    hero.pic = "sunrage.png";
+                    turn.Text = $"{hero.name} теперь превратится в Сверхновую при смерти!";
+                    break;
+                case 2: // Юпитер
+                    hero.pic = "jupiterrage.png";
+                    turn.Text = $"{hero.name} теперь отражает урон обратно атакующему!";
+                    break;
+                case 3: // Нейтронная звезда (Пульсар)
+                    hero.pic = "netronrage.png";
+                    turn.Text = $"{hero.name} теперь наносит больше радиации и иммунен к ней!";
+                    hero.radiation = 0;
+                    break;
+                case 4: // Кварк
+                    hero.pic = "quarkrage.png";
+                    turn.Text = $"{hero.name} теперь не умирает от своей атаки, но урон уменьшается!";
+                    break;
+            }
+
+            supes[n] = null;
+
+            UpdateAllBattleDisplays();
+            draw();
+            return;
+        }
+        else if (sup.id == 16) // Подарок
+        {
+            if (stars < 4000)
+            {
+                turn.Text = "Подарок доступен только с 4000 звёзд!";
+                return;
+            }
+
+            // Подарок превращается в случайное усиление
+            int randomEffect = rand.Next(1, 8); // 1-7 случайные эффекты
+            turn.Text = $"Подарок превращается в случайное усиление!";
+
+            switch (randomEffect)
+            {
+                case 1: // Исцеление
+                    hero.hp = Math.Min(hero.max_hp, hero.hp + 20);
+                    turn.Text = $"Подарок: {hero.name} исцелен на 20 HP!";
+                    break;
+                case 2: // Урон
+                    hero.damage = Math.Min(hero.max_damage, hero.damage + 20);
+                    turn.Text = $"Подарок: {hero.name} получил +20 к урону!";
+                    break;
+                case 3: // Смесь
+                    hero.hp = Math.Min(hero.max_hp, hero.hp + 20);
+                    hero.damage = Math.Min(hero.max_damage, hero.damage + 15);
+                    turn.Text = $"Подарок: {hero.name} получил +20 HP и +15 к урону!";
+                    break;
+                case 4: // Ослабление врага
+                    var aliveEnemies = enemyheroes.Where(h => h != null && h.alive).ToList();
+                    if (aliveEnemies.Count > 0)
+                    {
+                        var randomEnemy = aliveEnemies[rand.Next(aliveEnemies.Count)];
+                        randomEnemy.damage = Math.Max(0, randomEnemy.damage - 20);
+                        turn.Text = $"Подарок: {randomEnemy.name} получил -20 к урону!";
+                        UpdateAllEnemyDisplays();
+                    }
+                    else
+                    {
+                        turn.Text = "Подарок: Нет целей для ослабления!";
+                    }
+                    break;
+                case 5: // Большое исцеление
+                    hero.hp = Math.Min(hero.max_hp, hero.hp + 30);
+                    turn.Text = $"Подарок: {hero.name} исцелен на 30 HP!";
+                    break;
+                case 6: // Чёрная дыра
+                    var aliveEnemiesForBlackHole = enemyheroes.Where(h => h != null && h.alive).ToList();
+                    if (aliveEnemiesForBlackHole.Count > 0)
+                    {
+                        var randomEnemy = aliveEnemiesForBlackHole[rand.Next(aliveEnemiesForBlackHole.Count)];
+                        randomEnemy.alive = false;
+                        randomEnemy.hp = 0;
+                        turn.Text = $"Подарок: {randomEnemy.name} уничтожен черной дырой!";
+                        UpdateAllEnemyDisplays();
+                    }
+                    else
+                    {
+                        turn.Text = "Подарок: Нет целей для черной дыры!";
+                    }
+                    break;
+                case 7: // Экскалибур
+                    hero.damage = Math.Min(hero.max_damage, hero.damage + 35);
+                    turn.Text = $"Подарок: {hero.name} получил Экскалибур (+35 урона)!";
+                    break;
+            }
+
+            supes[n] = null;
+            UpdateAllBattleDisplays();
+            UpdateAllEnemyDisplays();
+            return;
+        }
 
         turn.Text = $"Используется {sup.name} на {hero.name}!";
 
@@ -1474,9 +2381,10 @@ public partial class ingame : ContentPage
 
                 turn.Text = $"{hero.name} поменял HP и урон местами!";
                 break;
-            case 15: 
-                int randomHeroId = rand.Next(0, heros.Count);
-                string[] newHeroData = heros[randomHeroId].Split(':');
+            case 15:
+                int randomHeroId = GetRandomHeroId();
+                string heroData = heroDictionary[randomHeroId];
+                string[] newHeroData = heroData.Split(':');
                 string oldName = hero.name;
 
                 heroes[target] = new Hero(
@@ -1519,5 +2427,54 @@ public partial class ingame : ContentPage
     private void skip_Clicked(object sender, EventArgs e)
     {
         time = 5;
+    }
+}
+
+public class Hero
+{
+    public string name;
+    public int hp;
+    public int damage;
+    public int max_hp;
+    public int max_damage;
+    public int radiation;
+    public int energy;
+    public bool alive;
+    public string pic;
+    public bool hasRageAbility;
+    public bool isEnraged;
+    public int rageType;
+
+    public Hero(string name, int hp, int dmg, int max_hp, int max_dmg, int radiation,
+                int energy, bool alive, string pic)
+    {
+        this.name = name;
+        this.hp = hp;
+        this.damage = dmg;
+        this.max_hp = max_hp;
+        this.max_damage = max_dmg;
+        this.radiation = radiation;
+        this.energy = energy;
+        this.alive = alive;
+        this.pic = pic;
+        this.hasRageAbility = false;
+        this.isEnraged = false;
+        this.rageType = 0;
+    }
+}
+
+public class Sup
+{
+    public int id;
+    public string name;
+    public int energy;
+    public string pic;
+
+    public Sup(int id, string name, int energy, string pic)
+    {
+        this.id = id;
+        this.name = name;
+        this.energy = energy;
+        this.pic = pic;
     }
 }
