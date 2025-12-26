@@ -61,7 +61,7 @@ public partial class camera : ContentPage
 
         Dispatcher.DispatchAsync(async () =>
         {
-            if (codes.ContainsKey(first.Value)) Navigation.PushAsync(new card(codes[first.Value][0], codes[first.Value][1]));
+            if (codes.ContainsKey(first.Value)) Navigation.PushAsync(new card(codes[first.Value][0], codes[first.Value][1], true, 0));
 
         });
     }

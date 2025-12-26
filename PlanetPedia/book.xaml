@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.book"
+             Title="">
+    <Grid>
+        <Image 
+            Source="background.png"
+            Opacity="0.6"
+            Aspect="AspectFill"/>
+        <ScrollView>
+            <VerticalStackLayout>
+                <VerticalStackLayout x:Name="accbox" Margin="10">
+                    <VerticalStackLayout x:Name="panel">
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="To_Profile"/>
+                            </HorizontalStackLayout.GestureRecognizers>
+                            <Image 
+                                Source="profile.png"
+                                HeightRequest="50"/>
+                            <Label 
+                                x:Name="username"
+                                Text="USER"
+                                VerticalOptions="Center"
+                                Margin="10,0,0,0"
+                                FontSize="20"
+                                FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+                        <Button 
+                            x:Name="quit"
+                            Text="Выйти"
+                            WidthRequest="100"
+                            TextColor="White"
+                            BorderColor="Black"
+                            BorderWidth="2"
+                            BackgroundColor="DarkRed"
+                            Margin="0,5"
+                            Clicked="quit_Clicked"/>
+                    </VerticalStackLayout>
+                    
+                    <Button 
+                        x:Name="loginb"
+                        Text="Войти"
+                        TextColor="White"
+                        BorderColor="Black"
+                        BorderWidth="2"
+                        WidthRequest="100"
+                        Clicked="loginb_Clicked"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center" Margin="10,20,10,0">
+                    <Entry 
+                        x:Name="search"
+                        WidthRequest="200"/>
+                    <Button 
+                        x:Name="apply"
+                        Text="Поиск"
+                        Margin="5,0"
+                        TextColor="White"
+                        BorderColor="Black"
+                        BorderWidth="2"
+                        Clicked="apply_Clicked"/>
+                </HorizontalStackLayout>
+                <FlexLayout x:Name="container" Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center">
+                    
+                </FlexLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

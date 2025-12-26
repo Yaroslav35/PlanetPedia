@@ -66,11 +66,17 @@
 		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="6.1.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.90" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
+		<PackageReference Include="MySqlConnector" Version="2.5.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.1" />
+		<PackageReference Include="System.Security.Permissions" Version="10.0.1" />
 		<PackageReference Include="ZXing.Net.Maui" Version="0.5.0" />
 		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="book.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="camera.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -78,6 +84,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="download.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="edit.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="exo.xaml">
@@ -89,7 +98,7 @@
 	  <MauiXaml Update="ingame.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="moons.xaml">
+	  <MauiXaml Update="login.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="neiro.xaml">
@@ -104,10 +113,10 @@
 	  <MauiXaml Update="pictureview.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="planets.xaml">
+	  <MauiXaml Update="planetsnew.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="planetsnew.xaml">
+	  <MauiXaml Update="profile.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="rage.xaml">
@@ -130,5 +139,6 @@
 	<ItemGroup>
 	  <Folder Include="Platforms\Android\Resources\raw\" />
 	</ItemGroup>
+
 
 </Project>

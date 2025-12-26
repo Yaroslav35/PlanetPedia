@@ -45,51 +45,51 @@ public partial class objects : ContentPage
 
     private void pulsarb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("pulsar.txt","sunmoons.txt"));
+        Navigation.PushAsync(new card("pulsar.txt","sunmoons.txt", true, 0));
     }
 
     private void blackholeb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("blackhole.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("blackhole.txt", "sunmoons.txt", true, 0));
     }
 
     private void cometb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("comet.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("comet.txt", "sunmoons.txt", true, 0));
     }
 
     private void oortab_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("oorta.txt","sunmoons.txt"));
+        Navigation.PushAsync(new card("oorta.txt","sunmoons.txt", true, 0));
     }
 
     private void milkywayb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("milkyway.txt","sunmoons.txt"));
+        Navigation.PushAsync(new card("milkyway.txt","sunmoons.txt", true, 0));
     }
 
     private void attractorb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("attractor.txt","sunmoons.txt"));
+        Navigation.PushAsync(new card("attractor.txt","sunmoons.txt", true, 0));
     }
 
     private void voidb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("void.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("void.txt", "sunmoons.txt", true, 0));
     }
 
     private void nebulab_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("nebula.txt","sunmoons.txt"));
+        Navigation.PushAsync(new card("nebula.txt","sunmoons.txt", true, 0));
     }
 
     private void laniakeab_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("laniakea.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("laniakea.txt", "sunmoons.txt", true, 0));
     }
 
     private void webspaceb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("webspace.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("webspace.txt", "sunmoons.txt", true, 0));
     }
 }

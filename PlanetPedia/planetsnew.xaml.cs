@@ -37,47 +37,47 @@ public partial class planetsnew : ContentPage
     }
     private void sunb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("sun.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("sun.txt", "sunmoons.txt", true, 0));
     }
 
     private void mercuryb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("mercury.txt", "mercurymoons.txt"));
+        Navigation.PushAsync(new card("mercury.txt", "mercurymoons.txt", true, 0));
     }
 
     private void venusb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("venus.txt", "venusmoons.txt"));
+        Navigation.PushAsync(new card("venus.txt", "venusmoons.txt", true, 0));
     }
 
     private void earthb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("earth.txt", "earthmoons.txt"));
+        Navigation.PushAsync(new card("earth.txt", "earthmoons.txt", true, 0));
     }
 
     private void marsb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("mars.txt", "marsmoons.txt"));
+        Navigation.PushAsync(new card("mars.txt", "marsmoons.txt", true, 0));
     }
 
     private void jupiterb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("jupiter.txt", "jupitermoons.txt"));
+        Navigation.PushAsync(new card("jupiter.txt", "jupitermoons.txt", true, 0));
     }
 
     private void saturnb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("saturn.txt", "saturnmoons.txt"));
+        Navigation.PushAsync(new card("saturn.txt", "saturnmoons.txt", true, 0));
     }
 
     private void uranusb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("uranus.txt", "uranusmoons.txt"));
+        Navigation.PushAsync(new card("uranus.txt", "uranusmoons.txt", true, 0));
     }
 
     private void neptuneb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("neptune.txt", "neptunemoons.txt"));
+        Navigation.PushAsync(new card("neptune.txt", "neptunemoons.txt", true, 0));
     }
 
     private void neirob_Clicked(object sender, EventArgs e)
@@ -87,7 +87,7 @@ public partial class planetsnew : ContentPage
 
     private void voyager_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("voyager2.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("voyager2.txt", "sunmoons.txt", true, 0));
     }
 
     private void spaceb_Clicked(object sender, EventArgs e)
@@ -100,82 +100,82 @@ public partial class planetsnew : ContentPage
 
     private void moonb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("moon.txt", empty));
+        Navigation.PushAsync(new card("moon.txt", empty, true, 0));
     }
 
     private void fobosb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("fobos.txt", empty));
+        Navigation.PushAsync(new card("fobos.txt", empty, true, 0));
     }
 
     private void deimosb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("deimos.txt", empty));
+        Navigation.PushAsync(new card("deimos.txt", empty, true, 0));
     }
 
     private void iob_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("io.txt", empty));
+        Navigation.PushAsync(new card("io.txt", empty, true, 0));
     }
 
     private void callisto_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("callisto.txt", empty));
+        Navigation.PushAsync(new card("callisto.txt", empty, true, 0));
     }
 
     private void ganymedeb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("ganymede.txt", empty));
+        Navigation.PushAsync(new card("ganymede.txt", empty, true, 0));
     }
 
     private void europab_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("europa.txt", empty));
+        Navigation.PushAsync(new card("europa.txt", empty, true, 0));
     }
 
     private void titanb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("titan.txt", empty));
+        Navigation.PushAsync(new card("titan.txt", empty, true, 0));
     }
 
     private void mimasb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("mimas.txt", empty));
+        Navigation.PushAsync(new card("mimas.txt", empty, true, 0));
     }
 
     private void enceladusb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("enceladus.txt", empty));
+        Navigation.PushAsync(new card("enceladus.txt", empty, true, 0));
     }
 
     private void reyab_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("reya.txt", empty));
+        Navigation.PushAsync(new card("reya.txt", empty, true, 0));
     }
 
     private void yapetb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("yapet.txt", empty));
+        Navigation.PushAsync(new card("yapet.txt", empty, true, 0));
     }
 
     private void mirandab_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("miranda.txt", empty));
+        Navigation.PushAsync(new card("miranda.txt", empty, true, 0));
     }
 
     private void titaniab_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("titania.txt", empty));
+        Navigation.PushAsync(new card("titania.txt", empty, true, 0));
     }
 
     private void oberonb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("oberon.txt", empty));
+        Navigation.PushAsync(new card("oberon.txt", empty, true, 0));
     }
 
     private void tritoneb_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("tritone.txt", empty));
+        Navigation.PushAsync(new card("tritone.txt", empty, true, 0));
     }
 
     private void tg_Tapped(object sender, EventArgs e)
@@ -257,6 +257,6 @@ public partial class planetsnew : ContentPage
     }
     private void ton_Clicked(object sender, EventArgs e)
     {
-        Navigation.PushAsync(new card("ton618.txt", "sunmoons.txt"));
+        Navigation.PushAsync(new card("ton618.txt", "sunmoons.txt", true, 0));
     }
 }

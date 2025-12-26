@@ -1,4 +1,9 @@
 using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using MySqlConnector;
+using System.Data.Common;
+using System.Text;
+using static ZXing.QrCode.Internal.Mode;
 #if ANDROID
 using Android.OS;
 #endif
@@ -11,16 +16,22 @@ public partial class card : ContentPage
 	string source = "";
 	string vid_url = "";
 	string obj_url = "";
+	bool filemode = false;
 	bool anim = false;
+	bool opened = false;
+	int id = 0;
 
-	public card(string file_get, string file_moons_get)
+	public card(string file_get, string file_moons_get, bool filemode_get, int id_get)
 	{
         InitializeComponent();
+        System.Text.EncodingProvider ppp = System.Text.CodePagesEncodingProvider.Instance;
+        Encoding.RegisterProvider(ppp);
         List<VisualElement> elements = new List<VisualElement>() { title, img, block1, block2, block3, block4, block5, block6, block7, block8};
         file = file_get;
 		file_moons = file_moons_get;
 		anim = true;
-		
+		filemode = filemode_get;
+		id = id_get;
 
         foreach (VisualElement element in elements) element.Opacity = 0;
 
@@ -33,8 +44,132 @@ public partial class card : ContentPage
 		box3d.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
 		tests.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
 
-        read();
+		if (filemode) read();
 	}
+
+	private async void database()
+	{
+		try
+		{
+			if(opened)
+			{
+				wiki.IsVisible = false;
+                bool vid_enabled = Preferences.Get("video", true);
+                bool obj_enabled = Preferences.Get("obj", true);
+                Dictionary<string, string> gallery = new Dictionary<string, string>();
+				piclist.Children.Clear();
+				using (var conn = new MySqlConnection(SQLClass.CONNECTION_STRING))
+				{
+					await conn.OpenAsync();
+					MySqlCommand cmd = new MySqlCommand($"SELECT * FROM pages WHERE id = '{id}'", conn);
+					try
+					{
+						DbDataReader reader = cmd.ExecuteReader();
+						while (reader.Read())
+						{
+							title.Text = reader.GetString(1);
+							img.Source = ImageSource.FromUri(new Uri(reader.GetString(2)));
+
+							Label property = new Label();
+							property.Text = reader.GetString(3);
+							property.FontSize = 18;
+							property.Margin = new Thickness(15, 7);
+							property.TextColor = Colors.Black;
+							propertylist.Children.Add(property);
+
+							about.Text = reader.GetString(4);
+
+							Label unique = new Label();
+							unique.Text = reader.GetString(5);
+							unique.FontSize = 18;
+							unique.Margin = new Thickness(15, 7);
+							unique.TextColor = Colors.Black;
+							uniquelist.Children.Add(unique);
+
+							if (!string.IsNullOrEmpty(reader.GetString(6)))
+							{
+								List<string> gallery_pairs = new List<string>();
+								if (reader.GetString(6).Contains(";")) gallery_pairs = reader.GetString(6).Split(";").ToList();
+								else gallery_pairs.Add(reader.GetString(6));
+								try
+								{
+									foreach (string pair in gallery_pairs) gallery.Add(pair.Split("|")[0], pair.Split("|")[1]);
+								}
+								catch { }
+								foreach (KeyValuePair<string, string> pair in gallery)
+								{
+									Border frame = new Border();
+									frame.Margin = new Thickness(5);
+									frame.Stroke = Colors.Black;
+									piclist.Children.Add(frame);
+
+									VerticalStackLayout vertical = new VerticalStackLayout();
+									frame.Content = vertical;
+
+									Image pic = new Image();
+									pic.Source = ImageSource.FromUri(new Uri(pair.Key));
+									pic.IsAnimationPlaying = true;
+									pic.MaximumWidthRequest = 300;
+									pic.HeightRequest = 300;
+									pic.Aspect = Aspect.AspectFit;
+									var tapGesture = new TapGestureRecognizer();
+									tapGesture.Tapped += (s, e) =>
+									{
+										OnImageTapped(s, e, pair.Key, pair.Value);
+									};
+									pic.GestureRecognizers.Add(tapGesture);
+									vertical.Children.Add(pic);
+
+									Label desc = new Label();
+									desc.Text = pair.Value;
+									desc.HorizontalOptions = LayoutOptions.Center;
+									desc.FontAttributes = FontAttributes.Italic;
+									desc.FontSize = 12;
+									desc.TextColor = Colors.Black;
+									desc.Margin = new Thickness(5, 0);
+									vertical.Children.Add(desc);
+								}
+							}
+
+							vid_url = reader.GetString(7);
+							obj_url = reader.GetString(8);
+
+							if (vid_enabled) web.Source = vid_url;
+							else web.Source = "disabledvid.html";
+
+							if (obj_enabled) web3d.Source = obj_url;
+							else web3d.Source = "disabled3d.html";
+
+							full.IsVisible = vid_enabled;
+							web3d_full.IsVisible = obj_enabled;
+
+							Label nomoons = new Label();
+							nomoons.Text = "У данного космического тела отсутствуют спутники...";
+							nomoons.FontSize = 18;
+							nomoons.FontAttributes = FontAttributes.Italic;
+							nomoons.Margin = new Thickness(15, 15, 0, 20);
+							nomoons.TextColor = Colors.Black;
+							moonslist.Children.Clear();
+							moonslist.Children.Add(nomoons);
+						}
+						reader.Close();
+						Console.WriteLine();
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine(ex.Message);
+					}
+				}
+            }
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.ToString());
+            await Task.Delay(5000);
+			database();
+        }
+	}
+
     async private void read()
 	{
 		bool vid_enabled = Preferences.Get("video", true);
@@ -104,6 +239,7 @@ public partial class card : ContentPage
 			pic.Source = ImageSource.FromFile(pair.Key);
 			pic.MaximumWidthRequest = 300;
 			pic.HeightRequest = 300;
+			pic.IsAnimationPlaying = true;
 			pic.Aspect = Aspect.AspectFit;
             var tapGesture = new TapGestureRecognizer();
             tapGesture.Tapped += (s, e) =>
@@ -334,6 +470,15 @@ public partial class card : ContentPage
 
     protected async override void OnAppearing()
     {
+		try
+		{
+			if (!filemode)
+			{
+				opened = true;
+                database();
+            }
+		}
+		catch { }
         List<VisualElement> elements = new List<VisualElement>() { title, img, block1, block2, block3, block4, block5, block6, block7, block8 };
         base.OnAppearing();
 
@@ -351,6 +496,19 @@ public partial class card : ContentPage
 			await Task.Delay(10);
 		}
 		anim = false;
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+		try
+		{
+			if (!filemode)
+			{
+				opened = false;
+			}
+		}
+		catch { }
     }
 
     private void test_go(object? sender, TappedEventArgs e, string title, string dir)
@@ -379,7 +537,7 @@ public partial class card : ContentPage
 			{"Оберон","oberon"},
 			{"Тритон","tritone"}
 		};
-		Navigation.PushAsync(new card(moons[(sender as Button).Text] + ".txt","sunmoons.txt"));
+		Navigation.PushAsync(new card(moons[(sender as Button).Text] + ".txt","sunmoons.txt", true, 0));
     }
 
     private void wiki_Clicked(object sender, EventArgs e)

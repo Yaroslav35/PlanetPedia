@@ -42,6 +42,6 @@ public partial class neiro : ContentPage
 
     private void kepler_Clicked(object sender, EventArgs e)
     {
-		Navigation.PushAsync(new card("kepler22.txt","sunmoons.txt"));
+		Navigation.PushAsync(new card("kepler22.txt","sunmoons.txt", true, 0));
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanetPedia.profile"
+             Title="">
+    <Grid>
+        <Image 
+            Source="background.png"
+            Opacity="0.6"
+            Aspect="AspectFill"/>
+        <ScrollView>
+            <VerticalStackLayout>
+                <Border x:Name="bor1" Margin="10" Stroke="Black">
+                    <HorizontalStackLayout>
+                        <Image 
+                            Source="profile.png"
+                            HeightRequest="80"
+                            Margin="5"/>
+                        <Label 
+                            x:Name="name"
+                            Text="USER"
+                            VerticalTextAlignment="Center"
+                            FontAttributes="Bold"
+                            FontSize="30"
+                            Margin="5,0,0,0"/>
+                    </HorizontalStackLayout>
+                </Border>
+                <Button 
+                    x:Name="add"
+                    Text="+ Добавить"
+                    TextColor="White"
+                    BorderColor="Black"
+                    HorizontalOptions="Center"
+                    Margin="0,10,0,0"
+                    BorderWidth="2"
+                    WidthRequest="200"
+                    Clicked="add_Clicked"/>
+                <Label 
+                    Text="Ваши статьи:"
+                    HorizontalOptions="Center"
+                    Margin="0,50,0,0"
+                    FontAttributes="Italic"
+                    FontSize="20"/>
+                <FlexLayout x:Name="container" Direction="Row" AlignContent="Center" AlignItems="Center" Wrap="Wrap" JustifyContent="Center" Margin="0,10,0,0">
+                    
+                </FlexLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

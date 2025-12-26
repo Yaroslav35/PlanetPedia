@@ -30,7 +30,7 @@ public partial class space : ContentPage
 	{
 		InitializeComponent();
 
-        List<VisualElement> elements = new List<VisualElement>() {title, bor1, bor2, bor3, bor4, bor5};
+        List<VisualElement> elements = new List<VisualElement>() {title, bor1, bor2, bor3, bor4, bor5, bor6};
         foreach (VisualElement element in elements) element.Opacity = 0;
         anim = true;
 
@@ -39,12 +39,13 @@ public partial class space : ContentPage
         bor3.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
         bor4.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
         bor5.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
+        bor6.BackgroundColor = Color.FromRgba(105, 108, 138, 0.3);
     }
 
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        List<VisualElement> elements = new List<VisualElement>() { title, bor1, bor2, bor3, bor4, bor5 };
+        List<VisualElement> elements = new List<VisualElement>() { title, bor1, bor2, bor3, bor4, bor5, bor6};
         expe = Preferences.Get("exp",0);
         while (expe >= 100 * lvl && lvl <= 100)
         {
@@ -343,5 +344,10 @@ public partial class space : ContentPage
     {
         howl.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("551A8B"), Color.FromArgb("db96f2"));
         Navigation.PushAsync(new web("game.html"));
+    }
+
+    private void book_Clicked(object sender, EventArgs e)
+    {
+        Navigation.PushAsync(new book());
     }
 }

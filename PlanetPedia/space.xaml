@@ -189,6 +189,36 @@
                         Clicked="bonus_Clicked"/>
                         </VerticalStackLayout>
                     </Border>
+                    <Border x:Name="bor6" Stroke="Black" BackgroundColor="#aaaaaa" HeightRequest="350" WidthRequest="330" Margin="10">
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="Энциклопедия"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                FontSize="24"
+                                Margin="0,10,0,0"/>
+                            <Image 
+                                Source="book.png"
+                                HeightRequest="150"
+                                WidthRequest="150"
+                                Margin="0,20,0,0" />
+                            <Label 
+                                Text="Читай статьи, написанные единомышленниками"
+                                TextColor="Black"
+                                HorizontalTextAlignment="Center"
+                                FontAttributes="Italic"
+                                Margin="0,20,0,0"/>
+                            <Button 
+                                x:Name="bookb"
+                                Text="Исследовать"
+                                TextColor="White"
+                                BorderColor="Black"
+                                BorderWidth="2"
+                                Margin="10,20,10,0"
+                                WidthRequest="150"
+                                Clicked="book_Clicked"/>
+                        </VerticalStackLayout>
+                    </Border>
                 </FlexLayout>
                 <VerticalStackLayout x:Name="way" IsVisible="False">
                     <BoxView 
